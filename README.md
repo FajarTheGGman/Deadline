@@ -1,4 +1,4 @@
-# Dead Line
+# DeadLine
 <p>Application for improve students productivity</p>
 
 ![](https://img.shields.io/badge/Alert-information-yellow) 
