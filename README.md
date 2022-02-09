@@ -13,6 +13,8 @@
 ![](https://img.shields.io/badge/expressjs-4.17.1-white)
 
 # How to Setup Backend ?
+<img src="https://media.giphy.com/media/kQOxxwjjuTB7O/giphy.gif" width="180" />
+
 <pre>
 1. npm install
 2. npm start "your ip"
