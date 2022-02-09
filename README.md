@@ -1,45 +1,35 @@
-# Express API Starter
+# Dead Line
+<p>Application for improve students productivity</p>
 
-Includes API Server utilities:
+![](https://img.shields.io/badge/Alert-information-yellow) 
+<b>Still in development</b>
 
-* [morgan](https://www.npmjs.com/package/morgan)
-  * HTTP request logger middleware for node.js
-* [helmet](https://www.npmjs.com/package/helmet)
-  * Helmet helps you secure your Express apps by setting various HTTP headers. It's not a silver bullet, but it can help!
-* [dotenv](https://www.npmjs.com/package/dotenv)
-  * Dotenv is a zero-dependency module that loads environment variables from a `.env` file into `process.env`
+![](https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/banner.png)
 
-Development utilities:
+![](https://img.shields.io/badge/react-native-blue)
+![](https://img.shields.io/badge/nodejs-16.7.0-lime) 
+![](https://img.shields.io/badge/expo-4.5.2-white)
+![](https://img.shields.io/badge/mongo-4.0.19-green)
+![](https://img.shields.io/badge/expressjs-4.17.1-white)
 
-* [nodemon](https://www.npmjs.com/package/nodemon)
-  * nodemon is a tool that helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected.
-* [eslint](https://www.npmjs.com/package/eslint)
-  * ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
-* [mocha](https://www.npmjs.com/package/mocha)
-  * ☕️ Simple, flexible, fun JavaScript test framework for Node.js & The Browser ☕️
-* [supertest](https://www.npmjs.com/package/supertest)
-  * HTTP assertions made easy via superagent.
+# How to Setup Backend ?
+<pre>
+1. npm install
+2. npm start "your ip"
+</pre>
 
-## Setup
+# How to Setup Android App ?
+<pre>
+1. cd Android
+2. npm install
+3. npm start
+</pre>
 
-```
-npm install
-```
 
-## Lint
-
-```
-npm run lint
-```
-
-## Test
-
-```
-npm run test
-```
-
-## Development
-
-```
-npm run dev
-```
+<img src="https://media.giphy.com/media/8X2kIbRJZQkdXt46ur/giphy.gif" width="180" />
+<div>
+<b>Special Thanks!</b><br>
+<pre>
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Stack_Overflow_icon.svg" width="50" /> <img src="https://image.flaticon.com/icons/png/512/2702/2702602.png"  width="40" /> <img src="https://upload.wikimedia.org/wikipedia/commons/d/db/Npm-logo.svg" bottom=15 width="40"  /> <img src="https://image.flaticon.com/icons/png/512/4478/4478878.png" bottom=15 width="40"  /> <img src="https://undraw.co/favicon.ico" bottom=15 width="40"  />
+</pre>
+</div>
