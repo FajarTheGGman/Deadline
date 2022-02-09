@@ -18,7 +18,7 @@ route.post('/getall', (req,res) => {
                         if(err){
                             res.json({ error: '[!] Something wrong in server' }).status(501)
                         }else{
-                            res.json({ classes }).status(200)
+                            res.json({ class: classes }).status(200)
                         }
                     })
                 }
@@ -43,7 +43,7 @@ route.post('/add', (req,res) => {
                             if(classes.length == 0){
                                 modelClass.insertMany({ 
                                     class: req.body.class,
-                                    major: req.body.major,
+                                    desc: req.body.desc,
                                 }, (err, classes) => {
                                     if(err){
                                         res.json({ error: '[!] Something wrong in server' }).status(501)
@@ -102,11 +102,11 @@ route.post('/delete', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: req.body.username, level: 'admin' }, (err, users) => {
+            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
                 if(err || users.length == 0){
                     res.json({ error: '[!] Something wrong in server' }).status(501)
                 }else{
-                    modelClass.deleteOne({ class: req.body.class, major: req.body.major }, (err, classes) => {
+                    modelClass.deleteOne({ class: req.body.class }, (err, classes) => {
                         if(err){
                             res.json({ error: '[!] Something wrong in server' }).status(501)
                         }else{
@@ -135,6 +135,120 @@ route.post('/major/getall', (req, res) => {
                             res.json({ error: '[!] Something wrong in server' }).status(501)
                         }else{
                             res.json({ majors: majors }).status(200)
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
+
+route.post('/major/search', (req, res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong Authorization' }).status(301)
+        }else{
+            modelUsers.find({ username: token.username }, (err, users) => {
+                if(err || users.length == 0){
+                    res.json({ error: '[!] Users not found' }).status(501)
+                }else{
+                    modelMajor.find({ major: { $regex: req.body.major } }, (err, majors) => {
+                        if(err){
+                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                        }else{
+                            res.json({ majors: majors }).status(200)
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
+
+route.post('/major/add', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong Authorization' }).status(301)
+        }else{
+            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                if(err || users.length == 0){
+                    res.json({ error: '[!] Something wrong in server' }).status(501)
+                }else{
+                    modelMajor.find({ major: req.body.major }, (err, majors) => {
+                        if(err){
+                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                        }else{
+                            if(majors.length == 0){
+                                modelMajor.insertMany({ 
+                                    major: req.body.major,
+                                    desc: req.body.desc,
+                                }, (err, majors) => {
+                                    if(err){
+                                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                                    }else{
+                                        res.json({ success: '[+] Success add major' }).status(200)
+                                    }
+                                })
+                            }else{
+                                res.json({ error: '[!] Major already exist' }).status(501)
+                            }
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
+
+route.post('/major/update', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong Authorization' }).status(301)
+        }else{
+            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                if(err || users.length == 0){
+                    res.json({ error: '[!] Something wrong in server' }).status(501)
+                }else{
+                    modelMajor.find({ major: req.body.major }, (err, majors) => {
+                        if(err){
+                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                        }else{
+                            if(majors.length == 0){
+                                res.json({ error: '[!] Major does not exist' }).status(501)
+                            }else{
+                                modelMajor.updateOne({ major: req.body.major }, {
+                                    major: req.body.new_major,
+                                    desc: req.body.new_desc,
+                                }, (err, majors) => {
+                                    if(err){
+                                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                                    }else{
+                                        res.json({ success: '[+] Success update major' }).status(200)
+                                    }
+                                })
+                            }
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
+
+route.post('/major/delete', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong Authorization' }).status(301)
+        }else{
+            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                if(err || users.length == 0){
+                    res.json({ error: '[!] Something wrong in server' }).status(501)
+                }else{
+                    modelMajor.deleteOne({ major: req.body.major }, (err, majors) => {
+                        if(err){
+                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                        }else{
+                            res.json({ success: '[+] Success delete major' }).status(200)
                         }
                     })
                 }

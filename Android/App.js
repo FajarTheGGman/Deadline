@@ -25,6 +25,7 @@ import Admin from './components/Admin/Home'
 import LectureAdmin from './components/Admin/LectureAdmin'
 import Role from './components/Admin/Role'
 import ClassAdmin from './components/Admin/Class'
+import Location from './components/Admin/Location'
 
 export default class Navigation extends Component{
     render(){
@@ -81,6 +82,11 @@ export default class Navigation extends Component{
                         headerTitle: ""
                     }} />
                     <Stack.Screen name="ClassAdmin" component={ClassAdmin} options={{
+                        headerShown: true,
+                        headerShadowVisible: false,
+                        headerTitle: ""
+                    }} />
+                    <Stack.Screen name="Location" component={Location} options={{
                         headerShown: true,
                         headerShadowVisible: false,
                         headerTitle: ""

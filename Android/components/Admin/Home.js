@@ -199,7 +199,7 @@ class Index extends Component{
                                 <Text style={{ color: '#191A19' }}>Admin</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }}>
+                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }} onPress={() => this.props.navigation.navigate('Location')}>
                                 <Icons name="location-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Location</Text>
                             </TouchableOpacity>
