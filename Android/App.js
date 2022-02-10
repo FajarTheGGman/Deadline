@@ -26,6 +26,9 @@ import LectureAdmin from './components/Admin/LectureAdmin'
 import Role from './components/Admin/Role'
 import ClassAdmin from './components/Admin/Class'
 import Location from './components/Admin/Location'
+import EventAdmin from './components/Admin/Events'
+import InboxAdmin from './components/Admin/Inbox'
+import AdminNew from './components/Admin/Admin'
 
 export default class Navigation extends Component{
     render(){
@@ -87,6 +90,21 @@ export default class Navigation extends Component{
                         headerTitle: ""
                     }} />
                     <Stack.Screen name="Location" component={Location} options={{
+                        headerShown: true,
+                        headerShadowVisible: false,
+                        headerTitle: ""
+                    }} />
+                    <Stack.Screen name="EventAdmin" component={EventAdmin} options={{
+                        headerShown: true,
+                        headerShadowVisible: false,
+                        headerTitle: ""
+                    }} />
+                    <Stack.Screen name="InboxAdmin" component={InboxAdmin} options={{
+                        headerShown: true,
+                        headerShadowVisible: false,
+                        headerTitle: ""
+                    }} />
+                    <Stack.Screen name="AdminNew" component={AdminNew} options={{
                         headerShown: true,
                         headerShadowVisible: false,
                         headerTitle: ""

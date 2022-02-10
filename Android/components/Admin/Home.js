@@ -178,12 +178,12 @@ class Index extends Component{
                         </View>
 
                         <View style={{ flexDirection: "row", marginTop: 35, marginLeft: 20, justifyContent: 'space-evenly' }}>
-                            <TouchableOpacity style={{ alignItems: 'center' }}>
+                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('EventAdmin')}>
                                 <Icons name="golf-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Events</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }}>
+                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }} onPress={() => this.props.navigation.navigate('InboxAdmin')}>
                                 <Icons name="file-tray-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Inbox</Text>
                             </TouchableOpacity>
@@ -194,7 +194,7 @@ class Index extends Component{
                             </TouchableOpacity>
                         </View>
                         <View style={{ flexDirection: "row", marginTop: 35, marginLeft: 20, justifyContent: 'space-evenly' }}>
-                            <TouchableOpacity style={{ alignItems: 'center' }}>
+                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('AdminNew')}>
                                 <Icons name="person-circle-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Admin</Text>
                             </TouchableOpacity>

@@ -15,6 +15,7 @@ const routeRole = require('./routes/role')
 const routeHomework = require('./routes/homework')
 const routeLessons = require('./routes/lessons')
 const routeEvents = require('./routes/events')
+const routeInbox = require('./routes/inbox')
 
 require('dotenv').config();
 
@@ -37,6 +38,7 @@ app.use('/role', routeRole);
 app.use('/homework', routeHomework);
 app.use('/lessons', routeLessons);
 app.use('/events', routeEvents);
+app.use('/inbox', routeInbox);
 
 app.get('/', (req, res) => {
   res.json({

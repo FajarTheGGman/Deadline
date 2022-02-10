@@ -26,6 +26,29 @@ route.post('/getall', (req, res) => {
     })
 })
 
+route.post('/search', (req, res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong Authorization' }).status(301)
+        }else{
+            modelUsers.find({ username: token.username }, (err, users) => {
+                if(users.length == 0){
+                    res.json({ error: '[!] Users not found' })
+                }else{
+                    modelEvents.find({ events: { $regex: req.body.events } }, (err, events) => {
+                        if(events.length == 0){
+                            res.json({ error: '[!] Events not found' })
+                        }else{
+                            res.json({ events: events })
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
+
+
 route.post('/add', (req,res) => {
     jwt.verify(req.body.token, req.body.secret, (err, token) => {
         if(err){
