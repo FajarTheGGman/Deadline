@@ -106,6 +106,7 @@ export default class LectureAdmin extends Component{
                         time_input: null,
                     })
                     alert('Success adding new lecture');
+                    this.refresh();
                 }
             })
         })

@@ -85,7 +85,7 @@ export default class Location extends Component{
                             latitude: this.state.newLatitude,
                             longitude: this.state.newLongitude,
                         }}
-                        title="School"
+                        title="New School"
                         description="This is my school"
                     />
                 </MapView>

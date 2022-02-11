@@ -220,9 +220,9 @@ class Index extends Component{
                                 <Text style={{ color: '#191A19' }}>Attendance</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center' }}>
-                                <Icons name="school-outline" size={30} color="#191A19" />
-                                <Text style={{ color: '#191A19' }}>My Class</Text>
+                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('Leaderboard')}>
+                                <Icons name="trophy-outline" size={30} color="#191A19" />
+                                <Text style={{ color: '#191A19' }}>Leaderboard</Text>
                             </TouchableOpacity>
                         </View>
 
@@ -232,7 +232,7 @@ class Index extends Component{
                                 <Text style={{ color: '#191A19' }}>Events</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }}>
+                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }} onPress={() => this.props.navigation.navigate('Inbox')}>
                                 <Icons name="file-tray-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Inbox</Text>
                             </TouchableOpacity>

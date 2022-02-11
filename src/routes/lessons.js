@@ -5,6 +5,7 @@ const modelLessons = require('../models/Lessons');
 const jwt = require('jsonwebtoken');
 
 route.post('/getall', (req, res) => {
+    console.log(req.body.day)
     jwt.verify(req.body.token, req.body.secret, (err, token) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301);
@@ -14,7 +15,7 @@ route.post('/getall', (req, res) => {
                     if(err || users.length == 0){
                         res.json({ error: '[!] User not found' }).status(301);
                     }else{
-                        modelLessons.find({}, (err, lessons) => {
+                        modelLessons.find({ class: token.class, day: req.body.day }, (err, lessons) => {
                             if(err){
                                 res.json({ error: '[!] Error' }).status(301);
                             }else{

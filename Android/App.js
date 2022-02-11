@@ -10,6 +10,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
 
+// Banners
+import Banner from './components/Banner/Banner'
+
 // Users
 import Home from './components/Users/Home'
 import Profile from './components/Users/Profile'
@@ -19,6 +22,8 @@ import Events from './components/Users/Events'
 import Homework from './components/Users/Homework'
 import Notifications from './components/Users/Notifications'
 import Class from './components/Users/Class'
+import Leaderboard from './components/Users/Leaderboard'
+import Inbox from './components/Users/Inbox'
 
 // Admin
 import Admin from './components/Admin/Home'
@@ -36,8 +41,11 @@ export default class Navigation extends Component{
         const Stack = createNativeStackNavigator()
         return(
             <NavigationContainer>
-                <Stack.Navigator initialRouteName={"Login"}>
+                <Stack.Navigator initialRouteName={"Banner"}>
                     <Stack.Screen name="Home" component={Home} options={{
+                        headerShown: false
+                    }} />
+                    <Stack.Screen name="Banner" component={Banner} options={{
                         headerShown: false
                     }} />
                     <Stack.Screen name="Admin" component={Admin} options={{
@@ -62,6 +70,14 @@ export default class Navigation extends Component{
                         headerShadowVisible: false,
                     }} />
                     <Stack.Screen name="Events" component={Events} options={{
+                        headerShown: true,
+                        headerShadowVisible: false,
+                    }} />
+                    <Stack.Screen name="Inbox" component={Inbox} options={{
+                        headerShown: true,
+                        headerShadowVisible: false,
+                    }} />
+                    <Stack.Screen name="Leaderboard" component={Leaderboard} options={{
                         headerShown: true,
                         headerShadowVisible: false,
                     }} />

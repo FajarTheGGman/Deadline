@@ -147,7 +147,7 @@ export default class Attendance extends Component {
                 </View>
 
                 <View>
-                    <MapView initialRegion={{ latitude: -6.5945, longitude: 106.789, latitudeDelta: -6.5945, longitudeDelta: 106.789  }} style={{ width: 420, height: 250  }}>
+                    <MapView initialRegion={{ latitude: -6.578968462396026, longitude: 106.80924899876119, latitudeDelta: 0.0263, longitudeDelta: 0.0274  }} style={{ width: 420, height: 250  }}>
                         <Marker coordinate={{ latitude: this.state.my_lat, longitude: this.state.my_lon}} title="You" description="You are here !">
                             <Image source={require('../../assets/icons/student.png')} style={{ width: 50, height: 50 }} />
                         </Marker>

@@ -13,15 +13,23 @@ export default class Lecture extends Component{
     }
 
     componentDidMount(){
+        const dayOrigin = new Date().getDay();
+        const dayName = (dayOrigin) => {
+            const day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            return day[dayOrigin];
+        }
+
+        const day = dayName(dayOrigin);
+
         AsyncStorage.getItem('token').then(token => {
             axios.post(konfigurasi.server + 'lessons/getall', {
                 token: token,
                 secret: konfigurasi.secret,
+                day: day.toString().toLowerCase()
             }).then(res => {
                 this.setState({
                     data: this.state.data.concat(res.data.lessons)
                 })
-                console.log(res.data.lessons)
             }).catch(err => {
                 console.log(err)
             })

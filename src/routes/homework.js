@@ -13,13 +13,25 @@ route.post('/getall', (req,res) => {
                 if(users.length == 0 || err){
                     res.json({ error: '[!] User not found' }).status(301)
                 }else{
-                    modelHomework.find({}, (err, homework) => {
-                        if(err){
-                            res.json({ error: '[!] Error' }).status(301)
-                        }else{
-                            res.json({ homework: homework }).status(200)
-                        }
-                    })
+                    console.log(token.class)
+                    if(token.level == 'admin'){
+                        modelHomework.find({}, (err, homework) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301)
+                            }else{
+                                res.json({ homework: homework }).status(200)
+                            }
+                        })
+                    }else if(token.level == 'students'){
+                        modelHomework.find({ class: token.class }, (err, homework) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301)
+                            }else{
+                                res.json({ homework: homework }).status(200)
+                            }
+                        })
+                    }
+
                 }
             })
         }

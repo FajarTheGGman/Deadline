@@ -20,6 +20,7 @@ export default class HomeworkAdmin extends Component{
             desc_input: null,
             deadline_input: null,
             homeworkSearch: null,
+            teacher_input: null,
             date: false,
             addHomework: false,
         }
@@ -43,7 +44,8 @@ export default class HomeworkAdmin extends Component{
                 if(res.data.lessons){
                     this.setState({
                         lessons: this.state.lessons.concat(res.data.lessons),
-                        lesson_input: res.data.lessons[0].lessons
+                        lesson_input: res.data.lessons[0].lessons,
+                        teacher_input: res.data.lessons[0].teacher
                     })
                 }
             })
@@ -54,6 +56,7 @@ export default class HomeworkAdmin extends Component{
             }).then(res => {
                 if(res.data.class){
                     this.setState({
+                        class_input: res.data.class[0].class,
                         class: this.state.class.concat(res.data.class)
                     })
                 }
@@ -108,6 +111,7 @@ export default class HomeworkAdmin extends Component{
                 title: this.state.title_input,
                 class: this.state.class_input,
                 lessons: this.state.lesson_input,
+                teacher: this.state.teacher_input,
                 desc: this.state.desc_input,
                 deadline: this.state.deadline_input
             }).then(res => {
@@ -267,10 +271,11 @@ export default class HomeworkAdmin extends Component{
                             <Text style={{ marginTop: 15, color: 'grey', marginLeft: 10 }}>The Homeworks</Text>
                             <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
                                 <Image source={require('../../assets/illustrations/lecture/teacher.png')} style={{ width: 50, height: 50, marginLeft: 5 }} />
-                                <View style={{ flexDirection: 'column' }}>
-                                    <Text style={{ fontWeight: 'bold', marginLeft: 15, fontSize: 16, color: '#4E9F3D' }}>{x.title}</Text>
-                                    <Text style={{ fontSize: 15, color: 'grey', marginLeft: 15 }}>{x.desc}</Text>
-                                </View>
+                                <Text style={{ fontWeight: 'bold', marginLeft: 15, fontSize: 16, color: '#4E9F3D' }}>{x.title}</Text>
+                            </View>
+                             <View style={{ marginTop: 10, marginLeft: 5 }}>
+                                <Text style={{ color: '#4E9F3D', fontWeight: 'bold' }}>Task to complete</Text>
+                                <Text style={{ color: 'grey' }}>{x.desc}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', marginTop: 15, marginLeft: 10, justifyContent: 'space-between', alignItems: 'center' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
