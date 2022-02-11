@@ -6,7 +6,7 @@ import Icons from 'react-native-vector-icons/Ionicons'
 import MapView, { Marker } from 'react-native-maps'
 import * as geolib from 'geolib'
 import * as Location from 'expo-location'
-
+import konfigurasi from '../../config'
 
 export default class Attendance extends Component {
     constructor(props){
@@ -20,10 +20,30 @@ export default class Attendance extends Component {
             total_distance: null,
             my_lat: 0,
             my_lon: 0,
+            end_location: 'School',
+            end_lat: 0,
+            end_lon: 0
         }
     }
 
     componentDidMount(){
+        AsyncStorage.getItem('token').then(token => {
+            axios.post(konfigurasi.server + "location/get", {
+                token: token,
+                secret: konfigurasi.secret
+            }).then(res => {
+                if(res.data.location){
+                    this.setState({
+                        end_location: res.data.location[0].location,
+                        end_lat: res.data.location[0].latitude,
+                        end_lon: res.data.location[0].longitude
+                    })
+                }
+            })
+        })
+
+        const { status } = Location.requestForegroundPermissionsAsync();
+
         Location.watchPositionAsync({
             enableHighAccuracy: true,
             timeInterval: 1,
@@ -36,7 +56,7 @@ export default class Attendance extends Component {
 
             const total_distance = geolib.getDistance(
                 {latitude: this.state.my_lat, longitude: this.state.my_lon},
-                {latitude: -6.6068155, longitude: 106.798691}
+                {latitude: this.state.end_lat, longitude: this.state.end_lon}
             )
 
             this.setState({
@@ -55,11 +75,6 @@ export default class Attendance extends Component {
                 })
             }
         })
-        /*
-        setInterval(() => {
-            let date = new Date()
-            this.setState({ time: date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() })
-        }, 1)*/
     }
 
     render(){
@@ -133,11 +148,11 @@ export default class Attendance extends Component {
 
                 <View>
                     <MapView initialRegion={{ latitude: -6.5945, longitude: 106.789, latitudeDelta: -6.5945, longitudeDelta: 106.789  }} style={{ width: 420, height: 250  }}>
-                        <Marker coordinate={{ latitude: this.state.my_lat, longitude: this.state.my_lon}} title="Starting Point" description="This is Your Home">
-                            <Image source={{ uri: 'https://cdn-icons.flaticon.com/png/512/2163/premium/2163350.png?token=exp=1644152335~hmac=2dca33716bd21b73f9f3bf52152333cc' }} style={{ width: 50, height: 50 }} />
+                        <Marker coordinate={{ latitude: this.state.my_lat, longitude: this.state.my_lon}} title="You" description="You are here !">
+                            <Image source={require('../../assets/icons/student.png')} style={{ width: 50, height: 50 }} />
                         </Marker>
-                        <Marker coordinate={{ latitude: -6.6068155, longitude: 106.798691 }} title="Final Destination" description="This is Your School">
-                            <Image source={{ uri: 'https://cdn-icons.flaticon.com/png/512/2602/premium/2602414.png?token=exp=1644152466~hmac=41c4cab876dc663cc2c2e0c2bf7b91eb' }} style={{ width: 50, height: 50 }} />
+                        <Marker coordinate={{ latitude: this.state.end_lat, longitude: this.state.end_lon }} title={this.state.end_location} description="This is Your School">
+                            <Image source={require('../../assets/icons/school.png')} style={{ width: 50, height: 50 }} />
                         </Marker>
                     </MapView>
                 </View>

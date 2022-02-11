@@ -131,7 +131,7 @@ class Index extends Component{
                 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row', marginTop: 25, marginLeft: 20 }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
                             <Image source={{ uri: "https://66.media.tumblr.com/f437e1a485894e5a4b50fe79fb59913e/tumblr_mxccksP6TQ1snvtspo1_500.jpg" }} style={{ width: 50, height: 50, borderRadius: 100, borderWidth: 2, borderColor: '#191A19' }} />
                         </TouchableOpacity>
 
@@ -188,7 +188,7 @@ class Index extends Component{
                                 <Text style={{ color: '#191A19' }}>Inbox</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 10 }}>
+                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 10 }} onPress={() => this.props.navigation.navigate('HomeworkAdmin')}>
                                 <Icons name="newspaper-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Home Work</Text>
                             </TouchableOpacity>

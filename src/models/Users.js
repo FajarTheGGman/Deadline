@@ -5,6 +5,7 @@ const Users = mongoose.Schema({
     class: { type: String },
     major: { type: String },
     gender: { type: String },
+    picture: { type: String },
     username: { type: String },
     password: { type: String },
     status: { type: String, default: 'studying' },

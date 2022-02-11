@@ -29,6 +29,7 @@ import Location from './components/Admin/Location'
 import EventAdmin from './components/Admin/Events'
 import InboxAdmin from './components/Admin/Inbox'
 import AdminNew from './components/Admin/Admin'
+import HomeworkAdmin from './components/Admin/Homework'
 
 export default class Navigation extends Component{
     render(){
@@ -92,7 +93,7 @@ export default class Navigation extends Component{
                     <Stack.Screen name="Location" component={Location} options={{
                         headerShown: true,
                         headerShadowVisible: false,
-                        headerTitle: ""
+                        headerTitle: "Your Location"
                     }} />
                     <Stack.Screen name="EventAdmin" component={EventAdmin} options={{
                         headerShown: true,
@@ -105,6 +106,11 @@ export default class Navigation extends Component{
                         headerTitle: ""
                     }} />
                     <Stack.Screen name="AdminNew" component={AdminNew} options={{
+                        headerShown: true,
+                        headerShadowVisible: false,
+                        headerTitle: ""
+                    }} />
+                    <Stack.Screen name="HomeworkAdmin" component={HomeworkAdmin} options={{
                         headerShown: true,
                         headerShadowVisible: false,
                         headerTitle: ""

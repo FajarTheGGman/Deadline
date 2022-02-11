@@ -9,7 +9,6 @@ route.post('/getall', (req, res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301);
         }else{
-            console.log(token)
             if(token.level == 'students'){
                 modelUsers.find({ username: token.username }, (err, users) => {
                     if(err || users.length == 0){
