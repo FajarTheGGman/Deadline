@@ -46,7 +46,12 @@ export default class Lecture extends Component{
                 </View>
 
                 <View style={{ marginTop: 25, paddingBottom: 25 }}>
-                    {this.state.data.map((x, y) => {
+                    {this.state.data.length == 0 ? <View style={{ alignItems: 'center' }}>
+                        <View style={{ marginTop: 80, alignItems: 'center' }}>
+                            <Icons name='logo-dropbox' color='grey' size={60} />
+                            <Text style={{ color: 'grey' }}>It's Looks like you have no lecture today</Text>
+                        </View>
+                    </View> : this.state.data.map((x, y) => {
                         return  <View style={{ backgroundColor: 'white', padding: 15, marginTop: 15, borderRadius: 15, elevation: 15, marginRight: 10, marginLeft: 10 }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <View>

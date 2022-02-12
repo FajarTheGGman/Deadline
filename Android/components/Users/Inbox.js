@@ -96,7 +96,12 @@ export default class Inbox extends Component{
                 </View>
 
                 <View style={{ marginTop: 20 }}>
-                    {this.state.inbox.map((x,y) => {
+                    {this.state.inbox.length == 0 ? <View style={{ alignItems: 'center' }}>
+                        <View style={{ marginTop: 80, alignItems: 'center' }}>
+                            <Icons name='logo-dropbox' color='grey' size={60} />
+                            <Text style={{ color: 'grey' }}>It's Looks like you have no lecture today</Text>
+                        </View>
+                    </View> : this.state.inbox.map((x,y) => {
                         return <TouchableOpacity style={{ padding: 15, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', marginRight: 10, marginLeft: 10, alignItems: 'center', marginTop: 20 }} onPress={() => this.overview(y)}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={{ uri: 'https://66.media.tumblr.com/1911d9a6e744365fe7a92ba72a7734b8/tumblr_mfswmevqB41rvyr2no1_1280.jpg' }} style={{ width: 50, height: 50, borderRadius: 100 }} />

@@ -12,6 +12,7 @@ import Register from './components/Auth/Register'
 
 // Banners
 import Banner from './components/Banner/Banner'
+import Guide from './components/Banner/Guide'
 
 // Users
 import Home from './components/Users/Home'
@@ -46,6 +47,9 @@ export default class Navigation extends Component{
                         headerShown: false
                     }} />
                     <Stack.Screen name="Banner" component={Banner} options={{
+                        headerShown: false
+                    }} />
+                    <Stack.Screen name="Guide" component={Guide} options={{
                         headerShown: false
                     }} />
                     <Stack.Screen name="Admin" component={Admin} options={{
