@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, TextInput, Picker, Image, AsyncStorage, S
 import axios from 'axios'
 import konfigurasi from '../../config'
 import Swiper from 'react-native-swiper'
+import { StackActions } from '@react-navigation/native';
 
 export default class Banner extends Component{
     constructor(props){
@@ -13,6 +14,31 @@ export default class Banner extends Component{
             ver: "{ Version: 1.0.0 }"
         }
     }
+
+    componentDidMount(){
+        AsyncStorage.getItem('token').then((token) => {
+            if(token){
+                axios.post(konfigurasi.server + "auth/profile", {
+                    token: token,
+                    secret: konfigurasi.secret
+                }).then(res => {
+                    if(res.status == 200){
+                        if(res.data.level == 'admin'){
+                            this.props.navigation.dispatch(
+                                StackActions.replace('Admin')
+                            );
+                        }else{
+                            this.props.navigation.dispatch(
+                                StackActions.replace('Home')
+                            );
+                        }
+                    }
+                })
+            }
+        })
+
+    }
+
     render(){
         return(
             <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', backgroundColor: 'white' }}>

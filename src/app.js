@@ -17,6 +17,7 @@ const routeLessons = require('./routes/lessons')
 const routeEvents = require('./routes/events')
 const routeInbox = require('./routes/inbox')
 const routeLocation = require('./routes/location')
+const routeAttendance = require('./routes/attendance')
 
 require('dotenv').config();
 
@@ -41,6 +42,7 @@ app.use('/lessons', routeLessons);
 app.use('/events', routeEvents);
 app.use('/inbox', routeInbox);
 app.use('/location', routeLocation);
+app.use('/attendance', routeAttendance);
 
 app.get('/', (req, res) => {
   res.json({

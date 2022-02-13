@@ -5,6 +5,7 @@ import Icons from 'react-native-vector-icons/Ionicons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Permissions, Notifications } from 'expo'
 import { StackActions } from '@react-navigation/native'
+import base64 from 'react-native-base64'
 
 // expo packages
 import * as Location from 'expo-location'
@@ -46,8 +47,9 @@ class Barcode extends Component{
         return(
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
-                
-            </View>        
+                <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                </View>
+            </View>
         )
     }
 }

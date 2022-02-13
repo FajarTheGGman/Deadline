@@ -25,6 +25,7 @@ import Notifications from './components/Users/Notifications'
 import Class from './components/Users/Class'
 import Leaderboard from './components/Users/Leaderboard'
 import Inbox from './components/Users/Inbox'
+import About from './components/Users/About'
 
 // Admin
 import Admin from './components/Admin/Home'
@@ -62,6 +63,10 @@ export default class Navigation extends Component{
                         headerShown: false
                     }} />
                     <Stack.Screen name="Profile" component={Profile} options={{
+                        headerShown: true,
+                        headerShadowVisible: false,
+                    }} />
+                    <Stack.Screen name="About" component={About} options={{
                         headerShown: true,
                         headerShadowVisible: false,
                     }} />

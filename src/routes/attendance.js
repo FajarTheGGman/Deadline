@@ -1,8 +1,8 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const route = express.Router();
-const modelUsers = require('../models/users');
-const modelAttendance = require('../models/attendance');
+const modelUsers = require('../models/Users');
+const modelAttendance = require('../models/Attendance');
 
 route.post('/getall', (req, res) => {
     jwt.verify(req.body.token, req.body.secret, (err, token) => {
@@ -66,6 +66,12 @@ route.post('/add', (req,res) => {
                                 major: token.major,
                                 date: req.body.date,
                                 late: req.body.late,
+                            }, (err, done) => {
+                                if(err){
+                                    res.json({ error: '[!] Error add attendance' }).status(301);
+                                }else{
+                                    res.json({ success: '[+] Add attendance success' });
+                                }
                             })
                         }else{
                             res.json({ error: "[!] You already get attendance" }).status(301)

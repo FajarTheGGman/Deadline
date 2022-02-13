@@ -9,6 +9,7 @@ const AttendanceSchema = new mongoose.Schema({
     class: { type: String },
     late: { type: Boolean, default: false },
     date: { type: String },
+    datetime: { type: String },
 });
 
 module.exports = mongoose.model('Attendance', AttendanceSchema);

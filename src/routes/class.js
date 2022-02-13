@@ -27,6 +27,16 @@ route.post('/getall', (req,res) => {
     })
 })
 
+route.post('/get', (req,res) => {
+    modelClass.find({}, (err, classes) => {
+        if(err){
+            res.json({ error: '[!] Something wrong in server' }).status(501)
+        }else{
+            res.json({ class: classes }).status(200)
+        }
+    })
+})
+
 route.post('/add', (req,res) => {
     jwt.verify(req.body.token, req.body.secret, (err, token) => {
         if(err){
@@ -139,6 +149,16 @@ route.post('/major/getall', (req, res) => {
                     })
                 }
             })
+        }
+    })
+})
+
+route.post('/major/get', (req,res) => {
+    modelMajor.find({}, (err, major) => {
+        if(err){
+            res.json({ error: '[!] Something wrong in server' }).status(501)
+        }else{
+            res.json({ major: major }).status(200)
         }
     })
 })

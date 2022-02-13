@@ -5,7 +5,6 @@ const modelLessons = require('../models/Lessons');
 const jwt = require('jsonwebtoken');
 
 route.post('/getall', (req, res) => {
-    console.log(req.body.day)
     jwt.verify(req.body.token, req.body.secret, (err, token) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301);

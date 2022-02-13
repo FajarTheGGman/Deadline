@@ -60,8 +60,8 @@ export default class Location extends Component{
                 <MapView
                     style={{flex:1, flexDirection:'column'}}
                     initialRegion={{
-                        latitude: -6.914744,
-                        longitude: 107.609810,
+                        latitude: this.state.latitude,
+                        longitude: this.state.longitude,
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
                     }}

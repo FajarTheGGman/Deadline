@@ -145,6 +145,7 @@ export default class LectureAdmin extends Component{
                                         <Picker.Item label="Thursday" value="thursday" />
                                         <Picker.Item label="Friday" value="friday" />
                                         <Picker.Item label="Saturday" value="saturday" />
+                                        <Picker.Item label="Sunday" value="sunday" />
                                     </Picker>
                                 </View>
 
@@ -160,9 +161,8 @@ export default class LectureAdmin extends Component{
                                     is24Hour={true}
                                     display="default"
                                     onChange={(event, selectedDate) => {
-                                        const date = selectedDate.getHours() + ':' + selectedDate.getMinutes();
+                                        const date = selectedDate.getHours() + ':' + selectedDate.getMinutes() + ":" + selectedDate.getSeconds();
                                         this.setState({ time_input: date, clock: false });
-                                        console.log(this.state.time_input);
                                     }}/>
                                 )}
 
