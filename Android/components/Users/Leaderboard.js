@@ -9,8 +9,20 @@ export default class Leaderboard extends Component {
         super(props)
         
         this.state = {
-            
+            data: []
         }
+    }
+    
+    componentDidMount(){
+        AsyncStorage.getItem('token').then(token => {
+            axios.post(konfigurasi.server + 'attendance/getall', {
+                token: token,
+                secret: konfigurasi.secret
+            }).then(res => {
+                console.log(res.data)
+                this.setState({ data: this.state.data.concat(res.data.data) })
+            })
+        })
     }
 
     render(){
@@ -23,19 +35,22 @@ export default class Leaderboard extends Component {
                 </View>
 
                 <View style={{ marginTop: 25, paddingBottom: 25, marginLeft: 20, marginRight: 20 }}>
-                    <View style={{ backgroundColor: 'white', padding: 10, borderRadius: 20, elevation: 15, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    {this.state.data.map((x,y) => {
+                        return <View style={{ backgroundColor: 'white', marginTop: 25, padding: 10, borderRadius: 20, elevation: 15, flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={{ uri: 'https://66.media.tumblr.com/84044fea94e02406aedf531c3f787fc5/tumblr_mr4hj0tzgS1qbpxtio1_540.png' }} style={{ width: 50, height: 50, borderRadius: 100 }} />
                             <View style={{ flexDirection: 'column', marginLeft: 10 }}>
-                                <Text style={{ fontWeight: 'bold', fontSize: 15 }}>Full Name</Text>
-                                <Text style={{ fontSize: 12 }}>@username</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 15 }}>{x.name}</Text>
+                                <Text style={{ fontSize: 12 }}>@{x.username}</Text>
                             </View>
                         </View>
 
                         <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
-                            <Text>21:20</Text>
+                            <Text>{x.time}</Text>
                         </View>
                     </View>
+
+                    })}
                 </View>
             </ScrollView>
         )

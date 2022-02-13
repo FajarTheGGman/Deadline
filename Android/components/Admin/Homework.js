@@ -120,6 +120,21 @@ export default class HomeworkAdmin extends Component{
                     this.refresh()
                 }
             })
+
+            axios.post(konfigurasi.server + 'notification/add', {
+                token: token,
+                secret: konfigurasi.secret,
+                title: 'Homework ' + this.state.lesson_input,
+                message: 'You have new homework from ' + this.state.teacher_input,
+                type: 'newspaper-outline',
+                class: this.state.class_input,
+                from: this.state.teacher_input,
+                time: new Date().getHours() + ':' + new Date().getMinutes()
+            }).then(res => {
+                if(res.data.success){
+                    console.log('Notification sucessully added')
+                }
+            })
         })
     }
 

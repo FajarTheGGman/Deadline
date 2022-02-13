@@ -23,7 +23,7 @@ export default class About extends Component{
                             <Icons name='logo-github' size={40} />
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={{ flexDirection: 'column', padding: 10, backgroundColor: 'white', elevation: 15, borderRadius: 13, marginRight: 20, aligmItems: 'center' }} onPress={() => Linking.openURL('https://twitter.com/kernel024')}>
+                        <TouchableOpacity style={{ flexDirection: 'column', padding: 10, backgroundColor: 'white', elevation: 15, borderRadius: 13, marginRight: 20, aligmItems: 'center' }} onPress={() => Linking.openURL('https://twitter.com/fajardotpsd')}>
                             <Icons name='logo-twitter' size={40} />
                         </TouchableOpacity>
                     </View>

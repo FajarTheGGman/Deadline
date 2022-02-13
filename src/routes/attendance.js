@@ -9,7 +9,6 @@ route.post('/getall', (req, res) => {
         if(err){
             res.json({ error: '[!] Wrong authorization' });
         }
-
         modelUsers.find({ username: token.username }, (err, result) => {
             if(err){
                 res.json({ error: '[!] Users no found' }).staus(301);
@@ -28,15 +27,11 @@ route.post('/getall', (req, res) => {
                         }
                     });
                 }else if(token.level == 'students'){
-                    modelAttendance.find({ class: req.body.class, major: req.body.major }, (err, result) => {
+                    modelAttendance.find({ class: token.class, major: token.major }).sort({ time: 'asc' }).exec((err, result) => {
                         if(err){
                             res.json({ error: '[!] Error get all attendance' }).status(301);
-                        }
-
-                        if(result.length > 0){
-                            res.json({ success: '[+] Get all attendance success', data: result });
                         }else{
-                            res.json({ error: '[!] Error get all attendance' });
+                            res.json({ data: result });
                         }
                     });
                 }
@@ -60,6 +55,7 @@ route.post('/add', (req,res) => {
                         if(check.length == 0){
                             modelAttendance.insertMany({
                                 name: token.name,
+                                username: token.username,
                                 lessons: req.body.lessons,
                                 time: req.body.time,
                                 class: token.class,

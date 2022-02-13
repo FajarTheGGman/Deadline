@@ -15,7 +15,7 @@ export default class Guide extends Component{
             fullname: '',
             username: '',
             password: '',
-            grade: '',
+            class: '',
             major: '',
             gender: 'male'
         }
@@ -25,7 +25,8 @@ export default class Guide extends Component{
         axios.post(konfigurasi.server + 'class/get').then(res => {
             if(res.status == 200){
                 this.setState({ getClass: this.state.getClass.concat(res.data.class) })
-                this.setState({ grade: res.data.class[0].class })
+                this.setState({ class: res.data.class[0].class })
+                console.log(this.state.class)
             }
         })
 
@@ -66,9 +67,10 @@ export default class Guide extends Component{
             name: this.state.fullname,
             username: this.state.username,
             password: this.state.password,
-            class: this.state.grade,
+            class: this.state.class,
             major: this.state.major,
-            gender: this.state.gender
+            gender: this.state.gender,
+            level: 'students'
         }).then(res => {
             if(res.status == 200){
                 this.login()
@@ -82,20 +84,6 @@ export default class Guide extends Component{
                 <StatusBar barStyle={'dark-content'} backgroundColor={"white"} />
 
                 <Swiper showsButton={true}>
-                    <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={{ fontWeight: "bold", fontSize: 23 }}>Who Are You ?</Text>
-                        <Image source={require('../../assets/illustrations/exam.png')} style={{ width: 220, height: 180 }} />
-                        <Text>Are you students or teacher ?</Text>
-
-                        <TouchableOpacity style={{ backgroundColor: '#4E9F3D', padding: 10, borderRadius: 10, marginTop: 40, elevation: 15 }}>
-                            <Text style={{ fontWeight: "bold" }}>I'am a Student</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={{ backgroundColor: 'black', padding: 10, borderRadius: 10, marginTop: 25, elevation: 15 }}>
-                            <Text style={{ fontWeight: "bold", color: 'white' }}>I'am a Teacher</Text>
-                        </TouchableOpacity>
-                    </View>
-
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontWeight: "bold", fontSize: 23 }}>Wellcome Students !</Text>
                         <Image source={require('../../assets/illustrations/signin.png')} style={{ width: 290, height: 220, marginTop: 15 }} />
@@ -140,7 +128,7 @@ export default class Guide extends Component{
                             <Picker
                                 selectedValue={this.state.grade}
                                 style={{ height: 50, width: 250 }}
-                                onValueChange={(itemValue, itemIndex) => this.setState({ grade: itemValue }
+                                onValueChange={(itemValue, itemIndex) => this.setState({ class: itemValue }
                                 )}>
                                 {this.state.getClass.map((val, index) => {
                                     return <Picker.Item label={'Class - ' + val.class} value={val.class} key={index} />
@@ -159,7 +147,7 @@ export default class Guide extends Component{
                             <Picker
                                 selectedValue={this.state.grade}
                                 style={{ height: 50, width: 250 }}
-                                onValueChange={(itemValue, itemIndex) => this.setState({ grade: itemValue }
+                                onValueChange={(itemValue, itemIndex) => this.setState({ major: itemValue }
                                 )}>
                                 {this.state.getMajor.map((val, index) => {
                                     return <Picker.Item label={val.major} value={val.major} key={index} />

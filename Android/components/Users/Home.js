@@ -78,12 +78,10 @@ class Barcode extends Component{
         return(
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
-                {/* make barcode scanner */}
                 <BarCodeScanner
                     onBarCodeScanned={this.handleBarCodeScanned}
                     style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                 >
-                    {/* make a scanning view*/}
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <Icons name="qr-code-outline" size={120} color="black" />
                         <Text style={{ fontWeight: 'bold', marginTop: 15 }}>Scan QR Here!, to get attendance</Text>

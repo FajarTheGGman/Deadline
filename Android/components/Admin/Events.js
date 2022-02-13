@@ -64,6 +64,21 @@ export default class EventAdmin extends Component{
                     this.setState({ eventTitle: null, eventDesc: null, eventDate: null })
                 }
             })
+
+            axios.post(konfigurasi.server + 'notification/add', {
+                token: token,
+                secret: konfigurasi.secret,
+                title:  this.state.eventTitle,
+                message: this.state.eventDesc,
+                type: 'golf-outline',
+                class: this.state.class_input,
+                from: this.state.teacher_input,
+                time: new Date().getHours() + ':' + new Date().getMinutes()
+            }).then(res => {
+                if(res.data.success){
+                    console.log('Notification sucessully added')
+                }
+            })
         })
     }
 

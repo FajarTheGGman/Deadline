@@ -109,6 +109,21 @@ export default class LectureAdmin extends Component{
                     this.refresh();
                 }
             })
+
+            axios.post(konfigurasi.server + 'notification/add', {
+                token: token,
+                secret: konfigurasi.secret,
+                title: 'New Lecture ' + this.state.lesson_input,
+                message: "There's new lecture for you!",
+                type: 'library-outline',
+                class: this.state.class_input,
+                from: this.state.teacher_input,
+                time: new Date().getHours() + ':' + new Date().getMinutes()
+            }).then(res => {
+                if(res.data.success){
+                    console.log('Notification sucessully added')
+                }
+            })
         })
     }
 

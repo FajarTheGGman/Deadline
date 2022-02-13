@@ -3,15 +3,18 @@ const mongoose = require('mongoose')
 const Notif = mongoose.Schema({
     from: {
         type: String,
-        required: true
     },
     title: {
         type: String,
-        required: true
     },
     message: {
         type: String,
-        required: true
+    },
+    type: {
+        type: String,
+    },
+    class: {
+        type: String,
     },
     date: {
         type: String,

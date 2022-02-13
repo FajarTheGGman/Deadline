@@ -64,7 +64,7 @@ class Settings extends Component{
     logout(){
         AsyncStorage.removeItem('token')
         this.props.navigation.dispatch(
-            StackActions.replace('Login')
+            StackActions.replace('Banner')
         )
     }
 
@@ -144,7 +144,7 @@ class Index extends Component{
                     </View>
 
                     <View style={{ flexDirection: 'column', marginRight: 30, marginTop: 30 }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Notifications')}>
                             <Icons name="notifications-outline" size={30} color="#191A19" />
                         </TouchableOpacity>
                     </View>
