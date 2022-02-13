@@ -1,36 +1,81 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const route = express.Router();
-const modelUsers = require('../models/users');
-const modelAttendance = require('../models/attendance');
+const modelUsers = require('../models/Users');
+const modelAttendance = require('../models/Attendance');
 
 route.post('/getall', (req, res) => {
     jwt.verify(req.body.token, req.body.secret, (err, token) => {
         if(err){
             res.json({ error: '[!] Wrong authorization' });
         }
-
-        modelUsers.find({ username: token.username, level: 'admin' }, (err, result) => {
+        modelUsers.find({ username: token.username }, (err, result) => {
             if(err){
                 res.json({ error: '[!] Users no found' }).staus(301);
             }
-
             if(result.length > 0){
-                modelAttendance.find({}, (err, result) => {
-                    if(err){
-                        res.json({ error: '[!] Error get all attendance' }).status(301);
-                    }
+                if(token.level == 'admin'){
+                    modelAttendance.find({}, (err, result) => {
+                        if(err){
+                            res.json({ error: '[!] Error get all attendance' }).status(301);
+                        }
 
-                    if(result.length > 0){
-                        res.json({ success: '[+] Get all attendance success', data: result });
-                    }else{
-                        res.json({ error: '[!] Error get all attendance' });
-                    }
-                });
+                        if(result.length > 0){
+                            res.json({ success: '[+] Get all attendance success', data: result });
+                        }else{
+                            res.json({ error: '[!] Error get all attendance' });
+                        }
+                    });
+                }else if(token.level == 'students'){
+                    modelAttendance.find({ class: token.class, major: token.major }).sort({ time: 'asc' }).exec((err, result) => {
+                        if(err){
+                            res.json({ error: '[!] Error get all attendance' }).status(301);
+                        }else{
+                            res.json({ data: result });
+                        }
+                    });
+                }
             }else{
                 res.json({ error: '[!] Error get all attendance' });
             }
         });
+    })
+})
+
+route.post('/add', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong authorization' }).status(301);
+        }else{
+            modelUsers.find({ username: token.username }, (err, users) => {
+                if(users.length == 0){
+                    res.json({ error: '[!] Users not found' }).status(301);
+                }else{
+                    modelAttendance.find({ name: token.name }, (err, check) => {
+                        if(check.length == 0){
+                            modelAttendance.insertMany({
+                                name: token.name,
+                                username: token.username,
+                                lessons: req.body.lessons,
+                                time: req.body.time,
+                                class: token.class,
+                                major: token.major,
+                                date: req.body.date,
+                                late: req.body.late,
+                            }, (err, done) => {
+                                if(err){
+                                    res.json({ error: '[!] Error add attendance' }).status(301);
+                                }else{
+                                    res.json({ success: '[+] Add attendance success' });
+                                }
+                            })
+                        }else{
+                            res.json({ error: "[!] You already get attendance" }).status(301)
+                        }
+                    })
+                }
+            })
+        }
     })
 })
 

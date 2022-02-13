@@ -1,45 +1,49 @@
-# Express API Starter
+# DeadLine
+<p>Application for improve students productivity</p>
 
-Includes API Server utilities:
+![](https://img.shields.io/badge/Alert-information-yellow) 
+<b>Still in development</b>
 
-* [morgan](https://www.npmjs.com/package/morgan)
-  * HTTP request logger middleware for node.js
-* [helmet](https://www.npmjs.com/package/helmet)
-  * Helmet helps you secure your Express apps by setting various HTTP headers. It's not a silver bullet, but it can help!
-* [dotenv](https://www.npmjs.com/package/dotenv)
-  * Dotenv is a zero-dependency module that loads environment variables from a `.env` file into `process.env`
+![](https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/banner.png)
 
-Development utilities:
+![](https://img.shields.io/badge/react-native-blue)
+![](https://img.shields.io/badge/nodejs-16.7.0-lime) 
+![](https://img.shields.io/badge/expo-4.5.2-white)
+![](https://img.shields.io/badge/mongo-4.0.19-green)
+![](https://img.shields.io/badge/expressjs-4.17.1-white)
 
-* [nodemon](https://www.npmjs.com/package/nodemon)
-  * nodemon is a tool that helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected.
-* [eslint](https://www.npmjs.com/package/eslint)
-  * ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
-* [mocha](https://www.npmjs.com/package/mocha)
-  * ☕️ Simple, flexible, fun JavaScript test framework for Node.js & The Browser ☕️
-* [supertest](https://www.npmjs.com/package/supertest)
-  * HTTP assertions made easy via superagent.
+[![Deploy Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)  [![Deploy Vercel](https://vercel.com/button)](https://vercel.com/new) [![Deploy Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/neverendingqs/netlify-express)
 
-## Setup
+# How to Setup all of this stuff ?
+<img src="https://media.giphy.com/media/kQOxxwjjuTB7O/giphy.gif" width="180" />
 
-```
-npm install
-```
+<b> The Backend </b>
+<pre>
+1. npm install
+2. npm start "your ip"
+</pre>
 
-## Lint
+<b> The Android </b>
+<pre>
+1. cd Android
+2. npm install
+3. npm start
+</pre>
 
-```
-npm run lint
-```
+# Screenshots
+<img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/banner.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/banner2.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/banner3.jpeg" width="250" height="550" />
 
-## Test
+<img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/banner4.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/home.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/homework.jpeg" width="250" height="550" />
 
-```
-npm run test
-```
+<img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/lecture.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/location.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/location-fail.jpeg" width="250" height="550" />
 
-## Development
+<img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/login.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/notification.jpeg" width="250" height="550" />
 
-```
-npm run dev
-```
+<img src="https://media.giphy.com/media/8X2kIbRJZQkdXt46ur/giphy.gif" width="180" />
+<div>
+<b>Special Thanks!</b><br>
+<pre>
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Stack_Overflow_icon.svg" width="50" /> <img src="https://image.flaticon.com/icons/png/512/2702/2702602.png"  width="40" /> <img src="https://upload.wikimedia.org/wikipedia/commons/d/db/Npm-logo.svg" bottom=15 width="40"  /> <img src="https://image.flaticon.com/icons/png/512/4478/4478878.png" bottom=15 width="40"  /> <img src="https://undraw.co/favicon.ico" bottom=15 width="40"  /> <img src="https://copilot.github.com/head2x.png" bottom=15 width="40"  /> 
+
+</pre>
+</div>

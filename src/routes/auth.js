@@ -8,10 +8,10 @@ route.post('/login', (req,res) => {
     modelUsers.find({ username: req.body.username }, (err, check) => {
         if(err){
             res.json({ error: '[!] Username or password is wrong' }).status(401)
-        }else{
+        }
             try{
                 bcrypt.compare(req.body.password, check[0].password, (err, pw) => {
-                    if(err){
+                    if(!pw){
                         res.json({ error: '[!] Username or password is wrong' }).status(401)
                     }else{
                         const Token = jwt.sign({
@@ -26,10 +26,9 @@ route.post('/login', (req,res) => {
                         res.json({ success: 'Successfully login' })
                     }
                 })
-            }catch(err){
+            }catch(e){
                 res.json({ error: '[!] Username or password is wrong' }).status(401)
             }
-        }
     })
 })
 
@@ -38,20 +37,26 @@ route.post('/register', (req,res) => {
         if(users != null){
             res.json({ error: '[!] Users already registered' }).status(301)
         }else{
-            modelUsers.insertMany({ 
-                name: req.body.name,
-                class: req.body.class,
-                major: req.body.major,
-                username: req.body.username,
-                password: req.body.password,
-                gender: req.body.gender,
-                level: req.body.level
-            }, (err, done) => {
+            bcrypt.hash(req.body.password, 10, (err, pw) => {
                 if(err){
-                    res.json({ error: '[!] Something wrong in server' }).status(501)
-                }else{
-                    res.json({ success: 'Successfully registered' })
+                    res.json({ error: '[!] Something Wrong in server' }).status(501)
                 }
+
+                modelUsers.insertMany({ 
+                    name: req.body.name,
+                    class: req.body.class,
+                    major: req.body.major,
+                    username: req.body.username,
+                    password: pw,
+                    gender: req.body.gender,
+                    level: req.body.level
+                }, (err, done) => {
+                    if(err){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        res.json({ success: 'Successfully registered' })
+                    }
+                })
             })
         }
     })
@@ -67,6 +72,72 @@ route.post('/profile', (req, res) => {
                     res.json({ error: '[!] Something on server' }).status(501)
                 }else{
                     res.json(done)
+                }
+            })
+        }
+    })
+})
+
+route.post('/delete', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong Authorization' }).status(301)
+        }else{
+            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                if(users.length == 0){
+                    res.json({ error: '[!] You are not admin' }).status(301)
+                }else{
+                    modelUsers.deleteOne({ username: req.body.username }, (err, done) => {
+                        if(err){
+                            res.json({ error: '[!] Something on server' }).status(501)
+                        }else{
+                            res.json({ success: 'Successfully deleted' })
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
+
+route.post('/getall/admin', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong Authorization' }).status(301)
+        }else{
+            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                if(users.length == 0){
+                    res.json({ error: '[!] Users not found' }).status(501)
+                }else{
+                    modelUsers.find({ level: 'admin' }, (err, all) => {
+                        if(err){
+                            res.json({ error: '[!] Something on server' }).status(501)
+                        }else{
+                            res.json({ users: all })
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
+
+route.post('/search/admin', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong Authorization' }).status(301)
+        }else{
+            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                if(users.length == 0){
+                    res.json({ error: '[!] Users not found' }).status(501)
+                }else{
+                    modelUsers.find({ name: { $regex: req.body.name }, level: 'admin' }, (err, all) => {
+                        if(err){
+                            res.json({ error: '[!] Something on server' }).status(501)
+                        }else{
+                            res.json({ users: all })
+                        }
+                    })
                 }
             })
         }

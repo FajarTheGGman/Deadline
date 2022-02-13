@@ -13,7 +13,41 @@ route.post('/getall', (req,res) => {
                 if(users.length == 0 || err){
                     res.json({ error: '[!] User not found' }).status(301)
                 }else{
-                    modelHomework.find({}, (err, homework) => {
+                    console.log(token.class)
+                    if(token.level == 'admin'){
+                        modelHomework.find({}, (err, homework) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301)
+                            }else{
+                                res.json({ homework: homework }).status(200)
+                            }
+                        })
+                    }else if(token.level == 'students'){
+                        modelHomework.find({ class: token.class }, (err, homework) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301)
+                            }else{
+                                res.json({ homework: homework }).status(200)
+                            }
+                        })
+                    }
+
+                }
+            })
+        }
+    })
+})
+
+route.post('/search', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong Authorization' }).status(301)
+        }else{
+            modelUsers.find({ username: token.username }, (err, users) => {
+                if(users.length == 0 || err){
+                    res.json({ error: '[!] User not found' }).status(301)
+                }else{
+                    modelHomework.find({ title: { $regex: req.body.homework } }, (err, homework) => {
                         if(err){
                             res.json({ error: '[!] Error' }).status(301)
                         }else{
@@ -37,6 +71,7 @@ route.post('/add', (req,res) => {
                 }else{
                     modelHomework.insertMany({
                         title: req.body.title,
+                        lessons: req.body.lessons,
                         teacher: req.body.teacher,
                         class: req.body.class,
                         major: req.body.major,
@@ -99,7 +134,7 @@ route.post('/delete', (req,res) => {
                 if(users.length == 0 || err){
                     res.json({ error: '[!] User not found' }).status(301)
                 }else{
-                    modelHomework.deleteOne({ title: req.body.title, teacher: req.body.teacher }, (err, homework) => {
+                    modelHomework.deleteOne({ _id: req.body.id }, (err, homework) => {
                         if(err){
                             res.json({ error: '[!] Error' }).status(301)
                         }else{

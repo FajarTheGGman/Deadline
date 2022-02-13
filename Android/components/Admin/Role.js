@@ -159,7 +159,8 @@ export default class Role extends Component{
                     </TouchableOpacity>
                 </View>
 
-                <View style={{ marginTop: 20 }}>
+                <View style={{ marginTop: 30 }}>
+                    <Text style={{ marginLeft: 15, fontWeight: 'bold', fontSize: 17 }}>Newest Roles</Text>
                     {this.state.dataRoles.map((x,y) => {
                         return <TouchableOpacity style={{ backgroundColor: "white", padding: 15, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', elevation: 10, marginRight: 10, marginLeft: 10, alignItems: 'center', marginTop: 20 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>

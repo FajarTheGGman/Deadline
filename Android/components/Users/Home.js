@@ -7,6 +7,7 @@ import { Permissions, Notifications } from 'expo'
 import { StackActions } from '@react-navigation/native'
 import konfigurasi from '../../config'
 import axios from 'axios'
+import { BarCodeScanner } from 'expo-barcode-scanner'
 
 // expo packages
 import * as Location from 'expo-location'
@@ -54,12 +55,39 @@ export default class Tab extends Component{
 }
 
 class Barcode extends Component{
+
+    handleBarCodeScanned = ({ type, data }) => {
+        /*
+        AsyncStorage.getItem('token').then(token => {
+            Location.getCurrentPositionAsync({}).then(location => {
+                axios.post(konfigurasi.url + '/api/attendance/scan', {
+                    token: token,
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                    code: data
+                }).then(res => {
+                    if(res.data.status == 'success'){
+                        this.props.navigation.navigate('Index')
+                    }
+                })
+            })
+        })*/
+    }
+
     render(){
         return(
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
-                
-            </View>        
+                <BarCodeScanner
+                    onBarCodeScanned={this.handleBarCodeScanned}
+                    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+                >
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Icons name="qr-code-outline" size={120} color="black" />
+                        <Text style={{ fontWeight: 'bold', marginTop: 15 }}>Scan QR Here!, to get attendance</Text>
+                    </View>
+                </BarCodeScanner>
+            </View>
         )
     }
 }
@@ -74,7 +102,7 @@ class Settings extends Component{
     logout(){
         AsyncStorage.removeItem('token')
         this.props.navigation.dispatch(
-            StackActions.replace("Login")
+            StackActions.replace("Banner")
         )
     }
 
@@ -85,7 +113,7 @@ class Settings extends Component{
                 <Text style={{ color: '#191A19', fontWeight: 'bold', fontSize: 17, alignSelf: 'center', marginTop: 15 }}>Settings <Icons name='hammer-outline' size={20} color="#191A19" /></Text>
                 
                 <View style={{ flexDirection: 'column', marginLeft: 20, marginRight: 20, justifyContent: 'space-between' }}>
-                    <View>
+                    <View style={{ flexDirection: 'column' }}>
                         <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10  }}>
                             <View style={{ flexDirection: 'row', marginTop: 10  }}>
                                 <Icons name="text-outline" size={25} color='black' />
@@ -101,6 +129,17 @@ class Settings extends Component{
                             <View style={{ flexDirection: 'row', marginTop: 10  }}>
                                 <Icons name="key-outline" size={25} color='black' />
                                 <Text style={{ fontWeight: 'bold', marginLeft: 10, marginTop: 3  }}>Change The Password</Text>
+                            </View>
+                                    
+                            <View style={{ marginTop: 10  }}>
+                                <Icons name="chevron-forward-outline" size={25} color='black' />
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10  }} onPress={() => this.props.navigation.navigate('About')}>
+                            <View style={{ flexDirection: 'row', marginTop: 10  }}>
+                                <Icons name="logo-octocat" size={25} color='black' />
+                                <Text style={{ fontWeight: 'bold', marginLeft: 10, marginTop: 3  }}>About Developer</Text>
                             </View>
                                     
                             <View style={{ marginTop: 10  }}>
@@ -133,11 +172,22 @@ class Index extends Component{
         this.state = {
             username: '',
             schedule: '',
-            lessons: []
+            lessons: [],
+            next_lecture: [],
+            time: ''
         }
     }
 
     componentDidMount(){
+        const dayOrigin = new Date().getDay();
+        const dayName = (dayOrigin) => {
+            const day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            return day[dayOrigin];
+        }
+
+        const day = dayName(dayOrigin);
+
+
         AsyncStorage.getItem("token").then((token) => {
             axios.post(konfigurasi.server + 'auth/profile', {
                 token: token,
@@ -147,30 +197,81 @@ class Index extends Component{
                     username: res.data.name,
                 })
             })
+
+            axios.post(konfigurasi.server + 'lessons/getall', {
+                token: token,
+                secret: konfigurasi.secret,
+                day: day.toLowerCase()
+            }).then(res => {
+                if(res.data.lessons){
+                    this.setState({
+                        lessons: this.state.lessons.concat(res.data.lessons)
+                    })
+
+                    let get_time = new Date().getHours() + ':' + new Date().getMinutes();
+                    this.setState({ time: get_time })
+                    this.state.lessons.map(item => {
+                        if(item.date > get_time){
+                            this.setState({ time: item.date })
+                            console.log(this.state.time)
+                            this.setState({ next_lecture: this.state.next_lecture.concat(item) })
+
+                        // count time from now to 14:20:01 with parseTime
+                        const countTime = (time) => {
+                            let time_split = time.split(':');
+                            let hour = time_split[0];
+                            let minute = time_split[1];
+                            let second = time_split[2];
+                            let now = new Date();
+                            let time_now = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+                            let time_now_split = time_now.split(':');
+                            let hour_now = time_now_split[0];
+                            let minute_now = time_now_split[1];
+                            let second_now = time_now_split[2];
+                            let hour_diff = hour - hour_now;
+                            let minute_diff = minute - minute_now;
+                            let second_diff = second - second_now;
+                            if(second_diff < 0){
+                                second_diff = 60 - second_diff;
+                                minute_diff = minute_diff - 1;
+                            }
+                            if(minute_diff < 0){
+                                minute_diff = 60 - minute_diff;
+                                hour_diff = hour_diff - 1;
+                            }
+                            return { hour_diff, minute_diff, second_diff }
+                        }
+
+
+
+                        let hours = 1
+                        let minutes = 10
+                        let sec = 60
+                        setInterval(() => {
+                            this.setState({
+                                schedule: `${countTime(this.state.time).hour_diff} : ${countTime(this.state.time).minute_diff} : ${countTime(this.state.time).second_diff}`
+                            })
+                            sec--;
+                            if(sec == 0){
+                                minutes--;
+                                sec = 60;
+                                if(minutes == 0){
+                                    hours--;
+                                    minutes = 60;
+                                    if(hours == 0){
+                                        this.setState({
+                                            schedule: 'Class Begin'
+                                        })
+                                    }
+                                }
+                            }
+                        }, 1000)
+                        }
+                    })
+                }
+            })
         })
 
-        let hours = 1
-        let minutes = 10
-        let sec = 50
-        setInterval(() => {
-            this.setState({
-                schedule: `${hours} : ${minutes} : ${sec}`
-            })
-            sec--;
-            if(sec == 0){
-                minutes--;
-                sec = 60;
-                if(minutes == 0){
-                    hours--;
-                    minutes = 60;
-                    if(hours == 0){
-                        this.setState({
-                            schedule: 'Class Begin'
-                        })
-                    }
-                }
-            }
-        }, 1000)
     }
 
     render(){
@@ -203,7 +304,7 @@ class Index extends Component{
 
                     <View>
                         <View style={{ marginTop: 15, backgroundColor: '#191A19', borderRadius: 10, padding: 7, alignSelf: 'flex-start' }}>
-                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>Class Begin in - {this.state.schedule}</Text>
+                            {this.state.schedule.length == 0 ? <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>There's no class today</Text> : <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>Class Begin in - {this.state.schedule}</Text>  }
                         </View>
                     </View>
 
@@ -220,9 +321,9 @@ class Index extends Component{
                                 <Text style={{ color: '#191A19' }}>Attendance</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center' }}>
-                                <Icons name="school-outline" size={30} color="#191A19" />
-                                <Text style={{ color: '#191A19' }}>My Class</Text>
+                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('Leaderboard')}>
+                                <Icons name="trophy-outline" size={30} color="#191A19" />
+                                <Text style={{ color: '#191A19' }}>Leaderboard</Text>
                             </TouchableOpacity>
                         </View>
 
@@ -232,7 +333,7 @@ class Index extends Component{
                                 <Text style={{ color: '#191A19' }}>Events</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }}>
+                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }} onPress={() => this.props.navigation.navigate('Inbox')}>
                                 <Icons name="file-tray-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Inbox</Text>
                             </TouchableOpacity>

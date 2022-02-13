@@ -8,13 +8,14 @@ const Completed = mongoose.Schema({
 })
 
 const Homework = mongoose.Schema({
-    title: { type: String, required: true },
-    teacher: { type: String, required: true },
-    class: { type: String, required: true },
-    major: { type: String, required: true },
+    title: { type: String },
+    lessons: { type: String },
+    teacher: { type: String },
+    class: { type: String },
+    major: { type: String },
     completed: [Completed],
     desc: { type: String },
-    deadline: { type: String, required: true },
+    deadline: { type: String },
 })
 
 module.exports = mongoose.model('Homework', Homework);
