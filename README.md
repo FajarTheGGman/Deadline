@@ -12,15 +12,18 @@
 ![](https://img.shields.io/badge/mongo-4.0.19-green)
 ![](https://img.shields.io/badge/expressjs-4.17.1-white)
 
-# How to Setup Backend ?
+[![Deploy Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)  [![Deploy Vercel](https://vercel.com/button)](https://vercel.com/new) [![Deploy Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/neverendingqs/netlify-express)
+
+# How to Setup all of this stuff ?
 <img src="https://media.giphy.com/media/kQOxxwjjuTB7O/giphy.gif" width="180" />
 
+<b> The Backend </b>
 <pre>
 1. npm install
 2. npm start "your ip"
 </pre>
 
-# How to Setup Android App ?
+<b> The Android </b>
 <pre>
 1. cd Android
 2. npm install
@@ -40,6 +43,7 @@
 <div>
 <b>Special Thanks!</b><br>
 <pre>
-<img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Stack_Overflow_icon.svg" width="50" /> <img src="https://image.flaticon.com/icons/png/512/2702/2702602.png"  width="40" /> <img src="https://upload.wikimedia.org/wikipedia/commons/d/db/Npm-logo.svg" bottom=15 width="40"  /> <img src="https://image.flaticon.com/icons/png/512/4478/4478878.png" bottom=15 width="40"  /> <img src="https://undraw.co/favicon.ico" bottom=15 width="40"  />
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Stack_Overflow_icon.svg" width="50" /> <img src="https://image.flaticon.com/icons/png/512/2702/2702602.png"  width="40" /> <img src="https://upload.wikimedia.org/wikipedia/commons/d/db/Npm-logo.svg" bottom=15 width="40"  /> <img src="https://image.flaticon.com/icons/png/512/4478/4478878.png" bottom=15 width="40"  /> <img src="https://undraw.co/favicon.ico" bottom=15 width="40"  /> <img src="https://copilot.github.com/head2x.png" bottom=15 width="40"  /> 
+
 </pre>
 </div>
