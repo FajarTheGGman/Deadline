@@ -1,0 +1,12 @@
+{
+    "name": "Dead Line",
+    "description": "Application to improve productivity for students",
+    "env": {
+        "DB": {
+            "value": "YOUR MONGODB CONNECTION STRING"
+        },
+        "SECRET": {
+            "value": "dotbeafool"
+        }
+    }
+}
