@@ -9,13 +9,12 @@ route.post('/getall', (req, res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301);
         }else{
-            console.log(token)
             if(token.level == 'students'){
                 modelUsers.find({ username: token.username }, (err, users) => {
                     if(err || users.length == 0){
                         res.json({ error: '[!] User not found' }).status(301);
                     }else{
-                        modelLessons.find({}, (err, lessons) => {
+                        modelLessons.find({ class: token.class, day: req.body.day }, (err, lessons) => {
                             if(err){
                                 res.json({ error: '[!] Error' }).status(301);
                             }else{

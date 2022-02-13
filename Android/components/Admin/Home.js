@@ -5,6 +5,7 @@ import Icons from 'react-native-vector-icons/Ionicons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Permissions, Notifications } from 'expo'
 import { StackActions } from '@react-navigation/native'
+import base64 from 'react-native-base64'
 
 // expo packages
 import * as Location from 'expo-location'
@@ -46,8 +47,9 @@ class Barcode extends Component{
         return(
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
-                
-            </View>        
+                <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                </View>
+            </View>
         )
     }
 }
@@ -62,7 +64,7 @@ class Settings extends Component{
     logout(){
         AsyncStorage.removeItem('token')
         this.props.navigation.dispatch(
-            StackActions.replace('Login')
+            StackActions.replace('Banner')
         )
     }
 
@@ -131,7 +133,7 @@ class Index extends Component{
                 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row', marginTop: 25, marginLeft: 20 }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
                             <Image source={{ uri: "https://66.media.tumblr.com/f437e1a485894e5a4b50fe79fb59913e/tumblr_mxccksP6TQ1snvtspo1_500.jpg" }} style={{ width: 50, height: 50, borderRadius: 100, borderWidth: 2, borderColor: '#191A19' }} />
                         </TouchableOpacity>
 
@@ -142,7 +144,7 @@ class Index extends Component{
                     </View>
 
                     <View style={{ flexDirection: 'column', marginRight: 30, marginTop: 30 }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Notifications')}>
                             <Icons name="notifications-outline" size={30} color="#191A19" />
                         </TouchableOpacity>
                     </View>
@@ -178,28 +180,28 @@ class Index extends Component{
                         </View>
 
                         <View style={{ flexDirection: "row", marginTop: 35, marginLeft: 20, justifyContent: 'space-evenly' }}>
-                            <TouchableOpacity style={{ alignItems: 'center' }}>
+                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('EventAdmin')}>
                                 <Icons name="golf-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Events</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }}>
+                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }} onPress={() => this.props.navigation.navigate('InboxAdmin')}>
                                 <Icons name="file-tray-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Inbox</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 10 }}>
+                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 10 }} onPress={() => this.props.navigation.navigate('HomeworkAdmin')}>
                                 <Icons name="newspaper-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Home Work</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{ flexDirection: "row", marginTop: 35, marginLeft: 20, justifyContent: 'space-evenly' }}>
-                            <TouchableOpacity style={{ alignItems: 'center' }}>
+                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('AdminNew')}>
                                 <Icons name="person-circle-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Admin</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }}>
+                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }} onPress={() => this.props.navigation.navigate('Location')}>
                                 <Icons name="location-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Location</Text>
                             </TouchableOpacity>

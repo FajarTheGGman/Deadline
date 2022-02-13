@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const Major = mongoose.Schema({
-    name: { type: String },
+    major: { type: String },
     desc: { type: String }
 })
 

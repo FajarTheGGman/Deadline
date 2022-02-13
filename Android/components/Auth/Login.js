@@ -106,7 +106,6 @@ export default class Login extends Component {
                             <TouchableOpacity style={{ backgroundColor: '#4E9F3D', padding: 10, borderRadius: 5, width: 300, marginTop: 15, alignItems: 'center' }} onPress={() => this.login()}>
                                 <Text style={{ fontWeight: 'bold' }}>Login</Text>
                             </TouchableOpacity>
-                            <Text style={{ marginTop: 10 }}>If you don't have any account, try register <Text onPress={() => this.props.navigation.navigate('Register')} style={{ color: '#4E9F3D' }}>Here!</Text></Text>
                         </View>
                     </KeyboardAwareScrollView>
                 </View>

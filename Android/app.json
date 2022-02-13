@@ -25,11 +25,12 @@
         "backgroundColor": "#FFFFFF"
       },
       "permissions": [
-            "ACCESS_BACKGROUND_LOCATION",
-            "FOREGROUND_SERVICE",
-            "ACCESS_FINE_LOCATION",
-            "ACCESS_COARSE_LOCATION"
-      ]
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
+      "package": "com.fajartheggman.DeadLine"
     },
     "web": {
       "favicon": "./assets/favicon.png"
