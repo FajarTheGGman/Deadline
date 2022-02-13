@@ -27,6 +27,14 @@
 3. npm start
 </pre>
 
+# Screenshots
+<img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/banner.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/banner2.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/banner3.jpeg" width="250" height="550" />
+
+<img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/banner4.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/home.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/homework.jpeg" width="250" height="550" />
+
+<img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/lecture.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/location.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/location-fail.jpeg" width="250" height="550" />
+
+<img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/login.jpeg" width="250" height="550" /> <img src="https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/application/notification.jpeg" width="250" height="550" />
 
 <img src="https://media.giphy.com/media/8X2kIbRJZQkdXt46ur/giphy.gif" width="180" />
 <div>
