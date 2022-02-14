@@ -27,6 +27,10 @@ import Leaderboard from './components/Users/Leaderboard'
 import Inbox from './components/Users/Inbox'
 import About from './components/Users/About'
 
+// Settings
+import Passwords from './components/Settings/Passwords'
+import Username from './components/Settings/Username'
+
 // Admin
 import Admin from './components/Admin/Home'
 import LectureAdmin from './components/Admin/LectureAdmin'
@@ -98,6 +102,19 @@ export default class Navigation extends Component{
                         headerShown: true,
                         headerShadowVisible: false,
                     }} />
+
+                    {/* Settings */}
+                    <Stack.Screen name="Passwords" component={Passwords} options={{
+                        headerShown: true,
+                        headerShadowVisible: false,
+                        headerTitle: 'Change Passwords'
+                    }} />
+                    <Stack.Screen name="Username" component={Username} options={{
+                        headerShown: true,
+                        headerShadowVisible: false,
+                        headerTitle: 'Change Username'
+                    }} />
+
 
                     {/* Admin Sections */}
                     <Stack.Screen name="LectureAdmin" component={LectureAdmin} options={{

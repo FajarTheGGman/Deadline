@@ -35,7 +35,10 @@ export default class Leaderboard extends Component {
                 </View>
 
                 <View style={{ marginTop: 25, paddingBottom: 25, marginLeft: 20, marginRight: 20 }}>
-                    {this.state.data.map((x,y) => {
+                    {this.state.data.length == 0 ? <View style={{ marginTop: 65, alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }}>
+                        <Icons name='logo-dropbox' size={80} color="grey" />
+                        <Text style={{ fontWeight: 'bold', color: 'grey' }}>Leaderboards not available yet!</Text>
+                    </View>: this.state.data.map((x,y) => {
                         return <View style={{ backgroundColor: 'white', marginTop: 25, padding: 10, borderRadius: 20, elevation: 15, flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={{ uri: 'https://66.media.tumblr.com/84044fea94e02406aedf531c3f787fc5/tumblr_mr4hj0tzgS1qbpxtio1_540.png' }} style={{ width: 50, height: 50, borderRadius: 100 }} />

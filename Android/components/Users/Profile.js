@@ -10,7 +10,7 @@ export default class Profile extends Component{
             name: null,
             username: null,
             class: null,
-            major: null,
+            major: '',
             since: null,
         }
     }
@@ -70,7 +70,7 @@ export default class Profile extends Component{
 
                     <View style={{ flexDirection: 'column', alignItems: 'center', backgroundColor: 'white', elevation: 10, padding: 5, paddingLeft: 10, paddingRight: 10, borderRadius: 10 }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Major</Text>
-                        <Text>{this.state.major}</Text>
+                        <Text>{this.state.major.length > 5 ? this.state.major.slice(0, 5)+'...' : this.state.major}</Text>
                     </View>
                 </View>
 

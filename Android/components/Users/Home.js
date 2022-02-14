@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableOpacity, AsyncStorage, ScrollView, StatusBar } from 'react-native'
+import { View, Text, Image, RefreshControl, TouchableOpacity, AsyncStorage, ScrollView, StatusBar } from 'react-native'
 import Modal from 'react-native-modal'
 import Icons from 'react-native-vector-icons/Ionicons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -8,6 +8,7 @@ import { StackActions } from '@react-navigation/native'
 import konfigurasi from '../../config'
 import axios from 'axios'
 import { BarCodeScanner } from 'expo-barcode-scanner'
+
 
 // expo packages
 import * as Location from 'expo-location'
@@ -114,7 +115,7 @@ class Settings extends Component{
                 
                 <View style={{ flexDirection: 'column', marginLeft: 20, marginRight: 20, justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'column' }}>
-                        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10  }}>
+                        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10  }}  onPress={() => this.props.navigation.navigate('Username')}>
                             <View style={{ flexDirection: 'row', marginTop: 10  }}>
                                 <Icons name="text-outline" size={25} color='black' />
                                 <Text style={{ fontWeight: 'bold', marginLeft: 10, marginTop: 3  }}>Change The Username</Text>
@@ -125,7 +126,7 @@ class Settings extends Component{
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10  }}>
+                        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10  }} onPress={() => this.props.navigation.navigate('Passwords')}>
                             <View style={{ flexDirection: 'row', marginTop: 10  }}>
                                 <Icons name="key-outline" size={25} color='black' />
                                 <Text style={{ fontWeight: 'bold', marginLeft: 10, marginTop: 3  }}>Change The Password</Text>
@@ -174,7 +175,8 @@ class Index extends Component{
             schedule: '',
             lessons: [],
             next_lecture: [],
-            time: ''
+            time: '',
+            refresh: false
         }
     }
 
@@ -271,12 +273,110 @@ class Index extends Component{
                 }
             })
         })
+    }
+
+    refresh(){
+        const dayOrigin = new Date().getDay();
+        const dayName = (dayOrigin) => {
+            const day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            return day[dayOrigin];
+        }
+
+        const day = dayName(dayOrigin);
+
+
+        AsyncStorage.getItem("token").then(async (token) => {
+            this.setState({ refresh: true })
+            await axios.post(konfigurasi.server + 'auth/profile', {
+                token: token,
+                secret: konfigurasi.secret
+            }).then((res) => {
+                this.setState({
+                    username: res.data.name,
+                })
+            })
+
+            await axios.post(konfigurasi.server + 'lessons/getall', {
+                token: token,
+                secret: konfigurasi.secret,
+                day: day.toLowerCase()
+            }).then(res => {
+                if(res.data.lessons){
+                    this.setState({
+                        lessons: this.state.lessons.concat(res.data.lessons)
+                    })
+
+                    let get_time = new Date().getHours() + ':' + new Date().getMinutes();
+                    this.setState({ time: get_time })
+                    this.state.lessons.map(item => {
+                        if(item.date > get_time){
+                            this.setState({ time: item.date })
+                            console.log(this.state.time)
+                            this.setState({ next_lecture: this.state.next_lecture.concat(item) })
+
+                        // count time from now to 14:20:01 with parseTime
+                        const countTime = (time) => {
+                            let time_split = time.split(':');
+                            let hour = time_split[0];
+                            let minute = time_split[1];
+                            let second = time_split[2];
+                            let now = new Date();
+                            let time_now = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+                            let time_now_split = time_now.split(':');
+                            let hour_now = time_now_split[0];
+                            let minute_now = time_now_split[1];
+                            let second_now = time_now_split[2];
+                            let hour_diff = hour - hour_now;
+                            let minute_diff = minute - minute_now;
+                            let second_diff = second - second_now;
+                            if(second_diff < 0){
+                                second_diff = 60 - second_diff;
+                                minute_diff = minute_diff - 1;
+                            }
+                            if(minute_diff < 0){
+                                minute_diff = 60 - minute_diff;
+                                hour_diff = hour_diff - 1;
+                            }
+                            return { hour_diff, minute_diff, second_diff }
+                        }
+
+
+
+                        let hours = 1
+                        let minutes = 10
+                        let sec = 60
+                        setInterval(() => {
+                            this.setState({
+                                schedule: `${countTime(this.state.time).hour_diff} : ${countTime(this.state.time).minute_diff} : ${countTime(this.state.time).second_diff}`
+                            })
+                            sec--;
+                            if(sec == 0){
+                                minutes--;
+                                sec = 60;
+                                if(minutes == 0){
+                                    hours--;
+                                    minutes = 60;
+                                    if(hours == 0){
+                                        this.setState({
+                                            schedule: 'Class Begin'
+                                        })
+                                    }
+                                }
+                            }
+                        }, 1000)
+                        }
+                    })
+                }
+                this.setState({ refresh: false })
+            })
+        })
 
     }
 
+
     render(){
         return(
-            <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }} refreshControl={<RefreshControl refreshing={this.state.refresh} onRefresh={() => this.refresh()}/>}>
                 <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
                 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -345,7 +445,7 @@ class Index extends Component{
                         </View>
                     </View>
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 }

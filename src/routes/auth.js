@@ -62,6 +62,62 @@ route.post('/register', (req,res) => {
     })
 })
 
+route.post('/fullname', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Something wrong in server' }).status(501)
+        }else{
+            modelUsers.find({ username: token.username }, (err, users) => {
+                if(users.length == 0){
+                    res.json({ error: '[!] Users not found' }).status(301)
+                }else{
+                    modelUsers.updateOne({ username: token.username }, { $set: { name: req.body.name } }, (err, done) => {
+                        if(err){
+                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                        }else{
+                            res.json({ success: 'Successfully updated' })
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
+
+route.post('/forgot', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong Authorization' }).status(301)
+        }else{
+            modelUsers.find({ username: token.username }, (err, users) => {
+                if(users.length == 0){
+                    res.json({ error: '[!] Users not found' }).status(301)
+                }else{
+                    bcrypt.compare(req.body.old_password, users[0].password, (err, pw) => {
+                        if(!pw){
+                            res.json({ error: '[!] Wrong old password' }).status(301)
+                        }else{
+                            bcrypt.hash(req.body.new_password, 10, (err, pw) => {
+                                if(err){
+                                    res.json({ error: '[!] Something wrong in server' }).status(501)
+                                }
+
+                                modelUsers.updateOne({ username: token.username }, { $set: { password: pw } }, (err, done) => {
+                                    if(err){
+                                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                                    }else{
+                                        res.json({ success: 'Successfully change password' })
+                                    }
+                                })
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    })
+})
+
 route.post('/profile', (req, res) => {
     jwt.verify(req.body.token, req.body.secret, (err, token) => {
         if(err){
