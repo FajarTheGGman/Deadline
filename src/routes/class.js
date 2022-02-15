@@ -42,32 +42,61 @@ route.post('/add', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(err || users.length == 0){
-                    res.json({ error: '[!] Something wrong in server' }).status(501)
-                }else{
-                    modelClass.find({ class: req.body.class }, (err, classes) => {
-                        if(err){
-                            res.json({ error: '[!] Something wrong in server' }).status(501)
-                        }else{
-                            if(classes.length == 0){
-                                modelClass.insertMany({ 
-                                    class: req.body.class,
-                                    desc: req.body.desc,
-                                }, (err, classes) => {
-                                    if(err){
-                                        res.json({ error: '[!] Something wrong in server' }).status(501)
-                                    }else{
-                                        res.json({ success: '[+] Success add class' }).status(200)
-                                    }
-                                })
+            if(token.level == 'admin'){
+                modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        modelClass.find({ class: req.body.class }, (err, classes) => {
+                            if(err){
+                                res.json({ error: '[!] Something wrong in server' }).status(501)
                             }else{
-                                res.json({ error: '[!] Class already exist' }).status(501)
+                                if(classes.length == 0){
+                                    modelClass.insertMany({ 
+                                        class: req.body.class,
+                                        desc: req.body.desc,
+                                    }, (err, classes) => {
+                                        if(err){
+                                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                                        }else{
+                                            res.json({ success: '[+] Success add class' }).status(200)
+                                        }
+                                    })
+                                }else{
+                                    res.json({ error: '[!] Class already exist' }).status(501)
+                                }
                             }
-                        }
-                    })
-                }
-            })
+                        })
+                    }
+                })
+            }else if(token.level == 'developer'){
+                modelUsers.find({ username: token.username, level: 'developer' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        modelClass.find({ class: req.body.class }, (err, classes) => {
+                            if(err){
+                                res.json({ error: '[!] Something wrong in server' }).status(501)
+                            }else{
+                                if(classes.length == 0){
+                                    modelClass.insertMany({ 
+                                        class: req.body.class,
+                                        desc: req.body.desc,
+                                    }, (err, classes) => {
+                                        if(err){
+                                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                                        }else{
+                                            res.json({ success: '[+] Success add class' }).status(200)
+                                        }
+                                    })
+                                }else{
+                                    res.json({ error: '[!] Class already exist' }).status(501)
+                                }
+                            }
+                        })
+                    }
+                })
+            }
         }
     })
 })
@@ -77,32 +106,61 @@ route.post('/update', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(err || users.length == 0){
-                    res.json({ error: '[!] Something wrong in server' }).status(501)
-                }else{
-                    modelClass.find({ class: req.body.class }, (err, classes) => {
-                        if(err){
-                            res.json({ error: '[!] Something wrong in server' }).status(501)
-                        }else{
-                            if(classes.length == 0){
-                                res.json({ error: '[!] Class does not exist' }).status(501)
+            if(token.level == 'admin'){
+                modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        modelClass.find({ class: req.body.class }, (err, classes) => {
+                            if(err){
+                                res.json({ error: '[!] Something wrong in server' }).status(501)
                             }else{
-                                modelClass.updateOne({ class: req.body.class }, {
-                                    class: req.body.new_class,
-                                    major: req.body.new_major,
-                                }, (err, classes) => {
-                                    if(err){
-                                        res.json({ error: '[!] Something wrong in server' }).status(501)
-                                    }else{
-                                        res.json({ success: '[+] Success update class' }).status(200)
-                                    }
-                                })
+                                if(classes.length == 0){
+                                    res.json({ error: '[!] Class does not exist' }).status(501)
+                                }else{
+                                    modelClass.updateOne({ class: req.body.class }, {
+                                        class: req.body.new_class,
+                                        major: req.body.new_major,
+                                    }, (err, classes) => {
+                                        if(err){
+                                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                                        }else{
+                                            res.json({ success: '[+] Success update class' }).status(200)
+                                        }
+                                    })
+                                }
                             }
-                        }
-                    })
-                }
-            })
+                        })
+                    }
+                })
+            }else if(token.level == 'developer'){
+                modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        modelClass.find({ class: req.body.class }, (err, classes) => {
+                            if(err){
+                                res.json({ error: '[!] Something wrong in server' }).status(501)
+                            }else{
+                                if(classes.length == 0){
+                                    res.json({ error: '[!] Class does not exist' }).status(501)
+                                }else{
+                                    modelClass.updateOne({ class: req.body.class }, {
+                                        class: req.body.new_class,
+                                        major: req.body.new_major,
+                                    }, (err, classes) => {
+                                        if(err){
+                                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                                        }else{
+                                            res.json({ success: '[+] Success update class' }).status(200)
+                                        }
+                                    })
+                                }
+                            }
+                        })
+                    }
+                })
+            }
         }
     })
 })
@@ -112,19 +170,37 @@ route.post('/delete', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(err || users.length == 0){
-                    res.json({ error: '[!] Something wrong in server' }).status(501)
-                }else{
-                    modelClass.deleteOne({ class: req.body.class }, (err, classes) => {
-                        if(err){
-                            res.json({ error: '[!] Something wrong in server' }).status(501)
-                        }else{
-                            res.json({ success: '[+] Success delete class' }).status(200)
-                        }
-                    })
-                }
-            })
+            if(token.level == 'admin'){
+                modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        modelClass.deleteOne({ class: req.body.class }, (err, classes) => {
+                            if(err){
+                                res.json({ error: '[!] Something wrong in server' }).status(501)
+                            }else{
+                                res.json({ success: '[+] Success delete class' }).status(200)
+                            }
+                        })
+                    }
+                })
+            }else if(token.level == 'developer'){
+                modelUsers.find({ username: token.username, level: 'developer' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        modelClass.deleteOne({ class: req.body.class }, (err, classes) => {
+                            if(err){
+                                res.json({ error: '[!] Something wrong in server' }).status(501)
+                            }else{
+                                res.json({ success: '[+] Success delete class' }).status(200)
+                            }
+                        })
+                    }
+                })
+            }else{
+                res.json({ error: '[!] You are not authorized' }).status(501)
+            }
         }
     })
 })
@@ -190,32 +266,63 @@ route.post('/major/add', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(err || users.length == 0){
-                    res.json({ error: '[!] Something wrong in server' }).status(501)
-                }else{
-                    modelMajor.find({ major: req.body.major }, (err, majors) => {
-                        if(err){
-                            res.json({ error: '[!] Something wrong in server' }).status(501)
-                        }else{
-                            if(majors.length == 0){
-                                modelMajor.insertMany({ 
-                                    major: req.body.major,
-                                    desc: req.body.desc,
-                                }, (err, majors) => {
-                                    if(err){
-                                        res.json({ error: '[!] Something wrong in server' }).status(501)
-                                    }else{
-                                        res.json({ success: '[+] Success add major' }).status(200)
-                                    }
-                                })
+            if(token.level == 'admin'){
+                modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        modelMajor.find({ major: req.body.major }, (err, majors) => {
+                            if(err){
+                                res.json({ error: '[!] Something wrong in server' }).status(501)
                             }else{
-                                res.json({ error: '[!] Major already exist' }).status(501)
+                                if(majors.length == 0){
+                                    modelMajor.insertMany({ 
+                                        major: req.body.major,
+                                        desc: req.body.desc,
+                                    }, (err, majors) => {
+                                        if(err){
+                                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                                        }else{
+                                            res.json({ success: '[+] Success add major' }).status(200)
+                                        }
+                                    })
+                                }else{
+                                    res.json({ error: '[!] Major already exist' }).status(501)
+                                }
                             }
-                        }
-                    })
-                }
-            })
+                        })
+                    }
+                })
+            }else if(token.level == 'developer'){
+                modelUsers.find({ username: token.username, level: 'developer' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        modelMajor.find({ major: req.body.major }, (err, majors) => {
+                            if(err){
+                                res.json({ error: '[!] Something wrong in server' }).status(501)
+                            }else{
+                                if(majors.length == 0){
+                                    modelMajor.insertMany({ 
+                                        major: req.body.major,
+                                        desc: req.body.desc,
+                                    }, (err, majors) => {
+                                        if(err){
+                                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                                        }else{
+                                            res.json({ success: '[+] Success add major' }).status(200)
+                                        }
+                                    })
+                                }else{
+                                    res.json({ error: '[!] Major already exist' }).status(501)
+                                }
+                            }
+                        })
+                    }
+                })
+            }else{
+                res.json({ error: '[!] You are not authorized' }).status(501)
+            }
         }
     })
 })
@@ -225,32 +332,63 @@ route.post('/major/update', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(err || users.length == 0){
-                    res.json({ error: '[!] Something wrong in server' }).status(501)
-                }else{
-                    modelMajor.find({ major: req.body.major }, (err, majors) => {
-                        if(err){
-                            res.json({ error: '[!] Something wrong in server' }).status(501)
-                        }else{
-                            if(majors.length == 0){
-                                res.json({ error: '[!] Major does not exist' }).status(501)
+            if(token.level == 'admin'){
+                modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        modelMajor.find({ major: req.body.major }, (err, majors) => {
+                            if(err){
+                                res.json({ error: '[!] Something wrong in server' }).status(501)
                             }else{
-                                modelMajor.updateOne({ major: req.body.major }, {
-                                    major: req.body.new_major,
-                                    desc: req.body.new_desc,
-                                }, (err, majors) => {
-                                    if(err){
-                                        res.json({ error: '[!] Something wrong in server' }).status(501)
-                                    }else{
-                                        res.json({ success: '[+] Success update major' }).status(200)
-                                    }
-                                })
+                                if(majors.length == 0){
+                                    res.json({ error: '[!] Major does not exist' }).status(501)
+                                }else{
+                                    modelMajor.updateOne({ major: req.body.major }, {
+                                        major: req.body.new_major,
+                                        desc: req.body.new_desc,
+                                    }, (err, majors) => {
+                                        if(err){
+                                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                                        }else{
+                                            res.json({ success: '[+] Success update major' }).status(200)
+                                        }
+                                    })
+                                }
                             }
-                        }
-                    })
-                }
-            })
+                        })
+                    }
+                })
+            }else if(token.level == 'developer'){
+                modelUsers.find({ username: token.username, level: 'developer' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        modelMajor.find({ major: req.body.major }, (err, majors) => {
+                            if(err){
+                                res.json({ error: '[!] Something wrong in server' }).status(501)
+                            }else{
+                                if(majors.length == 0){
+                                    res.json({ error: '[!] Major does not exist' }).status(501)
+                                }else{
+                                    modelMajor.updateOne({ major: req.body.major }, {
+                                        major: req.body.new_major,
+                                        desc: req.body.new_desc,
+                                    }, (err, majors) => {
+                                        if(err){
+                                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                                        }else{
+                                            res.json({ success: '[+] Success update major' }).status(200)
+                                        }
+                                    })
+                                }
+                            }
+                        })
+                    }
+                })
+            }else{
+                res.json({ error: '[!] You are not authorized' }).status(501)
+            }
         }
     })
 })
@@ -260,19 +398,37 @@ route.post('/major/delete', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(err || users.length == 0){
-                    res.json({ error: '[!] Something wrong in server' }).status(501)
-                }else{
-                    modelMajor.deleteOne({ major: req.body.major }, (err, majors) => {
-                        if(err){
-                            res.json({ error: '[!] Something wrong in server' }).status(501)
-                        }else{
-                            res.json({ success: '[+] Success delete major' }).status(200)
-                        }
-                    })
-                }
-            })
+            if(token.level == 'admin'){
+                modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        modelMajor.deleteOne({ major: req.body.major }, (err, majors) => {
+                            if(err){
+                                res.json({ error: '[!] Something wrong in server' }).status(501)
+                            }else{
+                                res.json({ success: '[+] Success delete major' }).status(200)
+                            }
+                        })
+                    }
+                })
+            }else if(token.level == 'developer'){
+                modelUsers.find({ username: token.username, level: 'developer' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] Something wrong in server' }).status(501)
+                    }else{
+                        modelMajor.deleteOne({ major: req.body.major }, (err, majors) => {
+                            if(err){
+                                res.json({ error: '[!] Something wrong in server' }).status(501)
+                            }else{
+                                res.json({ success: '[+] Success delete major' }).status(200)
+                            }
+                        })
+                    }
+                })
+            }else{
+                res.json({ error: '[!] You are not authorized' }).status(501)
+            }
         }
     })
 })

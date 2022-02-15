@@ -186,7 +186,7 @@ export default class InboxAdmin extends Component{
                                 <View style={{ marginLeft: 10, marginTop: 20 }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Image source={{ uri: 'https://66.media.tumblr.com/88cdcf920cb1afa091313e1e6912e7e6/tumblr_nv6dx5YpTH1td30guo1_640.jpg' }} style={{ width: 50, height: 50, borderRadius: 100 }} />
+                                            <Image source={require('../../assets/illustrations/male.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />
                                             <View style={{ flexDirection: 'column', marginLeft: 10 }}>
                                                 <Text style={{ fontWeight: 'bold', fontSize: 17 }}>{this.state.sender_from}</Text>
                                                 <Text style={{ color: 'grey' }}>To: class - {this.state.sender_class}</Text>
@@ -289,7 +289,7 @@ export default class InboxAdmin extends Component{
                     {this.state.inbox.map((x,y) => {
                         return <TouchableOpacity style={{ padding: 15, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', marginRight: 10, marginLeft: 10, alignItems: 'center', marginTop: 20 }} onPress={() => this.overview(y)}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Image source={{ uri: 'https://66.media.tumblr.com/1911d9a6e744365fe7a92ba72a7734b8/tumblr_mfswmevqB41rvyr2no1_1280.jpg' }} style={{ width: 50, height: 50, borderRadius: 100 }} />
+                            <Image source={require('../../assets/illustrations/male.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />
                             <View style={{ marginLeft: 10, flexDirection: 'column' }}>
                                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{x.title}</Text>
                                 <Text style={{ fontSize: 15 }}>From {x.from}</Text>

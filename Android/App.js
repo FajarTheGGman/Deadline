@@ -33,6 +33,7 @@ import Username from './components/Settings/Username'
 
 // Admin
 import Admin from './components/Admin/Home'
+import AttendanceAdmin from './components/Admin/Attendance'
 import LectureAdmin from './components/Admin/LectureAdmin'
 import Role from './components/Admin/Role'
 import ClassAdmin from './components/Admin/Class'
@@ -120,17 +121,17 @@ export default class Navigation extends Component{
                     <Stack.Screen name="LectureAdmin" component={LectureAdmin} options={{
                         headerShown: true,
                         headerShadowVisible: false,
-                        headerTitle: ""
+                        headerTitle: "The Lecture"
                     }} />
                     <Stack.Screen name="Role" component={Role} options={{
                         headerShown: true,
                         headerShadowVisible: false,
-                        headerTitle: ""
+                        headerTitle: "The Roles"
                     }} />
                     <Stack.Screen name="ClassAdmin" component={ClassAdmin} options={{
                         headerShown: true,
                         headerShadowVisible: false,
-                        headerTitle: ""
+                        headerTitle: "The Class"
                     }} />
                     <Stack.Screen name="Location" component={Location} options={{
                         headerShown: true,
@@ -140,22 +141,27 @@ export default class Navigation extends Component{
                     <Stack.Screen name="EventAdmin" component={EventAdmin} options={{
                         headerShown: true,
                         headerShadowVisible: false,
-                        headerTitle: ""
+                        headerTitle: "The Events"
                     }} />
                     <Stack.Screen name="InboxAdmin" component={InboxAdmin} options={{
                         headerShown: true,
                         headerShadowVisible: false,
-                        headerTitle: ""
+                        headerTitle: "The Inbox"
                     }} />
                     <Stack.Screen name="AdminNew" component={AdminNew} options={{
                         headerShown: true,
                         headerShadowVisible: false,
-                        headerTitle: ""
+                        headerTitle: "New Admin"
+                    }} />
+                    <Stack.Screen name="AttendanceAdmin" component={AttendanceAdmin} options={{
+                        headerShown: true,
+                        headerShadowVisible: false,
+                        headerTitle: "The Attendance"
                     }} />
                     <Stack.Screen name="HomeworkAdmin" component={HomeworkAdmin} options={{
                         headerShown: true,
                         headerShadowVisible: false,
-                        headerTitle: ""
+                        headerTitle: "The Homework"
                     }} />
                     
                 </Stack.Navigator>

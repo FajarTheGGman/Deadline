@@ -26,6 +26,22 @@ route.post('/getall', (req,res) => {
                                 res.json({ notif: notifs }).status(200);
                         });
                     }
+                }else if(token.level == 'developer'){
+                    if(users.length == 0){
+                        res.json({ error: '[!] User not found' }).status(301);
+                    }else{
+                        modelNotif.find({ username: token.username }, (err, notifs) => {
+                            res.json({ notif: notifs }).status(200);
+                        });
+                    }
+                }else if(token.level == 'teacher'){
+                    if(users.length == 0){
+                        res.json({ error: '[!] User not found' }).status(301);
+                    }else{
+                        modelNotif.find({ username: token.username }, (err, notifs) => {
+                            res.json({ notif: notifs }).status(200);
+                        });
+                    }
                 }
             })
         }

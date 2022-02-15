@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const AttendanceSchema = new mongoose.Schema({
     name: { type: String },
     username: { type: String },
+    picture: { type: String, default: '' },
+    gender: { type: String },
     lessons: { type: String },
     major: { type: String },
     level: { type: String },
