@@ -29,6 +29,14 @@ route.post('/getall', (req,res) => {
                                 res.json({ inbox: done }).status(200)
                             }
                         })
+                    }else if(token.level == 'developer'){
+                        modelInbox.find({}, (err, done) => {
+                            if(err){
+                                res.json({ error: "[!] Error" }).status(301)
+                            }else{
+                                res.json({ inbox: done }).status(200)
+                            }
+                        })
                     }
                 }
             })

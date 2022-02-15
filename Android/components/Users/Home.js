@@ -8,7 +8,7 @@ import { StackActions } from '@react-navigation/native'
 import konfigurasi from '../../config'
 import axios from 'axios'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-
+import base64 from 'react-native-base64'
 
 // expo packages
 import * as Location from 'expo-location'
@@ -56,23 +56,183 @@ export default class Tab extends Component{
 }
 
 class Barcode extends Component{
+    constructor(props){
+        super(props)
+
+        this.state = {
+            lessons: [],
+            next_lecture: [],
+            time: '',
+            date: null,
+            region_lat: null,
+            region_lon: null,
+            total_distance: null,
+            my_lat: 0,
+            my_lon: 0,
+            end_location: 'School',
+            end_lat: 0,
+            end_lon: 0,
+            major: '',
+            class: '',
+            hand: 'hand-left-outline',
+            far: false
+        }
+    }
+
+    componentDidMount(){
+        const dayOrigin = new Date().getDay();
+        const dayName = (dayOrigin) => {
+            const day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            return day[dayOrigin];
+        }
+
+        const day = dayName(dayOrigin);
+
+        AsyncStorage.removeItem('attendance');
+        AsyncStorage.getItem('attendance').then(check => {
+            if(check == 'true'){
+                this.setState({ hand: 'hand-left' })
+            }else{
+                this.setState({ hand: 'hand-left-outline' })
+            }
+        })
+
+        AsyncStorage.getItem('token').then(token => {
+            axios.post(konfigurasi.server + "location/get", {
+                token: token,
+                secret: konfigurasi.secret
+            }).then(res => {
+                if(res.data.location){
+                    this.setState({
+                        end_location: res.data.location[0].location,
+                        end_lat: res.data.location[0].latitude,
+                        end_lon: res.data.location[0].longitude
+                    })
+                }
+            })
+
+            axios.post(konfigurasi.server + "auth/profile", {
+                token: token,
+                secret: konfigurasi.secret
+            }).then(res => {
+                if(res.status == 200){
+                    this.setState({
+                        major: res.data.major,
+                        class: res.data.class,
+                    })
+                }
+            })
+
+            axios.post(konfigurasi.server + 'lessons/getall', {
+                token: token,
+                secret: konfigurasi.secret,
+                day: day.toLowerCase()
+            }).then(res => {
+                if(res.data.lessons){
+                    this.setState({
+                        lessons: this.state.lessons.concat(res.data.lessons)
+                    })
+
+                    let get_time = new Date().getHours() + ':' + new Date().getMinutes();
+                    this.setState({ time: get_time })
+                    this.state.lessons.map(item => {
+                        if(item.date > get_time){
+                            this.setState({ next_lecture: this.state.next_lecture.concat(item) })
+                        }
+                    })
+                }
+            })
+        })
+
+        const { status } = Location.requestForegroundPermissionsAsync();
+
+        Location.watchPositionAsync({
+            enableHighAccuracy: true,
+            timeInterval: 1,
+            distanceInterval: 1
+        }, (location) => {
+            this.setState({
+                my_lat: location.coords.latitude,
+                my_lon: location.coords.longitude
+            })
+
+            const total_distance = geolib.getDistance(
+                {latitude: this.state.my_lat, longitude: this.state.my_lon},
+                {latitude: this.state.end_lat, longitude: this.state.end_lon}
+            )
+
+            this.setState({
+                total_distance: total_distance
+            })
+        })
+
+        const date = new Date().toDateString()
+        this.setState({ date: date })
+
+        axios.get('http://ip-api.com/json').then(res => {
+            if(res.status == 200){
+                this.setState({ 
+                    region_lat: res.data.lat,
+                    region_lon: res.data.lon
+                })
+            }
+        })
+    }
+
+    attendance(){
+        AsyncStorage.getItem('token').then(token => {
+            AsyncStorage.getItem('attendance').then(check => {
+                if(check == 'true'){
+                    this.setState({ hand: 'hand-left' })
+                }else{
+                    if(this.state.total_distance < 15){
+                        AsyncStorage.getItem('expire').then(x => {
+                            let getDate = new Date();
+                            if(x == getDate){
+                                alert('You have already attended today')
+                            }else{
+                                this.setState({ hand: 'hand-left-outline' })
+                                axios.post(konfigurasi.server + 'attendance/add', {
+                                    token: token,
+                                    secret: konfigurasi.secret,
+                                    lessons: this.state.next_lecture[0].lessons,
+                                    major: this.state.major,
+                                    class: this.state.class,
+                                    time: this.state.time,
+                                }).then(res => {
+                                    if(res.data.success){
+                                        alert('Attendance Success')
+                                        AsyncStorage.setItem('attendance', 'true');
+                                        AsyncStorage.setItem('expire', new Date());
+                                    }
+                                })
+                            }
+                        })
+                    }else{
+                        this.setState({ far: true })
+                    }
+                }
+            })
+        })
+    }
 
     handleBarCodeScanned = ({ type, data }) => {
-        /*
         AsyncStorage.getItem('token').then(token => {
-            Location.getCurrentPositionAsync({}).then(location => {
-                axios.post(konfigurasi.url + '/api/attendance/scan', {
-                    token: token,
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                    code: data
-                }).then(res => {
-                    if(res.data.status == 'success'){
-                        this.props.navigation.navigate('Index')
-                    }
-                })
+            const dec = base64.decode(data)
+            const js_data = JSON.parse(dec)
+            axios.post(konfigurasi.server + 'attendance/add', {
+                token: token,
+                secret: konfigurasi.secret,
+                class: js_data.class,
+                lessons: this.state.next_lecture[0].lessons,
+                major: this.state.major,
+                time: this.state.time,
+            }).then(res => {
+                if(res.data.status == 'success'){
+                    alert(js_data.callback)
+                }
             })
-        })*/
+        })
     }
 
     render(){

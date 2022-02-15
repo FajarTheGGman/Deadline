@@ -53,28 +53,53 @@ route.post('/add', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(users.length == 0 || err){
-                    res.json({ error: '[!] User not found' }).status(301)
-                }else{
-                    modelRole.find({ name: req.body.name }, (err, roles) => {
-                        if(roles.length > 0 || err){
-                            res.json({ error: '[!] Role already exists' }).status(301)
-                        }else{
-                            modelRole.insertMany({
-                                name: req.body.name,
-                                level: req.body.level
-                            }, (err, role) => {
-                                if(err){
-                                    res.json({ error: '[!] Error' }).status(301)
-                                }else{
-                                    res.json({ success: '[+] Role added' }).status(200)
-                                }
-                            })
-                        }
-                    })
-                }
-            })
+            if(token.level == 'admin'){
+                modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                    if(users.length == 0 || err){
+                        res.json({ error: '[!] User not found' }).status(301)
+                    }else{
+                        modelRole.find({ name: req.body.name }, (err, roles) => {
+                            if(roles.length > 0 || err){
+                                res.json({ error: '[!] Role already exists' }).status(301)
+                            }else{
+                                modelRole.insertMany({
+                                    name: req.body.name,
+                                    level: req.body.level
+                                }, (err, role) => {
+                                    if(err){
+                                        res.json({ error: '[!] Error' }).status(301)
+                                    }else{
+                                        res.json({ success: '[+] Role added' }).status(200)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }else if(token.level == 'developer'){
+                modelUsers.find({ username: token.username, level: 'developer' }, (err, users) => {
+                    if(users.length == 0 || err){
+                        res.json({ error: '[!] User not found' }).status(301)
+                    }else{
+                        modelRole.find({ name: req.body.name }, (err, roles) => {
+                            if(roles.length > 0 || err){
+                                res.json({ error: '[!] Role already exists' }).status(301)
+                            }else{
+                                modelRole.insertMany({
+                                    name: req.body.name,
+                                    level: req.body.level
+                                }, (err, role) => {
+                                    if(err){
+                                        res.json({ error: '[!] Error' }).status(301)
+                                    }else{
+                                        res.json({ success: '[+] Role added' }).status(200)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
         }
     })
 })
@@ -84,28 +109,53 @@ route.post('/update', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(users.length == 0 || err){
-                    res.json({ error: '[!] User not found' }).status(301)
-                }else{
-                    modelRole.find({ name: req.body.name }, (err, roles) => {
-                        if(roles.length == 0){
-                            res.json({ error: '[!] Role does not exists' }).status(301)
-                        }else{
-                            modelRole.updateOne({ name: req.body.name }, {
-                                name: req.body.new_name,
-                                level: req.body.new_level
-                            }, (err, role) => {
-                                if(err){
-                                    res.json({ error: '[!] Error' }).status(301)
-                                }else{
-                                    res.json({ success: '[+] Role updated' }).status(200)
-                                }
-                            })
-                        }
-                    })
-                }
-            })
+            if(token.level == 'admin'){
+                modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                    if(users.length == 0 || err){
+                        res.json({ error: '[!] User not found' }).status(301)
+                    }else{
+                        modelRole.find({ name: req.body.name }, (err, roles) => {
+                            if(roles.length == 0){
+                                res.json({ error: '[!] Role does not exists' }).status(301)
+                            }else{
+                                modelRole.updateOne({ name: req.body.name }, {
+                                    name: req.body.new_name,
+                                    level: req.body.new_level
+                                }, (err, role) => {
+                                    if(err){
+                                        res.json({ error: '[!] Error' }).status(301)
+                                    }else{
+                                        res.json({ success: '[+] Role updated' }).status(200)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }else if(token.level == 'developer'){
+                modelUsers.find({ username: token.username, level: 'developer' }, (err, users) => {
+                    if(users.length == 0 || err){
+                        res.json({ error: '[!] User not found' }).status(301)
+                    }else{
+                        modelRole.find({ name: req.body.name }, (err, roles) => {
+                            if(roles.length == 0){
+                                res.json({ error: '[!] Role does not exists' }).status(301)
+                            }else{
+                                modelRole.updateOne({ name: req.body.name }, {
+                                    name: req.body.new_name,
+                                    level: req.body.new_level
+                                }, (err, role) => {
+                                    if(err){
+                                        res.json({ error: '[!] Error' }).status(301)
+                                    }else{
+                                        res.json({ success: '[+] Role updated' }).status(200)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
         }
     })
 })
@@ -115,25 +165,47 @@ route.post('/delete', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(users.length == 0 || err){
-                    res.json({ error: '[!] User not found' }).status(301)
-                }else{
-                    modelRole.find({ name: req.body.name }, (err, roles) => {
-                        if(roles.length == 0){
-                            res.json({ error: '[!] Role does not exists' }).status(301)
-                        }else{
-                            modelRole.deleteOne({ name: req.body.name }, (err, role) => {
-                                if(err){
-                                    res.json({ error: '[!] Error' }).status(301)
-                                }else{
-                                    res.json({ success: '[+] Role deleted' }).status(200)
-                                }
-                            })
-                        }
-                    })
-                }
-            })
+            if(token.level == 'admin'){
+                modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                    if(users.length == 0 || err){
+                        res.json({ error: '[!] User not found' }).status(301)
+                    }else{
+                        modelRole.find({ name: req.body.name }, (err, roles) => {
+                            if(roles.length == 0){
+                                res.json({ error: '[!] Role does not exists' }).status(301)
+                            }else{
+                                modelRole.deleteOne({ name: req.body.name }, (err, role) => {
+                                    if(err){
+                                        res.json({ error: '[!] Error' }).status(301)
+                                    }else{
+                                        res.json({ success: '[+] Role deleted' }).status(200)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }else if(token.level == 'developer'){
+                modelUsers.find({ username: token.username, level: 'developer' }, (err, users) => {
+                    if(users.length == 0 || err){
+                        res.json({ error: '[!] User not found' }).status(301)
+                    }else{
+                        modelRole.find({ name: req.body.name }, (err, roles) => {
+                            if(roles.length == 0){
+                                res.json({ error: '[!] Role does not exists' }).status(301)
+                            }else{
+                                modelRole.deleteOne({ name: req.body.name }, (err, role) => {
+                                    if(err){
+                                        res.json({ error: '[!] Error' }).status(301)
+                                    }else{
+                                        res.json({ success: '[+] Role deleted' }).status(200)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
         }
     })
 })

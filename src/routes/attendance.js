@@ -34,6 +34,30 @@ route.post('/getall', (req, res) => {
                             res.json({ data: result });
                         }
                     });
+                }else if(token.level == 'developer'){
+                    modelAttendance.find({ class: { $regex: req.body.class }, username: { $regex: req.body.username } }, (err, result) => {
+                        if(err){
+                            res.json({ error: '[!] Error get all attendance' }).status(301);
+                        }
+
+                        if(result.length > 0){
+                            res.json({ success: '[+] Get all attendance success', data: result });
+                        }else{
+                            res.json({ error: '[!] Error get all attendance' });
+                        }
+                    });
+                }else if(token.level == 'teacher'){
+                    modelAttendance.find({}, (err, result) => {
+                        if(err){
+                            res.json({ error: '[!] Error get all attendance' }).status(301);
+                        }
+
+                        if(result.length > 0){
+                            res.json({ success: '[+] Get all attendance success', data: result });
+                        }else{
+                            res.json({ error: '[!] Error get all attendance' });
+                        }
+                    });
                 }
             }else{
                 res.json({ error: '[!] Error get all attendance' });
@@ -51,28 +75,46 @@ route.post('/add', (req,res) => {
                 if(users.length == 0){
                     res.json({ error: '[!] Users not found' }).status(301);
                 }else{
-                    modelAttendance.find({ name: token.name }, (err, check) => {
-                        if(check.length == 0){
-                            modelAttendance.insertMany({
-                                name: token.name,
-                                username: token.username,
-                                lessons: req.body.lessons,
-                                time: req.body.time,
-                                class: token.class,
-                                major: token.major,
-                                date: req.body.date,
-                                late: req.body.late,
-                            }, (err, done) => {
-                                if(err){
-                                    res.json({ error: '[!] Error add attendance' }).status(301);
-                                }else{
-                                    res.json({ success: '[+] Add attendance success' });
-                                }
-                            })
-                        }else{
-                            res.json({ error: "[!] You already get attendance" }).status(301)
-                        }
-                    })
+                    if(req.query.qr == 'true'){
+                        modelAttendance.find({ name: token.name, class: req.body.class }, (err, check) => {
+                                modelAttendance.insertMany({
+                                    name: token.name,
+                                    username: token.username,
+                                    lessons: req.body.lessons,
+                                    time: req.body.time,
+                                    class: token.class,
+                                    major: token.major,
+                                    date: req.body.date,
+                                    late: req.body.late,
+                                }, (err, done) => {
+                                    if(err){
+                                        res.json({ error: '[!] Error add attendance' }).status(301);
+                                    }else{
+                                        res.json({ success: '[+] Add attendance success' });
+                                    }
+                                });
+                        })
+
+                    }else{
+                        modelAttendance.find({ name: token.name }, (err, check) => {
+                                modelAttendance.insertMany({
+                                    name: token.name,
+                                    username: token.username,
+                                    lessons: req.body.lessons,
+                                    time: req.body.time,
+                                    class: token.class,
+                                    major: token.major,
+                                    date: req.body.date,
+                                    late: req.body.late,
+                                }, (err, done) => {
+                                    if(err){
+                                        res.json({ error: '[!] Error add attendance' }).status(301);
+                                    }else{
+                                        res.json({ success: '[+] Add attendance success' });
+                                    }
+                                });
+                        })
+                    }
                 }
             })
         }
