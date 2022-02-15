@@ -27,6 +27,10 @@ export default class Banner extends Component{
                             this.props.navigation.dispatch(
                                 StackActions.replace('Admin')
                             );
+                        }else if(res.data.level == 'developer'){
+                            this.props.navigation.dispatch(
+                                StackActions.replace('Admin')
+                            );
                         }else{
                             this.props.navigation.dispatch(
                                 StackActions.replace('Home')

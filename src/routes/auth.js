@@ -49,7 +49,7 @@ route.post('/register', (req,res) => {
                     username: req.body.username,
                     password: pw,
                     gender: req.body.gender,
-                    level: req.body.level
+                    level: req.body.level,
                 }, (err, done) => {
                     if(err){
                         res.json({ error: '[!] Something wrong in server' }).status(501)
@@ -57,6 +57,28 @@ route.post('/register', (req,res) => {
                         res.json({ success: 'Successfully registered' })
                     }
                 })
+            })
+        }
+    })
+})
+
+route.post('/picture', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Token is invalid' }).status(401)
+        }else{
+            modelUsers.findOne({ username: token.username }, (err, users) => {
+                if(err){
+                    res.json({ error: '[!] Something wrong in server' }).status(501)
+                }else{
+                    req.files.picture.mv(`./public/images/${users.username}.jpg`, (err) => {
+                        if(err){
+                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                        }else{
+                            res.json({ success: 'Successfully upload picture' })
+                        }
+                    })
+                }
             })
         }
     })
@@ -123,13 +145,23 @@ route.post('/profile', (req, res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.findOne({ username: token.username }, (err, done) => {
-                if(err){
-                    res.json({ error: '[!] Something on server' }).status(501)
-                }else{
-                    res.json(done)
-                }
-            })
+            if(req.body.users == 'true'){
+                modelUsers.findOne({ username: req.body.users }, (err, done) => {
+                    if(err){
+                        res.json({ error: '[!] Something on server' }).status(501)
+                    }else{
+                        res.json(done)
+                    }
+                })
+            }else{
+                modelUsers.findOne({ username: token.username }, (err, done) => {
+                    if(err){
+                        res.json({ error: '[!] Something on server' }).status(501)
+                    }else{
+                        res.json(done)
+                    }
+                })
+            }
         }
     })
 })
@@ -161,19 +193,41 @@ route.post('/getall/admin', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(users.length == 0){
-                    res.json({ error: '[!] Users not found' }).status(501)
-                }else{
-                    modelUsers.find({ level: 'admin' }, (err, all) => {
-                        if(err){
-                            res.json({ error: '[!] Something on server' }).status(501)
-                        }else{
-                            res.json({ users: all })
+            if(token.level == 'admin' || token.level == 'developer'){
+                modelUsers.find({ username: token.username }, (err, users) => {
+                    if(users.length == 0){
+                        res.json({ error: '[!] Users not found' }).status(501)
+                    }else{
+                        if(req.query.admin == 'true'){
+                            modelUsers.find({ level: 'admin' }, (err, all) => {
+                                if(err){
+                                    res.json({ error: '[!] Something on server' }).status(501)
+                                }else{
+                                    res.json({ users: all })
+                                }
+                            })
+                        }else if(req.query.developer == 'true'){
+                            modelUsers.find({ level: 'developer' }, (err, all) => {
+                                if(err){
+                                    res.json({ error: '[!] Something on server' }).status(501)
+                                }else{
+                                    res.json({ users: all })
+                                }
+                            })
+                        }else if(req.query.teacher == 'true'){
+                            modelUsers.find({ level: 'teacher' }, (err, all) => {
+                                if(err){
+                                    res.json({ error: '[!] Something on server' }).status(501)
+                                }else{
+                                    res.json({ users: all })
+                                }
+                            })
                         }
-                    })
-                }
-            })
+                    }
+                })
+            }else{
+                res.json({ error: '[!] You are not admin' }).status(301)
+            }
         }
     })
 })

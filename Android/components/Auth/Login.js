@@ -31,6 +31,10 @@ export default class Login extends Component {
                             this.props.navigation.dispatch(
                                 StackActions.replace('Admin')
                             );
+                        }else if(res.data.level == 'developer'){
+                            this.props.navigation.dispatch(
+                                StackActions.replace('Admin')
+                            );
                         }else{
                             this.props.navigation.dispatch(
                                 StackActions.replace('Home')
@@ -52,6 +56,10 @@ export default class Login extends Component {
                 this.setState({ loading: false })
                 AsyncStorage.setItem('token', res.headers.token).then(() => {
                     if(res.headers.level == 'admin'){
+                        this.props.navigation.dispatch(
+                            StackActions.replace('Admin')
+                        );
+                    }else if(res.headers.level == 'developer'){
                         this.props.navigation.dispatch(
                             StackActions.replace('Admin')
                         );

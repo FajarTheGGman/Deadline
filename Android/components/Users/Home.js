@@ -176,6 +176,8 @@ class Index extends Component{
             lessons: [],
             next_lecture: [],
             time: '',
+            picture: '',
+            gender: 'male',
             refresh: false
         }
     }
@@ -195,8 +197,11 @@ class Index extends Component{
                 token: token,
                 secret: konfigurasi.secret
             }).then((res) => {
+                console.log(res.data.picture)
                 this.setState({
                     username: res.data.name,
+                    picture: res.data.picture,
+                    gender: res.data.gender
                 })
             })
 
@@ -382,7 +387,7 @@ class Index extends Component{
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row', marginTop: 25, marginLeft: 20 }}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
-                            <Image source={{ uri: "https://66.media.tumblr.com/f437e1a485894e5a4b50fe79fb59913e/tumblr_mxccksP6TQ1snvtspo1_500.jpg" }} style={{ width: 50, height: 50, borderRadius: 100, borderWidth: 2, borderColor: '#191A19' }} />
+                            <Image source={this.state.picture.length == 0 ? this.state.gender == 'male' ? require('../../assets/illustrations/male.png') : require('../../assets/illustrations/female.png') : this.state.picture} style={{ width: 50, height: 50, borderRadius: 100, borderWidth: 2, borderColor: '#191A19' }} />
                         </TouchableOpacity>
 
                         <View style={{ flexDirection: 'column', marginLeft: 15 }}>

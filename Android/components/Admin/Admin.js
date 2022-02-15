@@ -11,24 +11,49 @@ export default class AdminNew extends Component{
 
         this.state = {
             adminList: [],
+            devList: [],
+            role: [],
             adminSearch: '',
             addAdmin: false,
             fullname: null,
             username: null,
             password: null,
+            choose_role: null,
             gender: 'male'
         }
     }
 
     componentDidMount(){
         AsyncStorage.getItem('token').then(token => {
-            axios.post(konfigurasi.server + 'auth/getall/admin', {
+            axios.post(konfigurasi.server + 'auth/getall/admin?admin=true', {
                 token: token,
                 secret: konfigurasi.secret
             }).then(res => {
                 if(res.data.users){
                     this.setState({
                         adminList: this.state.adminList.concat(res.data.users)
+                    })
+                }
+            })
+
+            axios.post(konfigurasi.server + 'role/getall', {
+                token: token,
+                secret: konfigurasi.secret
+            }).then(res => {
+                if(res.data.roles){
+                    this.setState({
+                        role: this.state.role.concat(res.data.roles)
+                    })
+                }
+            })
+
+            axios.post(konfigurasi.server + 'auth/getall/admin?developer=true', {
+                token: token,
+                secret: konfigurasi.secret
+            }).then(res => {
+                if(res.data.users){
+                    this.setState({
+                        devList: this.state.devList.concat(res.data.users)
                     })
                 }
             })
@@ -57,7 +82,7 @@ export default class AdminNew extends Component{
             username: this.state.username,
             password: this.state.password,
             gender: this.state.gender,
-            level: 'admin'
+            level: this.state.choose_role
         }).then(res => {
             if(res.data.success){
                 alert('Successfully creating admin')
@@ -109,7 +134,7 @@ export default class AdminNew extends Component{
                         <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white', marginTop: 70, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
                             <View style={{ backgroundColor: 'white', elevation: 15, alignItems: 'center', borderTopLeftRadius: 15, borderTopRightRadius: 15 }}>
                                 <Icons name='remove-outline' size={40} color="black" />
-                                <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: -8, paddingBottom: 15 }}>Add Some Admin</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: -8, paddingBottom: 15 }}>Add New Administrator</Text>
                             </View>
 
                             <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', marginTop: 20, alignItems: 'center' }}>
@@ -121,6 +146,17 @@ export default class AdminNew extends Component{
 
                                 <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 25 }}>Password</Text>
                                 <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Your Password ?" onChangeText={(val) => this.setState({ password: val })} secureTextEntry={true} />
+
+                                <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Role</Text>
+                                <View style={{  elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white'}} >
+                                    <Picker selectedValue={this.state.choose_role} onValueChange={(val) => this.setState({ choose_role: val })}>
+                                        {this.state.role.map((val, index) => {
+                                            return(
+                                                <Picker.Item label={val.name} value={val.level} key={index} />
+                                            )
+                                        })}
+                                    </Picker>
+                                </View>
 
                                 <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Your Gender</Text>
                                 <View style={{  elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white'}} >
@@ -168,6 +204,25 @@ export default class AdminNew extends Component{
                     </TouchableOpacity>
                 </View>
 
+                <Text style={{ fontWeight: 'bold', marginTop: 25, fontSize: 18, marginLeft: 15 }}>Newest Developer</Text>
+                {this.state.devList.map((x,y) => {
+                    return <View style={{ backgroundColor: 'white', marginTop: 15, elevation: 15, borderRadius: 15, marginLeft: 10, marginRight: 10, flexDirection: 'row', padding: 15, justifyContent: 'space-between', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={require('../../assets/icons/developer.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />
+                            <View style={{ flexDirection: 'column' }}>
+                                <Text style={{ fontWeight: 'bold', marginLeft: 10 }}>{x.name}</Text>
+                                <Text style={{ fontSize: 12, marginLeft: 10 }}>@{x.username}</Text>
+                            </View>
+                        </View>
+
+                        <View style={{ marginRight: 10 }}>
+                            <TouchableOpacity onPress={() => this.delete(x.username)}>
+                                <Icons name="trash-outline" size={25} color="red" />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                })}
+
                 <Text style={{ fontWeight: 'bold', marginTop: 25, fontSize: 18, marginLeft: 15 }}>Newest Admin</Text>
                 {this.state.adminList.map((x,y) => {
                     return <View style={{ backgroundColor: 'white', marginTop: 15, elevation: 15, borderRadius: 15, marginLeft: 10, marginRight: 10, flexDirection: 'row', padding: 15, justifyContent: 'space-between', alignItems: 'center' }}>
@@ -185,7 +240,6 @@ export default class AdminNew extends Component{
                             </TouchableOpacity>
                         </View>
                     </View>
-
                 })}
             </View>
         )

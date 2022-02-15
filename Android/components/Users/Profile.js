@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Image, FlatList, AsyncStorage, TouchableOpacity, ScrollView, StatusBar, ImageBackground } from 'react-native';
 import axios from 'axios';
 import konfigurasi from '../../config'
+import Icons from 'react-native-vector-icons/Ionicons';
 
 export default class Profile extends Component{
     constructor(props){
@@ -12,12 +13,16 @@ export default class Profile extends Component{
             class: null,
             major: '',
             since: null,
+            picture: '',
+            gender: 'male',
+            lessons: [],
+            level: ''
         }
     }
 
     componentDidMount(){
-        AsyncStorage.getItem('token').then(token => {
-            axios.post(konfigurasi.server + "auth/profile", {
+        AsyncStorage.getItem('token').then(async token => {
+            await axios.post(konfigurasi.server + "auth/profile", {
                 token: token,
                 secret: konfigurasi.secret
             }).then(res => {
@@ -25,14 +30,33 @@ export default class Profile extends Component{
                     this.setState({
                         name: res.data.name,
                         username: res.data.username,
-                        class: res.data.class,
-                        major: res.data.major,
+                        class: res.data.class == undefined ? 'Dev' : res.data.class,
+                        major: res.data.major == undefined ? 'Dev' : res.data.major,
                         since: res.data.since,
+                        picture: res.data.picture,
+                        gender: res.data.gender,
+                        level: res.data.level
                     })
+                    console.log(this.state.level)
                 }
             }).catch(err => {
                 console.log(err)
             })
+
+            if(this.state.level != 'admin' && this.state.level != 'developer'){
+                await axios.post(konfigurasi.server + "lessons/getall", {
+                    token: token,
+                    secret: konfigurasi.secret
+                }).then(res => {
+                    if(res.data.lessons){
+                        this.setState({
+                            lessons: this.state.lessons.concat(res.data.lessons)
+                        })
+                    }
+                }).catch(err => {
+                    console.log(err)
+                })
+            }
         })
     }
 
@@ -52,8 +76,8 @@ export default class Profile extends Component{
                 <StatusBar backgroundColor="white" barStyle="dark-content" />
 
                 <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 15 }}>
-                    <Image source={{ uri: 'https://66.media.tumblr.com/103172bc54793536858f3c75b6bc9a63/tumblr_nbflsfo9kM1sgccggo1_1280.jpg' }} style={{ width: 120, height: 120, borderRadius: 100, borderWidth: 2, borderColor: 'black' }} />
-                    <Text style={{ fontWeight: 'bold', fontSize: 22 }}>{this.state.name}</Text>
+                    <Image source={this.state.picture.length == 0 ? this.state.gender == 'male' ? require('../../assets/illustrations/male.png') : require('../../assets/illustrations/female.png') : this.state.picture} style={{ width: 120, height: 120, borderRadius: 100, borderWidth: 2, borderColor: 'black' }} />
+                    <Text style={{ fontWeight: 'bold', fontSize: 22 }}>{this.state.name} <Icons name='checkmark-circle' size={20} color='#4E9F3D' /></Text>
                     <Text style={{ fontSize: 16, color: 'grey' }}>@{this.state.username}</Text>
                </View>
 
@@ -75,14 +99,24 @@ export default class Profile extends Component{
                 </View>
 
                 <View style={{ marginTop: 25, marginLeft: 10 }}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Last Lecture</Text>
-                    <ScrollView horizontal={true} contentContainerStyle={{ marginTop: 15 }}>
-                        <TouchableOpacity>
-                            <ImageBackground source={require('../../assets/illustrations/lecture/math.png')} style={{ flexDirection: 'column', width: 100, height: 120, borderRadius: 10, padding: 5, borderColor: 'black', borderWidth: 2 }}>
-                                <Text style={{ fontWeight: 'bold', fontSize: 17, color: 'black' }}>Math</Text>
-                            </ImageBackground>
-                        </TouchableOpacity>
-                    </ScrollView>
+                    {this.state.level == 'students' ? <View>
+                        <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Last Lecture</Text>
+                        <ScrollView horizontal={true} contentContainerStyle={{ marginTop: 15 }}>
+                            {this.state.lessons.map((x,y) => {
+                                return <TouchableOpacity style={{ marginLeft: 15, marginRight: 15 }}>
+                                <ImageBackground source={require('../../assets/illustrations/lecture/math.png')} style={{ flexDirection: 'column', width: 100, height: 120, borderRadius: 10, padding: 5, borderColor: 'black', borderWidth: 2 }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: 17, color: 'black' }}>{x.lessons.length > 5 ? x.lessons.slice(0, 5)+'..' : x.lessons}</Text>
+                                </ImageBackground>
+                            </TouchableOpacity>
+                            })}
+                        </ScrollView>
+                    </View> : <View style={{ alignItems: 'center', backgroundColor: 'white', elevation: 15, borderRadius: 15, marginRight: 10, padding: 10 }}>
+                        <Icons name="logo-android" size={40} />
+                        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Developers</Text>
+                        <Text>This account just for developers,</Text>
+                        <Text>That's means this account has ability to get</Text>
+                        <Text>Full control of this applications</Text>
+                    </View> }
                 </View>
             </View>
         )

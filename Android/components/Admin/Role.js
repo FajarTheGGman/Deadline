@@ -117,6 +117,8 @@ export default class Role extends Component{
                                 <View style={{  elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white'}} >
                                     <Picker selectedValue={this.state.levelRoles} onValueChange={(val) => this.setState({ levelRoles: val })}>
                                         <Picker.Item label="Level Admin" value="admin" />
+                                        <Picker.Item label="Level Developer" value="developer" />
+                                        <Picker.Item label="Level Teacher" value="teacher" />
                                         <Picker.Item label="Level Students" value="students" />
                                     </Picker>
                                 </View>

@@ -29,6 +29,7 @@ mongoose.connect(process.env.DB, { useUnifiedTopology: true })
 
 const app = express();
 
+app.use(express.static('public'));
 app.use(file())
 app.use(morgan('dev'));
 app.use(helmet());

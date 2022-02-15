@@ -153,6 +153,28 @@ class Settings extends Component{
         )
     }
 
+    // make a method to send file data to server with axios
+    async sendFile(uri){
+        const token = await AsyncStorage.getItem('token')
+        const formData = new FormData()
+        formData.append('file', {
+            uri: uri,
+            name: 'file.jpg',
+            type: 'image/jpg'
+        })
+        formData.append('token', token)
+        formData.append('secret', konfigurasi.secret)
+        axios.post(konfigurasi.server + 'user/upload', formData).then(res => {
+            if(res.status === 200){
+                alert('Success')
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+
+
     render(){
         return(
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
@@ -222,6 +244,8 @@ class Index extends Component{
             lessons: [],
             next_lecture: [],
             time: '',
+            picture: '',
+            gender: '',
             refresh: false
         }
     }
@@ -243,6 +267,9 @@ class Index extends Component{
             }).then((res) => {
                 this.setState({
                     username: res.data.name,
+                    picture: res.data.picture,
+                    level: res.data.level,
+                    gender: res.data.gender
                 })
             })
 
@@ -427,11 +454,11 @@ class Index extends Component{
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row', marginTop: 25, marginLeft: 20 }}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
-                            <Image source={{ uri: "https://66.media.tumblr.com/f437e1a485894e5a4b50fe79fb59913e/tumblr_mxccksP6TQ1snvtspo1_500.jpg" }} style={{ width: 50, height: 50, borderRadius: 100, borderWidth: 2, borderColor: '#191A19' }} />
+                            <Image source={this.state.picture.length == 0 ? this.state.gender == 'male' ? require('../../assets/illustrations/male.png') : require('../../assets/illustrations/female.png') : this.state.picture} style={{ width: 50, height: 50, borderRadius: 100, borderWidth: 2, borderColor: '#191A19' }} />
                         </TouchableOpacity>
 
                         <View style={{ flexDirection: 'column', marginLeft: 15 }}>
-                            <Text style={{ color: '#191A19', fontSize: 16 }}>Wellcome Admin</Text>
+                            <Text style={{ color: '#191A19', fontSize: 16 }}>Wellcome {this.state.level}</Text>
                             <Text style={{ color: '#191A19', fontWeight: 'bold', fontSize: 18 }}>{this.state.username}</Text>
                         </View>
                     </View>

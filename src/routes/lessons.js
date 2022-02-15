@@ -10,19 +10,35 @@ route.post('/getall', (req, res) => {
             res.json({ error: '[!] Wrong Authorization' }).status(301);
         }else{
             if(token.level == 'students'){
-                modelUsers.find({ username: token.username }, (err, users) => {
-                    if(err || users.length == 0){
-                        res.json({ error: '[!] User not found' }).status(301);
-                    }else{
-                        modelLessons.find({ class: token.class, day: req.body.day }, (err, lessons) => {
-                            if(err){
-                                res.json({ error: '[!] Error' }).status(301);
-                            }else{
-                                res.json({ lessons: lessons }).status(200);
-                            }
-                        });
-                    }
-                })
+                if(req.body.users){
+                    modelUsers.find({ username: req.body.users }, (err, users) => {
+                        if(err || users.length == 0){
+                            res.json({ error: '[!] User not found' }).status(301);
+                        }else{
+                            modelLessons.find({ class: token.class, day: req.body.day }, (err, lessons) => {
+                                if(err){
+                                    res.json({ error: '[!] Error' }).status(301);
+                                }else{
+                                    res.json({ lessons: lessons }).status(200);
+                                }
+                            });
+                        }
+                    })
+                }else{
+                    modelUsers.find({ username: token.username }, (err, users) => {
+                        if(err || users.length == 0){
+                            res.json({ error: '[!] User not found' }).status(301);
+                        }else{
+                            modelLessons.find({ class: token.class, day: req.body.day }, (err, lessons) => {
+                                if(err){
+                                    res.json({ error: '[!] Error' }).status(301);
+                                }else{
+                                    res.json({ lessons: lessons }).status(200);
+                                }
+                            });
+                        }
+                    })
+                }
             }else if(token.level == 'admin'){
                 modelUsers.find({ username: token.username }, (err, users) => {
                     if(users.length == 0){
