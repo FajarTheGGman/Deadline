@@ -12,6 +12,7 @@ export default class LectureAdmin extends Component{
 
         this.state = {
             lessons: [],
+            class: [],
             lessons_search: null,
             addLecture: false,
             clock: false,
@@ -20,11 +21,23 @@ export default class LectureAdmin extends Component{
             class_input: null,
             day_input: null,
             time_input: null,
+            level: null,
         }
     }
 
     componentDidMount(){
         AsyncStorage.getItem('token').then(token => {
+            axios.post(konfigurasi.server + 'auth/profile', {
+                token: token,
+                secret: konfigurasi.secret,
+            }).then(res => {
+                if(res.status == 200){
+                    this.setState({
+                        level: res.data.level,
+                    })
+                }
+            })
+
             axios.post(konfigurasi.server + 'lessons/getall', {
                 token: token,
                 secret: konfigurasi.secret,
@@ -33,6 +46,15 @@ export default class LectureAdmin extends Component{
                     this.setState({
                         lessons: this.state.lessons.concat(res.data.lessons),
                     })
+                }
+            })
+
+            axios.post(konfigurasi.server + 'class/getall', {
+                token: token,
+                secret: konfigurasi.secret,
+            }).then(res => {
+                if(res.data.class){
+                    this.setState({ class: this.state.class.concat(res.data.class) })
                 }
             })
         })
@@ -113,7 +135,7 @@ export default class LectureAdmin extends Component{
             axios.post(konfigurasi.server + 'notification/add', {
                 token: token,
                 secret: konfigurasi.secret,
-                title: 'New Lecture ' + this.state.lesson_input,
+                title: 'New Lecture ' + this.state.lessons_input,
                 message: "There's new lecture for you!",
                 type: 'library-outline',
                 class: this.state.class_input,
@@ -145,11 +167,19 @@ export default class LectureAdmin extends Component{
                                 <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start' }}>Lecture Name</Text>
                                 <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Title Lessons ?" onChangeText={(val) => this.setState({ lessons_input: val })} />
 
-                                <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Lecture Teacher</Text>
-                                <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Which Teacher ?" onChangeText={(val) => this.setState({ teacher_input: val })} />
+                                {this.state.level == 'teacher' ? <View></View> : <View>
+                                    <Text style={{ fontSize: 15, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Lecture Teacher</Text>
+                                    <TextInput style={{ marginLeft: -3, padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Which Teacher ?" onChangeText={(val) => this.setState({ teacher_input: val })} />
+                                </View>}
 
                                 <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Lecture Class</Text>
-                                <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white'}} placeholder="Which Class ?" onChangeText={(val) => this.setState({ class_input: val })} />
+                                <View style={{  elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white'}}>
+                                    <Picker selectedItem={this.state.class_input} onValueChange={(val) => this.setState({ class_input: val })}>
+                                        {this.state.class.map((x,y) => {
+                                            return <Picker label={"Class - " + x.class} value={x.class} />
+                                        })}
+                                    </Picker>
+                                </View>
 
                                 <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Lecture Day</Text>
                                 <View style={{  elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white'}}>
@@ -228,7 +258,7 @@ export default class LectureAdmin extends Component{
                             </View>
 
                             <View style={{ backgroundColor: '#4E9F3D', padding: 5, borderRadius: 100 }}>
-                                <Text style={{ fontWeight: 'bold' }}>Type</Text>
+                                <Text style={{ fontWeight: 'bold' }}>{x.day}</Text>
                             </View>
                         </View>
 

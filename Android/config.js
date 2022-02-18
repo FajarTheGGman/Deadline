@@ -1,5 +1,5 @@
 const konfigurasi = {
-    server: 'http://192.168.1.10:5000/',
+    server: 'http://REPLACE_WITH_YOUR_SERVER/',
     secret: 'dontbeafool'
 }
 

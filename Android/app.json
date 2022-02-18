@@ -2,7 +2,7 @@
   "expo": {
     "name": "Dead Line",
     "slug": "Dead-Line",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -30,7 +30,7 @@
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION"
       ],
-      "package": "com.fajartheggman.DeadLine"
+      "package": "com.fajartheggman.DeadLinev1"
     },
     "web": {
       "favicon": "./assets/favicon.png"

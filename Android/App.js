@@ -33,6 +33,7 @@ import Username from './components/Settings/Username'
 
 // Admin
 import Admin from './components/Admin/Home'
+import Teacher from './components/Admin/HomeTeacher.js'
 import AttendanceAdmin from './components/Admin/Attendance'
 import LectureAdmin from './components/Admin/LectureAdmin'
 import Role from './components/Admin/Role'
@@ -61,6 +62,9 @@ export default class Navigation extends Component{
                     <Stack.Screen name="Admin" component={Admin} options={{
                         headerShown: false
                     }} />
+                    <Stack.Screen name="Teacher" component={Teacher} options={{
+                        headerShown: false
+                    }} />
                     <Stack.Screen name="Login" component={Login} options={{
                         headerShown: false
                     }} />
@@ -74,6 +78,7 @@ export default class Navigation extends Component{
                     <Stack.Screen name="About" component={About} options={{
                         headerShown: true,
                         headerShadowVisible: false,
+                        headerTitle: "About Me :)"
                     }} />
                     <Stack.Screen name="Lecture" component={Lecture} options={{
                         headerShown: true,

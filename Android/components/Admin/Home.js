@@ -456,7 +456,7 @@ class Index extends Component{
                 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row', marginTop: 25, marginLeft: 20 }}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', { users: 'me' })}>
                             <Image source={this.state.picture.length == 0 ? this.state.gender == 'male' ? require('../../assets/illustrations/male.png') : require('../../assets/illustrations/female.png') : this.state.picture} style={{ width: 50, height: 50, borderRadius: 100, borderWidth: 2, borderColor: '#191A19' }} />
                         </TouchableOpacity>
 
@@ -521,7 +521,7 @@ class Index extends Component{
                         <View style={{ flexDirection: "row", marginTop: 35, justifyContent: 'space-evenly' }}>
                             <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('AdminNew')}>
                                 <Icons name="person-circle-outline" size={30} color="#191A19" />
-                                <Text style={{ color: '#191A19' }}>Admin</Text>
+                                <Text style={{ color: '#191A19' }}>People</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('AttendanceAdmin')}>

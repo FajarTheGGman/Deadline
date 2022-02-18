@@ -1,30 +1,22 @@
 import React, { Component } from 'react'
-import { View, Text, Image, RefreshControl, TouchableOpacity, AsyncStorage, ScrollView, StatusBar } from 'react-native'
+import { View, AsyncStorage, RefreshControl, Text, Image, TouchableOpacity, ScrollView, StatusBar, TextInput, Picker } from 'react-native'
 import Modal from 'react-native-modal'
 import Icons from 'react-native-vector-icons/Ionicons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Permissions, Notifications } from 'expo'
+import { Notifications } from 'expo'
 import { StackActions } from '@react-navigation/native'
-import konfigurasi from '../../config'
-import axios from 'axios'
-import { BarCodeScanner } from 'expo-barcode-scanner'
 import base64 from 'react-native-base64'
+import axios from 'axios'
+import konfigurasi from '../../config'
+import QRCode from 'react-native-qrcode-svg'
+import ViewShot from 'react-native-view-shot'
+import * as MediaLibrary from 'expo-media-library'
+import * as Permissions from 'expo-permissions'
 
 // expo packages
 import * as Location from 'expo-location'
 
 export default class Tab extends Component{
-
-    componentDidMount(){
-        AsyncStorage.getItem('token').then(token => {
-            if(!token){
-                this.props.navigation.dispatch(
-                    StackActions.replace('Login')
-                )
-            }
-        })
-    }
-
     render(){
         let Tabs = createBottomTabNavigator()
         return(
@@ -40,6 +32,7 @@ export default class Tab extends Component{
                     marginBottom: 25,
                     position: 'absolute'
                 },
+
             })}>
                 <Tabs.Screen name="Index" component={Index} options={{ headerShown: false, tabBarIcon: ({ color, size }) => (
                     <Icons name='home-outline' size={25} color={"white"} />
@@ -60,178 +53,56 @@ class Barcode extends Component{
         super(props)
 
         this.state = {
-            lessons: [],
-            next_lecture: [],
-            time: '',
-            date: null,
-            region_lat: null,
-            region_lon: null,
-            total_distance: null,
-            my_lat: 0,
-            my_lon: 0,
-            end_location: 'School',
-            end_lat: 0,
-            end_lon: 0,
-            major: '',
+            raw: 'There is no data yet!',
             class: '',
-            hand: 'hand-left-outline',
-            far: false
+            callback: '',
+            classList: [],
         }
     }
 
-    componentDidMount(){
-        const dayOrigin = new Date().getDay();
-        const dayName = (dayOrigin) => {
-            const day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            return day[dayOrigin];
+    async componentDidMount(){
+        const check = await Permissions.getAsync(Permissions.MEDIA_LIBRARY)
+        if(check.status !== 'granted'){
+            const newPermisson = await Permissions.askAsync(Permissions.MEDIA_LIBRARY)
+            if(newPermisson.status !== 'granted'){
+                alert('You need to give permission to access your media library')
+            }
         }
 
-        const day = dayName(dayOrigin);
-
-        AsyncStorage.removeItem('attendance');
-        AsyncStorage.getItem('attendance').then(check => {
-            if(check == 'true'){
-                this.setState({ hand: 'hand-left' })
-            }else{
-                this.setState({ hand: 'hand-left-outline' })
-            }
-        })
-
         AsyncStorage.getItem('token').then(token => {
-            axios.post(konfigurasi.server + "location/get", {
+            axios.post(konfigurasi.server + 'class/getall', {
                 token: token,
                 secret: konfigurasi.secret
             }).then(res => {
-                if(res.data.location){
+                if(res.status === 200){
                     this.setState({
-                        end_location: res.data.location[0].location,
-                        end_lat: res.data.location[0].latitude,
-                        end_lon: res.data.location[0].longitude
+                        classList: this.state.classList.concat(res.data.class),
+                        class: res.data.class[0].class
                     })
                 }
-            })
-
-            axios.post(konfigurasi.server + "auth/profile", {
-                token: token,
-                secret: konfigurasi.secret
-            }).then(res => {
-                if(res.status == 200){
-                    this.setState({
-                        major: res.data.major,
-                        class: res.data.class,
-                    })
-                }
-            })
-
-            axios.post(konfigurasi.server + 'lessons/getall', {
-                token: token,
-                secret: konfigurasi.secret,
-                day: day.toLowerCase()
-            }).then(res => {
-                if(res.data.lessons){
-                    this.setState({
-                        lessons: this.state.lessons.concat(res.data.lessons)
-                    })
-
-                    let get_time = new Date().getHours() + ':' + new Date().getMinutes();
-                    this.setState({ time: get_time })
-                    this.state.lessons.map(item => {
-                        if(item.date > get_time){
-                            this.setState({ next_lecture: this.state.next_lecture.concat(item) })
-                        }
-                    })
-                }
+            }).catch(err => {
+                console.log(err)
             })
         })
+    }
 
-        const { status } = Location.requestForegroundPermissionsAsync();
-
-        Location.watchPositionAsync({
-            enableHighAccuracy: true,
-            timeInterval: 1,
-            distanceInterval: 1
-        }, (location) => {
-            this.setState({
-                my_lat: location.coords.latitude,
-                my_lon: location.coords.longitude
-            })
-
-            const total_distance = geolib.getDistance(
-                {latitude: this.state.my_lat, longitude: this.state.my_lon},
-                {latitude: this.state.end_lat, longitude: this.state.end_lon}
-            )
-
-            this.setState({
-                total_distance: total_distance
-            })
-        })
-
-        const date = new Date().toDateString()
-        this.setState({ date: date })
-
-        axios.get('http://ip-api.com/json').then(res => {
-            if(res.status == 200){
-                this.setState({ 
-                    region_lat: res.data.lat,
-                    region_lon: res.data.lon
+    create(){
+        AsyncStorage.getItem('token').then(token => {
+            this.refs.viewShot.capture().then(uri => {
+                MediaLibrary.saveToLibraryAsync(uri).then(() => {
+                    alert('QR Saved to your gallery')
                 })
+            })
+            const data = {
+                class: this.state.class,
+                callback: this.state.callback,
+                message: 'Be careful, this is a users data'
             }
-        })
-    }
-
-    attendance(){
-        AsyncStorage.getItem('token').then(token => {
-            AsyncStorage.getItem('attendance').then(check => {
-                if(check == 'true'){
-                    this.setState({ hand: 'hand-left' })
-                }else{
-                    if(this.state.total_distance < 15){
-                        AsyncStorage.getItem('expire').then(x => {
-                            let getDate = new Date();
-                            if(x == getDate){
-                                alert('You have already attended today')
-                            }else{
-                                this.setState({ hand: 'hand-left-outline' })
-                                axios.post(konfigurasi.server + 'attendance/add', {
-                                    token: token,
-                                    secret: konfigurasi.secret,
-                                    lessons: this.state.next_lecture[0].lessons,
-                                    major: this.state.major,
-                                    class: this.state.class,
-                                    time: this.state.time,
-                                }).then(res => {
-                                    if(res.data.success){
-                                        alert('Attendance Success')
-                                        AsyncStorage.setItem('attendance', 'true');
-                                        AsyncStorage.setItem('expire', new Date());
-                                    }
-                                })
-                            }
-                        })
-                    }else{
-                        this.setState({ far: true })
-                    }
-                }
-            })
-        })
-    }
-
-    handleBarCodeScanned = ({ type, data }) => {
-        AsyncStorage.getItem('token').then(token => {
-            const dec = base64.decode(data)
-            const js_data = JSON.parse(dec)
-            axios.post(konfigurasi.server + 'attendance/add', {
-                token: token,
-                secret: konfigurasi.secret,
-                class: js_data.class,
-                lessons: this.state.next_lecture[0].lessons,
-                major: this.state.major,
-                time: this.state.time,
-            }).then(res => {
-                if(res.data.status == 'success'){
-                    alert(js_data.callback)
-                }
-            })
+            const encryption = base64.encode(JSON.stringify(data))
+            console.log('before : ' + encryption)
+            const decryption = base64.decode(encryption)
+            console.log('after : ' + decryption)
+            this.setState({ raw: encryption.length === 0 ? 'There is no data yet!' : encryption })
         })
     }
 
@@ -239,15 +110,33 @@ class Barcode extends Component{
         return(
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
-                <BarCodeScanner
-                    onBarCodeScanned={this.handleBarCodeScanned}
-                    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-                >
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <Icons name="qr-code-outline" size={120} color="black" />
-                        <Text style={{ fontWeight: 'bold', marginTop: 15 }}>Scan QR Here!, to get attendance</Text>
+                <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Create QR Code</Text>
+                    <ViewShot ref="viewShot" options={{ format: "jpg", quality: 0.9 }}>
+                        <View style={{ backgroundColor: 'white', padding: 15, marginTop: 15, borderRadius: 10, elevation: 15 }}>
+                            <QRCode
+                                value={this.state.raw}
+                                size={200}
+                                logo={require('../../assets/icon.png')}
+                                logoSize={52}
+                                bgColor='black'
+                                fgColor='white' />
+                        </View>
+                    </ViewShot>
+                    <TextInput placeholder="Message ?" style={{ backgroundColor: 'white', padding: 10, borderRadius: 10, elevation: 15, marginTop: 20, width: 200 }} onChangeText={(val) => this.setState({ callback: val })} />
+                    <View style={{ marginTop: 20, backgroundColor: 'white', borderRadius: 10, padding: 5, width: 220, elevation: 15 }}>
+                        <Picker selectedItem={this.state.class} onValueChange={(val) => this.setState({ class: val })}>
+                            {this.state.classList.map((val, index) => {
+                                return(
+                                    <Picker.Item label={'Class - '+val.class} value={val.class} key={index} />
+                                )
+                            })}
+                        </Picker>
                     </View>
-                </BarCodeScanner>
+                    <TouchableOpacity style={{ backgroundColor: '#4E9F3D', padding: 10, borderRadius: 10, elevation: 15, marginTop: 20, width: 200, alignItems: 'center' }} onPress={() => this.create()}>
+                        <Text style={{ color: 'white', fontWeight: 'bold' }}>Create QR Code</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     }
@@ -266,6 +155,28 @@ class Settings extends Component{
             StackActions.replace("Banner")
         )
     }
+
+    // make a method to send file data to server with axios
+    async sendFile(uri){
+        const token = await AsyncStorage.getItem('token')
+        const formData = new FormData()
+        formData.append('file', {
+            uri: uri,
+            name: 'file.jpg',
+            type: 'image/jpg'
+        })
+        formData.append('token', token)
+        formData.append('secret', konfigurasi.secret)
+        axios.post(konfigurasi.server + 'user/upload', formData).then(res => {
+            if(res.status === 200){
+                alert('Success')
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+
 
     render(){
         return(
@@ -337,7 +248,7 @@ class Index extends Component{
             next_lecture: [],
             time: '',
             picture: '',
-            gender: 'male',
+            gender: '',
             refresh: false
         }
     }
@@ -357,10 +268,10 @@ class Index extends Component{
                 token: token,
                 secret: konfigurasi.secret
             }).then((res) => {
-                console.log(res.data.picture)
                 this.setState({
                     username: res.data.name,
                     picture: res.data.picture,
+                    level: res.data.level,
                     gender: res.data.gender
                 })
             })
@@ -538,10 +449,9 @@ class Index extends Component{
 
     }
 
-
     render(){
         return(
-            <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }} refreshControl={<RefreshControl refreshing={this.state.refresh} onRefresh={() => this.refresh()}/>}>
+            <ScrollView style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }} refreshControl={<RefreshControl refreshing={this.state.refresh} onRefresh={() => this.refresh()} />}>
                 <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
                 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -551,7 +461,7 @@ class Index extends Component{
                         </TouchableOpacity>
 
                         <View style={{ flexDirection: 'column', marginLeft: 15 }}>
-                            <Text style={{ color: '#191A19', fontSize: 16 }}>Wellcome Back</Text>
+                            <Text style={{ color: '#191A19', fontSize: 16 }}>Wellcome {this.state.level}</Text>
                             <Text style={{ color: '#191A19', fontWeight: 'bold', fontSize: 18 }}>{this.state.username}</Text>
                         </View>
                     </View>
@@ -569,45 +479,47 @@ class Index extends Component{
 
                     <View>
                         <View style={{ marginTop: 15, backgroundColor: '#191A19', borderRadius: 10, padding: 7, alignSelf: 'flex-start' }}>
-                            {this.state.schedule.length == 0 ? <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>There's no class today</Text> : <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>Class Begin in - {this.state.schedule}</Text>  }
+                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>Class Begin in - {this.state.schedule}</Text>
                         </View>
                     </View>
 
                     <View style={{ flexDirection: 'column', marginTop: 25 }}>
                         <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#191A19', alignSelf: 'center' }}>Your Navigation</Text>
                         <View style={{ flexDirection: "row", marginTop: 15, justifyContent: 'space-evenly', alignItems: 'center' }}>
-                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('Lecture')}>
+                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('LectureAdmin')}>
                                 <Icons name="library-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Lecture</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('Attendance')}>
-                                <Icons name="hand-left-outline" size={30} color="#191A19" />
-                                <Text style={{ color: '#191A19' }}>Attendance</Text>
+                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 10 }} onPress={() => this.props.navigation.navigate('HomeworkAdmin')}>
+                                <Icons name="newspaper-outline" size={30} color="#191A19" />
+                                <Text style={{ color: '#191A19' }}>Home Work</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('Leaderboard')}>
-                                <Icons name="trophy-outline" size={30} color="#191A19" />
-                                <Text style={{ color: '#191A19' }}>Leaderboard</Text>
+                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ClassAdmin')}>
+                                <Icons name="school-outline" size={30} color="#191A19" />
+                                <Text style={{ color: '#191A19' }}>Class</Text>
                             </TouchableOpacity>
                         </View>
 
-                        <View style={{ flexDirection: "row", marginTop: 35, justifyContent: 'space-evenly' }}>
-                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('Events')}>
+                        <View style={{ flexDirection: "row", marginTop: 35, justifyContent: 'space-evenly',  }}>
+                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('EventAdmin')}>
                                 <Icons name="golf-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Events</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 18 }} onPress={() => this.props.navigation.navigate('Inbox')}>
+                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('AttendanceAdmin')}>
+                                <Icons name="hand-left-outline" size={30} color="#191A19" />
+                                <Text style={{ color: '#191A19' }}>Attendance</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={{ alignItems: 'center',  }} onPress={() => this.props.navigation.navigate('InboxAdmin')}>
                                 <Icons name="file-tray-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Inbox</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 10 }} onPress={() => this.props.navigation.navigate('Homework')}>
-                                <Icons name="newspaper-outline" size={30} color="#191A19" />
-                                <Text style={{ color: '#191A19' }}>Home Work</Text>
-                            </TouchableOpacity>
                         </View>
+
                     </View>
                 </View>
             </ScrollView>

@@ -16,6 +16,8 @@ export default class InboxAdmin extends Component{
             inboxSearch: null,
             classAll: [],
             majorAll: [],
+            picture: '',
+            gender: '',
             title: null,
             body: null,
             class: null,
@@ -26,6 +28,10 @@ export default class InboxAdmin extends Component{
             sender_body: null,
             sender_time: null,
             sender_date: null,
+            sender_picture: '',
+            sender_gender: '',
+            sender_verified: false,
+            verified: false,
             overview: false,
             date: new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear(),
         }
@@ -38,7 +44,17 @@ export default class InboxAdmin extends Component{
                 secret: konfigurasi.secret
             }).then(res => {
                 if(res.status == 200){
-                    this.setState({ username: res.data.username })
+                    if(res.data.level == 'developer'){
+                        this.setState({ verified: true })
+                    }else if(res.data.level == 'admin'){
+                        this.setState({ verified: true })
+                    }
+
+                    this.setState({ 
+                        username: res.data.username,
+                        picture: res.data.picture,
+                        gender: res.data.gender
+                    })
                 }
             })
 
@@ -107,6 +123,9 @@ export default class InboxAdmin extends Component{
                 class: this.state.class,
                 major: this.state.major,
                 date: this.state.date,
+                picture: this.state.picture,
+                gender: this.state.gender,
+                verified: this.state.verified,
                 time: new Date().getHours() + ':' + new Date().getMinutes()
             }).then(res => {
                 if(res.data.success){
@@ -132,6 +151,9 @@ export default class InboxAdmin extends Component{
             sender_body: this.state.inbox[index].body,
             sender_time: this.state.inbox[index].time,
             sender_date: this.state.inbox[index].date,
+            sender_verified: this.state.inbox[index].verified,
+            sender_picture: this.state.inbox[index].picture,
+            sender_gender: this.state.inbox[index].gender == 'female' ? 'female' : 'male'
         })
     }
 
@@ -166,6 +188,11 @@ export default class InboxAdmin extends Component{
         })
     }
 
+    profile(){
+        this.setState({ overview: false })
+        this.props.navigation.navigate('Profile', { users: this.state.sender_from })
+    }
+
     render(){
         return(
             <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
@@ -186,9 +213,11 @@ export default class InboxAdmin extends Component{
                                 <View style={{ marginLeft: 10, marginTop: 20 }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Image source={require('../../assets/illustrations/male.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />
+                                            <TouchableOpacity onPress={() => this.profile()}>
+                                                {this.state.sender_picture.length == 0 ? this.state.sender_gender == 'male' ? <Image source={require('../../assets/illustrations/male.png')} style={{ width: 50, height: 50, borderRadius: 100 }} /> : <Image source={require('../../assets/illustrations/female.png')} style={{ width: 50, height: 50, borderRadius: 100 }} /> : <Image source={{ uri: this.state.picture }} style={{ width: 50, height: 50, borderRadius: 100 }} />}
+                                            </TouchableOpacity>
                                             <View style={{ flexDirection: 'column', marginLeft: 10 }}>
-                                                <Text style={{ fontWeight: 'bold', fontSize: 17 }}>{this.state.sender_from}</Text>
+                                                <Text style={{ fontWeight: 'bold', fontSize: 17 }}>{this.state.sender_from} {this.state.sender_verified ? <Icons name="checkmark-circle" size={20} color="#4E9F3D" /> : <Text></Text>}</Text>
                                                 <Text style={{ color: 'grey' }}>To: class - {this.state.sender_class}</Text>
                                             </View>
                                         </View>
@@ -289,7 +318,7 @@ export default class InboxAdmin extends Component{
                     {this.state.inbox.map((x,y) => {
                         return <TouchableOpacity style={{ padding: 15, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', marginRight: 10, marginLeft: 10, alignItems: 'center', marginTop: 20 }} onPress={() => this.overview(y)}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Image source={require('../../assets/illustrations/male.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />
+                            {x.gender == 'male' ? <Image source={require('../../assets/illustrations/male.png')} style={{ width: 50, height: 50, borderRadius: 100 }} /> : <Image source={require('../../assets/illustrations/female.png')} style={{ width: 50, height: 50, borderRadius: 100 }} /> }
                             <View style={{ marginLeft: 10, flexDirection: 'column' }}>
                                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{x.title}</Text>
                                 <Text style={{ fontSize: 15 }}>From {x.from}</Text>
@@ -302,11 +331,11 @@ export default class InboxAdmin extends Component{
                                 <Text style={{ color: 'grey' }}>{x.time}</Text>
                             </View>
 
-                            <View style={{ marginTop: 15 }}>
+                            {x.from == this.state.username ? <View style={{ marginTop: 15 }}>
                                 <TouchableOpacity onPress={() => this.delete(x.title)}>
                                     <Icons name="trash-outline" size={25} color="red" />
                                 </TouchableOpacity>
-                            </View>
+                            </View> : <View></View>}
                         </View>
                     </TouchableOpacity>
                     })}

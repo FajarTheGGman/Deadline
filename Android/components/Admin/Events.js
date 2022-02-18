@@ -197,7 +197,6 @@ export default class EventAdmin extends Component{
                             return <TouchableOpacity style={{ flexDirection: "column", marginTop: 25 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <Text style={{ fontWeight: 'bold' }}>{x.events}</Text>
-                                <Text style={{ color: '#4E9F3D' }}>Thesis</Text>
                             </View>
 
                             <View>

@@ -43,8 +43,8 @@ export default class Notification extends Component{
                             </View>
                             <View style={{ flexDirection: 'row', marginLeft: 10, alignItems: 'center', justifyContent: 'space-between' }}>
                                 <View style={{ flexDirection: 'column' }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{x.title}</Text>
-                                    <Text style={{ color: 'grey' }}>{x.message}</Text>
+                                    <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{x.title.length > 16 ? x.title.slice(0,24) + '...' : x.title}</Text>
+                                    <Text style={{ color: 'grey' }}>{x.message.length > 20 ? x.message.slice(0,25) + '...' : x.message}</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
