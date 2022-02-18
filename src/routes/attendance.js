@@ -35,15 +35,11 @@ route.post('/getall', (req, res) => {
                         }
                     });
                 }else if(token.level == 'developer'){
-                    modelAttendance.find({ class: { $regex: req.body.class }, username: { $regex: req.body.username } }, (err, result) => {
+                    modelAttendance.find({ class: { $regex: req.body.class }, major: { $regex: req.body.major }, username: { $regex: req.body.username } }, (err, result) => {
                         if(err){
                             res.json({ error: '[!] Error get all attendance' }).status(301);
-                        }
-
-                        if(result.length > 0){
-                            res.json({ success: '[+] Get all attendance success', data: result });
                         }else{
-                            res.json({ error: '[!] Error get all attendance' });
+                            res.json({ success: '[+] Get all attendance success', data: result });
                         }
                     });
                 }else if(token.level == 'teacher'){

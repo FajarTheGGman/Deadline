@@ -11,6 +11,7 @@ export default class HomeworkAdmin extends Component{
         super(props)
 
         this.state = {
+            username: null,
             homework: [],
             lessons: [],
             class: [],
@@ -22,7 +23,7 @@ export default class HomeworkAdmin extends Component{
             homeworkSearch: null,
             teacher_input: null,
             date: false,
-            addHomework: false,
+            addHomework: false
         }
     }
 
@@ -34,6 +35,15 @@ export default class HomeworkAdmin extends Component{
             }).then(res => {
                 if(res.data.homework){
                     this.setState({ homework: this.state.homework.concat(res.data.homework) })
+                }
+            })
+
+            axios.post(konfigurasi.server + 'auth/profile', {
+                token: token,
+                secret: konfigurasi.secret
+            }).then(res => {
+                if(res.status == 200){
+                    this.setState({ username: res.data.username })
                 }
             })
 
@@ -278,7 +288,7 @@ export default class HomeworkAdmin extends Component{
                             </View>
 
                             <View style={{ backgroundColor: '#4E9F3D', padding: 5, borderRadius: 100 }}>
-                                <Text style={{ fontWeight: 'bold' }}>Type</Text>
+                                <Text style={{ fontWeight: 'bold' }}>Grade - {x.class}</Text>
                             </View>
                         </View>
 
@@ -297,12 +307,11 @@ export default class HomeworkAdmin extends Component{
                                     <Icons name='time-outline' size={20} color="#4E9F3D" />
                                     <Text style={{ marginLeft: 10, color: '#4E9F3D' }}>{x.deadline}</Text>
                                 </View>
-
-                                <View style={{ marginRight: 5 }}>
+                                {this.state.username == x.teacher ? <View style={{ marginRight: 5 }}>
                                     <TouchableOpacity onPress={() => this.delete(x._id)}>
                                         <Icons name='trash-outline' size={25} color="red" />
                                     </TouchableOpacity>
-                                </View>
+                                </View> : <View></View>}
                             </View>
                         </View>
                     </View>

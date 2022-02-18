@@ -166,7 +166,7 @@ export default class Role extends Component{
                     {this.state.dataRoles.map((x,y) => {
                         return <TouchableOpacity style={{ backgroundColor: "white", padding: 15, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', elevation: 10, marginRight: 10, marginLeft: 10, alignItems: 'center', marginTop: 20 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Image source={{ uri: 'https://66.media.tumblr.com/1911d9a6e744365fe7a92ba72a7734b8/tumblr_mfswmevqB41rvyr2no1_1280.jpg' }} style={{ width: 50, height: 50, borderRadius: 100 }} />
+                            <Image source={require('../../assets/icons/roles.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />
                             <View style={{ marginLeft: 10, flexDirection: 'column' }}>
                                 <Text style={{ fontWeight: 'bold' }}>{x.name}</Text>
                                 <Text style={{ fontSize: 12 }}>{x.level}</Text>

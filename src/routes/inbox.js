@@ -30,7 +30,15 @@ route.post('/getall', (req,res) => {
                             }
                         })
                     }else if(token.level == 'developer'){
-                        modelInbox.find({}, (err, done) => {
+                        modelInbox.find({}).sort([['time', -1], ['date', -1]]).exec((err, done) => {
+                            if(err){
+                                res.json({ error: "[!] Error" }).status(301)
+                            }else{
+                                res.json({ inbox: done }).status(200)
+                            }
+                        })
+                    }else if(token.level == 'teacher'){
+                        modelInbox.find({}).sort([['time', -1], ['date', -1]]).exec((err, done) => {
                             if(err){
                                 res.json({ error: "[!] Error" }).status(301)
                             }else{
@@ -116,7 +124,10 @@ route.post('/add', (req,res) => {
                                 class: req.body.class,
                                 major: req.body.major,
                                 date: req.body.date,
-                                time: req.body.time
+                                time: req.body.time,
+                                gender: req.body.gender,
+                                picture: req.body.picture,
+                                verified: req.body.verified
                             }, (err, inbox) => {
                                 if(err){
                                     res.json({ error: "[!] Failed to add inbox" }).status(301)
@@ -175,11 +186,11 @@ route.post('/delete', (req,res) => {
                 if(users.length == 0){
                     res.json({ error: '[!] User not found' }).status(301)
                 }else{
-                    modelInbox.find({ title: req.body.title }, (err, done) => {
+                    modelInbox.find({ title: req.body.title, from: token.username }, (err, done) => {
                         if(done.length == 0){
                             res.json({ error: '[!] Inbox not found' }).status(301)
                         }else{
-                            modelInbox.deleteOne({ title: req.body.title }, (err, inbox) => {
+                            modelInbox.deleteOne({ title: req.body.title, username: token.username }, (err, inbox) => {
                                 if(err){
                                     res.json({ error: '[!] Failed to delete inbox' }).status(301)
                                 }else{

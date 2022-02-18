@@ -11,7 +11,7 @@ route.post('/getall', (req,res) => {
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
             modelUsers.find({ username: token.username }, (err, users) => {
-                if(err){
+                if(users.length == 0){
                     res.json({ error: '[!] Something wrong in server' }).status(501)
                 }else{
                     modelClass.find({}, (err, classes) => {

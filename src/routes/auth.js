@@ -145,7 +145,7 @@ route.post('/profile', (req, res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            if(req.body.users == 'true'){
+            if(req.query.users == 'true'){
                 modelUsers.findOne({ username: req.body.users }, (err, done) => {
                     if(err){
                         res.json({ error: '[!] Something on server' }).status(501)
@@ -171,19 +171,35 @@ route.post('/delete', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(users.length == 0){
-                    res.json({ error: '[!] You are not admin' }).status(301)
-                }else{
-                    modelUsers.deleteOne({ username: req.body.username }, (err, done) => {
-                        if(err){
-                            res.json({ error: '[!] Something on server' }).status(501)
-                        }else{
-                            res.json({ success: 'Successfully deleted' })
-                        }
-                    })
-                }
-            })
+            if(token.level == 'admin'){
+                modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                    if(users.length == 0){
+                        res.json({ error: '[!] You are not admin' }).status(301)
+                    }else{
+                        modelUsers.deleteOne({ username: req.body.username }, (err, done) => {
+                            if(err){
+                                res.json({ error: '[!] Something on server' }).status(501)
+                            }else{
+                                res.json({ success: 'Successfully deleted' })
+                            }
+                        })
+                    }
+                })
+            }else if(token.level == 'developer'){
+                modelUsers.find({ username: token.username, level: 'developer' }, (err, users) => {
+                    if(users.length == 0){
+                        res.json({ error: '[!] You are not admin' }).status(301)
+                    }else{
+                        modelUsers.deleteOne({ username: req.body.username }, (err, done) => {
+                            if(err){
+                                res.json({ error: '[!] Something on server' }).status(501)
+                            }else{
+                                res.json({ success: 'Successfully deleted' })
+                            }
+                        })
+                    }
+                })
+            }
         }
     })
 })
@@ -237,19 +253,49 @@ route.post('/search/admin', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(users.length == 0){
-                    res.json({ error: '[!] Users not found' }).status(501)
-                }else{
-                    modelUsers.find({ name: { $regex: req.body.name }, level: 'admin' }, (err, all) => {
-                        if(err){
-                            res.json({ error: '[!] Something on server' }).status(501)
-                        }else{
-                            res.json({ users: all })
-                        }
-                    })
-                }
-            })
+            if(req.query.level == 'admin'){
+                modelUsers.find({ username: token.username }, (err, users) => {
+                    if(users.length == 0){
+                        res.json({ error: '[!] Users not found' }).status(501)
+                    }else{
+                        modelUsers.find({ name: { $regex: req.body.name }, level: 'admin' }, (err, all) => {
+                            if(err){
+                                console.log(err)
+                            }else{
+                                res.json({ users: all })
+                            }
+                        })
+                    }
+                })
+            }else if(req.query.level == 'developer'){
+                modelUsers.find({ username: token.username }, (err, users) => {
+                    if(users.length == 0){
+                        res.json({ error: '[!] Users not found' }).status(501)
+                    }else{
+                        modelUsers.find({ name: { $regex: req.body.name }, level: 'admin' }, (err, all) => {
+                            if(err){
+                                res.json({ error: '[!] Something on server' }).status(501)
+                            }else{
+                                res.json({ users: all })
+                            }
+                        })
+                    }
+                })
+            }else if(req.query.level == 'teacher'){
+                modelUsers.find({ username: token.username }, (err, users) => {
+                    if(users.length == 0){
+                        res.json({ error: '[!] Users not found' }).status(501)
+                    }else{
+                        modelUsers.find({ name: { $regex: req.body.name }, level: 'admin' }, (err, all) => {
+                            if(err){
+                                res.json({ error: '[!] Something on server' }).status(501)
+                            }else{
+                                res.json({ users: all })
+                            }
+                        })
+                    }
+                })
+            }
         }
     })
 })

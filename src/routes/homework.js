@@ -13,7 +13,6 @@ route.post('/getall', (req,res) => {
                 if(users.length == 0 || err){
                     res.json({ error: '[!] User not found' }).status(301)
                 }else{
-                    console.log(token.class)
                     if(token.level == 'admin'){
                         modelHomework.find({}, (err, homework) => {
                             if(err){
@@ -38,6 +37,14 @@ route.post('/getall', (req,res) => {
                                 res.json({ homework: homework }).status(200)
                             }
                         })
+                    }else if(token.level == 'teacher'){
+                        modelHomework.find({ teacher: token.username }, (err, homework) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301)
+                            }else{
+                                res.json({ homework: homework }).status(200)
+                            }
+                        })
                     }
                 }
             })
@@ -50,19 +57,35 @@ route.post('/search', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username }, (err, users) => {
-                if(users.length == 0 || err){
-                    res.json({ error: '[!] User not found' }).status(301)
-                }else{
-                    modelHomework.find({ title: { $regex: req.body.homework } }, (err, homework) => {
-                        if(err){
-                            res.json({ error: '[!] Error' }).status(301)
-                        }else{
-                            res.json({ homework: homework }).status(200)
-                        }
-                    })
-                }
-            })
+            if(token.level == 'teacher'){
+                modelUsers.find({ username: token.username }, (err, users) => {
+                    if(users.length == 0 || err){
+                        res.json({ error: '[!] User not found' }).status(301)
+                    }else{
+                        modelHomework.find({ title: { $regex: req.body.homework }, teacher: token.username }, (err, homework) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301)
+                            }else{
+                                res.json({ homework: homework }).status(200)
+                            }
+                        })
+                    }
+                })
+            }else{
+                modelUsers.find({ username: token.username }, (err, users) => {
+                    if(users.length == 0 || err){
+                        res.json({ error: '[!] User not found' }).status(301)
+                    }else{
+                        modelHomework.find({ title: { $regex: req.body.homework } }, (err, homework) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301)
+                            }else{
+                                res.json({ homework: homework }).status(200)
+                            }
+                        })
+                    }
+                })
+            }
         }
     })
 })
@@ -80,7 +103,7 @@ route.post('/add', (req,res) => {
                         modelHomework.insertMany({
                             title: req.body.title,
                             lessons: req.body.lessons,
-                            teacher: req.body.teacher,
+                            teacher: token.username,
                             class: req.body.class,
                             major: req.body.major,
                             desc: req.body.desc,

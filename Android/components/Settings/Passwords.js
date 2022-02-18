@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, StatusBar } from 'react-native';
+import { View, Text, ScrollView, TextInput, TouchableOpacity, Image, AsyncStorage, StatusBar } from 'react-native';
 import axios from 'axios';
 import konfigurasi from '../../config';
 
@@ -20,7 +20,7 @@ export default class Passwords extends Component{
                 old_password: this.state.old_password,
                 new_password: this.state.new_password
             }).then(res => {
-                if(res.data.status == 'success'){
+                if(res.data.success){
                     alert('Password has been changed');
                 }else{
                     alert('Password is not changed');
@@ -33,7 +33,7 @@ export default class Passwords extends Component{
 
     render(){
         return(
-            <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
+            <ScrollView style={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar barStyle={"dark-content"} backgroundColor='white' />
                 <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 100 }}>
                     <Image source={require('../../assets/illustrations/passwords.png')} style={{ width: 160, height: 160 }} />
@@ -45,7 +45,7 @@ export default class Passwords extends Component{
                         <Text style={{ fontWeight: 'bold' }}>Change my password!</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 }

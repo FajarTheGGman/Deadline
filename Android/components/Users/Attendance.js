@@ -41,15 +41,6 @@ export default class Attendance extends Component {
 
         const day = dayName(dayOrigin);
 
-        AsyncStorage.removeItem('attendance');
-        AsyncStorage.getItem('attendance').then(check => {
-            if(check == 'true'){
-                this.setState({ hand: 'hand-left' })
-            }else{
-                this.setState({ hand: 'hand-left-outline' })
-            }
-        })
-
         AsyncStorage.getItem('token').then(token => {
             axios.post(konfigurasi.server + "location/get", {
                 token: token,
@@ -133,41 +124,35 @@ export default class Attendance extends Component {
     }
 
     attendance(){
-        AsyncStorage.getItem('token').then(token => {
-            AsyncStorage.getItem('attendance').then(check => {
-                if(check == 'true'){
-                    this.setState({ hand: 'hand-left' })
+        if(this.state.total_distance < 15){
+            AsyncStorage.getItem('expire').then(x => {
+                let getDate = new Date();
+                if(x == getDate){
+                    alert('You have already attended today')
                 }else{
-                    if(this.state.total_distance < 15){
-                        AsyncStorage.getItem('expire').then(x => {
-                            let getDate = new Date();
-                            if(x == getDate){
-                                alert('You have already attended today')
-                            }else{
-                                this.setState({ hand: 'hand-left-outline' })
-                                axios.post(konfigurasi.server + 'attendance/add', {
-                                    token: token,
-                                    secret: konfigurasi.secret,
-                                    lessons: this.state.next_lecture[0].lessons,
-                                    major: this.state.major,
-                                    class: this.state.class,
-                                    time: this.state.time,
-                                }).then(res => {
-                                    if(res.data.success){
-                                        alert('Attendance Success')
-                                        AsyncStorage.setItem('attendance', 'true');
-                                        AsyncStorage.setItem('expire', new Date());
-                                    }
-                                })
-                            }
-                        })
-                    }else{
-                        this.setState({ far: true })
-                    }
+                    this.setState({ hand: 'hand-left-outline' })
+                    axios.post(konfigurasi.server + 'attendance/add', {
+                        token: token,
+                        secret: konfigurasi.secret,
+                        lessons: this.state.next_lecture[0].lessons,
+                        major: this.state.major,
+                        class: this.state.class,
+                        time: this.state.time,
+                        date: new Date().getDay() + '/' + new Date().getMonth() + '/' + new Date().getFullYear()
+                    }).then(res => {
+                        if(res.data.success){
+                            alert('Attendance Success')
+                            AsyncStorage.setItem('attendance', 'true');
+                            AsyncStorage.setItem('expire', new Date());
+                        }
+                    })
                 }
             })
-        })
+        }else{
+            this.setState({ far: true })
+        }
     }
+
 
     render(){
         return(

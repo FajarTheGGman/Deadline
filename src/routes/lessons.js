@@ -67,6 +67,20 @@ route.post('/getall', (req, res) => {
                         });
                     }
                 })
+            }else if(token.level == 'teacher'){
+                modelUsers.find({ username: token.username }, (err, users) => {
+                    if(users.length == 0){
+                        res.json({ error: '[!] user not found' }).status(301);
+                    }else{
+                        modelLessons.find({ teacher: token.username }, (err, lessons) => {
+                            if(err){
+                                res.json({ error: '[!] error' }).status(301);
+                            }else{
+                                res.json({ lessons: lessons }).status(200);
+                            }
+                        });
+                    }
+                })
             }
         }
     })
@@ -77,19 +91,35 @@ route.post('/search', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username }, (err, users) => {
-                if(users.length == 0){
-                    res.json({ error: '[!] User not found' }).status(301);
-                }else{
-                    modelLessons.find({ lessons: { $regex: req.body.lessons } }, (err, lessons) => {
-                        if(err){
-                            res.json({ error: '[!] Error' }).status(301);
-                        }else{
-                            res.json({ lessons: lessons }).status(200);
-                        }
-                    })
-                }
-            })
+            if(token.level == 'teacher'){
+                modelUsers.find({ username: token.username }, (err, users) => {
+                    if(users.length == 0){
+                        res.json({ error: '[!] User not found' }).status(301);
+                    }else{
+                        modelLessons.find({ lessons: { $regex: req.body.lessons }, teacher: token.username }, (err, lessons) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301);
+                            }else{
+                                res.json({ lessons: lessons }).status(200);
+                            }
+                        })
+                    }
+                })
+            }else{
+                modelUsers.find({ username: token.username }, (err, users) => {
+                    if(users.length == 0){
+                        res.json({ error: '[!] User not found' }).status(301);
+                    }else{
+                        modelLessons.find({ lessons: { $regex: req.body.lessons } }, (err, lessons) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301);
+                            }else{
+                                res.json({ lessons: lessons }).status(200);
+                            }
+                        })
+                    }
+                })
+            }
         }
     })
 })
@@ -171,7 +201,7 @@ route.post('/add', (req,res) => {
                                 if(lessons.length == 0){
                                     modelLessons.insertMany({
                                         lessons: req.body.lessons,
-                                        teacher: req.body.teacher,
+                                        teacher: token.username,
                                         class: req.body.class,
                                         day: req.body.day,
                                         date: req.body.time
@@ -344,29 +374,79 @@ route.post('/delete', (req,res) => {
         if(err){
             res.json({ error: '[!] Wrong Authorization' }).status(301)
         }else{
-            modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
-                if(err || users.length == 0){
-                    res.json({ error: '[!] User not found' }).status(301);
-                }else{
-                    modelLessons.find({ lessons: req.body.lessons }, (err, lessons) => {
-                        if(err){
-                            res.json({ error: '[!] Error' }).status(301);
-                        }else{
-                            if(lessons.length == 0){
-                                res.json({ error: '[!] Lesson not found' }).status(301);
+            if(token.level == 'admin'){
+                modelUsers.find({ username: token.username, level: 'admin' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] User not found' }).status(301);
+                    }else{
+                        modelLessons.find({ lessons: req.body.lessons }, (err, lessons) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301);
                             }else{
-                                modelLessons.deleteOne({ lessons: req.body.lessons }, (err, lessons) => {
-                                    if(err){
-                                        res.json({ error: '[!] Error' }).status(301);
-                                    }else{
-                                        res.json({ success: '[+] Success' }).status(200);
-                                    }
-                                })
+                                if(lessons.length == 0){
+                                    res.json({ error: '[!] Lesson not found' }).status(301);
+                                }else{
+                                    modelLessons.deleteOne({ lessons: req.body.lessons }, (err, lessons) => {
+                                        if(err){
+                                            res.json({ error: '[!] Error' }).status(301);
+                                        }else{
+                                            res.json({ success: '[+] Success' }).status(200);
+                                        }
+                                    })
+                                }
                             }
-                        }
-                    })
-                }
-            })
+                        })
+                    }
+                })
+            }else if(token.level == 'developer'){
+                modelUsers.find({ username: token.username, level: 'developer' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] User not found' }).status(301);
+                    }else{
+                        modelLessons.find({ lessons: req.body.lessons }, (err, lessons) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301);
+                            }else{
+                                if(lessons.length == 0){
+                                    res.json({ error: '[!] Lesson not found' }).status(301);
+                                }else{
+                                    modelLessons.deleteOne({ lessons: req.body.lessons }, (err, lessons) => {
+                                        if(err){
+                                            res.json({ error: '[!] Error' }).status(301);
+                                        }else{
+                                            res.json({ success: '[+] Success' }).status(200);
+                                        }
+                                    })
+                                }
+                            }
+                        })
+                    }
+                })
+            }else if(token.level == 'teacher'){
+                modelUsers.find({ username: token.username, level: 'teacher' }, (err, users) => {
+                    if(err || users.length == 0){
+                        res.json({ error: '[!] User not found' }).status(301);
+                    }else{
+                        modelLessons.find({ lessons: req.body.lessons, teacher: token.username }, (err, lessons) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301);
+                            }else{
+                                if(lessons.length == 0){
+                                    res.json({ error: '[!] Lesson not found' }).status(301);
+                                }else{
+                                    modelLessons.deleteOne({ lessons: req.body.lessons, username: token.username }, (err, lessons) => {
+                                        if(err){
+                                            res.json({ error: '[!] Error' }).status(301);
+                                        }else{
+                                            res.json({ success: '[+] Success' }).status(200);
+                                        }
+                                    })
+                                }
+                            }
+                        })
+                    }
+                })
+            }
         }
     })
 })

@@ -31,9 +31,13 @@ export default class Banner extends Component{
                             this.props.navigation.dispatch(
                                 StackActions.replace('Admin')
                             );
-                        }else{
+                        }else if(res.data.level == 'students'){
                             this.props.navigation.dispatch(
                                 StackActions.replace('Home')
+                            );
+                        }else if(res.data.level == 'teacher'){
+                            this.props.navigation.dispatch(
+                                StackActions.replace('Teacher')
                             );
                         }
                     }
