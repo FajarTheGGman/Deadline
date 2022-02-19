@@ -20,6 +20,8 @@ route.post('/login', (req,res) => {
                             level: check[0].level,
                             username: check[0].username,
                             major: check[0].major,
+                            gender: check[0].gender,
+                            picture: check[0].picture
                         }, 'dontbeafool')
     
                         res.header({ token: Token, level: check[0].level })

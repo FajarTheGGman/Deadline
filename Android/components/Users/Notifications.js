@@ -26,7 +26,7 @@ export default class Notification extends Component{
 
     render(){
         return(
-            <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar backgroundColor="white" barStyle="dark-content" />
 
                 <View style={{ marginLeft: 17, marginTop: 15 }}>
@@ -52,7 +52,7 @@ export default class Notification extends Component{
 
                     })}
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 }

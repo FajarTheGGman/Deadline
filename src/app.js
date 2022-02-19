@@ -7,6 +7,8 @@ const helmet = require('helmet');
 const cors = require('cors');
 const mongoose = require('mongoose')
 const file = require('express-fileupload')
+const colors = require('colors')
+const bcrypt = require('bcrypt')
 
 // [ Route ]
 const routeAuth = require('./routes/auth')
@@ -25,7 +27,31 @@ require('dotenv').config();
 const middlewares = require('./middlewares');
 const api = require('./api');
 
-mongoose.connect(process.env.DB, { useUnifiedTopology: true })
+mongoose.connect(process.env.DB, { useUnifiedTopology: true }).then(() => {
+    defaultUsers()
+}).catch(err => {
+    console.log(colors.red('[!] Error connecting to database'))
+})
+
+const defaultUsers = () => {
+    const model = require('./models/Users')
+    model.findOne({ level: 'developer' }, (err, data) => {
+        bcrypt.hash('#justadeveloper', 10, (error, pw) => {
+            if(data == null){
+                model.insertMany({
+                    name: "DeadLine Dev",
+                    class: '',
+                    major: '',
+                    gender: 'male',
+                    level: 'developer',
+                    username: '@deadline',
+                    password: pw,
+                    since: new Date().getDate() + '/' + new Date().getMonth() + '/' + new Date().getFullYear(),
+                })
+            }
+        })
+    })
+}
 
 const app = express();
 

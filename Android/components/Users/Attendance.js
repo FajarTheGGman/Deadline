@@ -125,11 +125,6 @@ export default class Attendance extends Component {
 
     attendance(){
         if(this.state.total_distance < 15){
-            AsyncStorage.getItem('expire').then(x => {
-                let getDate = new Date();
-                if(x == getDate){
-                    alert('You have already attended today')
-                }else{
                     this.setState({ hand: 'hand-left-outline' })
                     axios.post(konfigurasi.server + 'attendance/add', {
                         token: token,
@@ -140,14 +135,14 @@ export default class Attendance extends Component {
                         time: this.state.time,
                         date: new Date().getDay() + '/' + new Date().getMonth() + '/' + new Date().getFullYear()
                     }).then(res => {
-                        if(res.data.success){
+                        if(res.status == 200){
                             alert('Attendance Success')
                             AsyncStorage.setItem('attendance', 'true');
                             AsyncStorage.setItem('expire', new Date());
+                        }else if(res.status == 301){
+                            alert('You already get attendance in this lecture')
                         }
                     })
-                }
-            })
         }else{
             this.setState({ far: true })
         }

@@ -27,7 +27,7 @@ route.post('/getall', (req, res) => {
                         }
                     });
                 }else if(token.level == 'students'){
-                    modelAttendance.find({ class: token.class, major: token.major }).sort({ time: 'asc' }).exec((err, result) => {
+                    modelAttendance.find({ class: token.class, major: token.major, lessons: req.body.lessons }).sort({ time: 'asc' }).exec((err, result) => {
                         if(err){
                             res.json({ error: '[!] Error get all attendance' }).status(301);
                         }else{
@@ -76,6 +76,8 @@ route.post('/add', (req,res) => {
                                 modelAttendance.insertMany({
                                     name: token.name,
                                     username: token.username,
+                                    picture: token.picture,
+                                    gender: token.gender,
                                     lessons: req.body.lessons,
                                     time: req.body.time,
                                     class: token.class,
@@ -92,12 +94,14 @@ route.post('/add', (req,res) => {
                         })
 
                     }else{
-                        modelAttendance.find({ name: token.name }, (err, check) => {
+                        modelAttendance.find({ name: token.name, lessons: req.body.lessons, date: req.body.date }, (err, check) => {
+                            if(check.length == 0){
                                 modelAttendance.insertMany({
                                     name: token.name,
                                     username: token.username,
                                     lessons: req.body.lessons,
                                     time: req.body.time,
+                                    gender: token.gender,
                                     class: token.class,
                                     major: token.major,
                                     date: req.body.date,
@@ -109,6 +113,10 @@ route.post('/add', (req,res) => {
                                         res.json({ success: '[+] Add attendance success' });
                                     }
                                 });
+                            }else{
+                                res.json({ error: '[!] You already get attendance' }).status(301);
+                            }
+                                
                         })
                     }
                 }
