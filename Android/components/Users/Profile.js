@@ -135,8 +135,8 @@ export default class Profile extends Component{
 
 
                     <Text style={{ fontWeight: 'bold', fontSize: 22 }}>{this.state.name} {this.state.admin ? <Icons name='checkmark-circle' size={20} color='#4E9F3D' /> : <Text></Text>}</Text>
-                    <Text style={{ fontSize: 16, color: 'grey' }}>@{this.state.username}</Text>
-                    <Text style={{ color: '#ededed' }}>{this.state.gender == 'male' ? "He/Him" : "She/her"}</Text>
+                    <Text style={{ fontSize: 16, color: 'grey' }}>{this.state.username == '@deadline' ? this.state.username : '@'+this.state.username}</Text>
+                    <Text style={{ color: '#ededed' }}>{this.state.gender == 'male' ? "he/him" : "she/her"}</Text>
                </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 25 }}>

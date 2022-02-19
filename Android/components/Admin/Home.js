@@ -519,12 +519,12 @@ class Index extends Component{
                             </TouchableOpacity>
                         </View>
                         <View style={{ flexDirection: "row", marginTop: 35, justifyContent: 'space-evenly' }}>
-                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('AdminNew')}>
+                            <TouchableOpacity style={{ alignItems: 'center', marginRight: -10 }} onPress={() => this.props.navigation.navigate('AdminNew')}>
                                 <Icons name="person-circle-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>People</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('AttendanceAdmin')}>
+                            <TouchableOpacity style={{ alignItems: 'center', marginRight: -10 }} onPress={() => this.props.navigation.navigate('AttendanceAdmin')}>
                                 <Icons name="hand-left-outline" size={30} color="#191A19" />
                                 <Text style={{ color: '#191A19' }}>Attendance</Text>
                             </TouchableOpacity>
