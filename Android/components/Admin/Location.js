@@ -11,8 +11,8 @@ export default class Location extends Component{
 
         this.state = {
             id: '',
-            latitude: -6.914744,
-            longitude: 107.609810,
+            latitude: -6.579000103883162,
+            longitude: 106.80920373648405,
             newLatitude: -6.914744,
             newLongitude: 107.609810,
             nameLocation: '',
@@ -62,8 +62,8 @@ export default class Location extends Component{
                     initialRegion={{
                         latitude: this.state.latitude,
                         longitude: this.state.longitude,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
+                        latitudeDelta: 0.2922,
+                        longitudeDelta: 0.2421,
                     }}
 
                     onPress={(val) => this.setState({

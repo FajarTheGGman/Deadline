@@ -99,9 +99,7 @@ class Barcode extends Component{
                 message: 'Be careful, this is a users data'
             }
             const encryption = base64.encode(JSON.stringify(data))
-            console.log('before : ' + encryption)
             const decryption = base64.decode(encryption)
-            console.log('after : ' + decryption)
             this.setState({ raw: encryption.length === 0 ? 'There is no data yet!' : encryption })
         })
     }
