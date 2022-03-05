@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, RefreshControl, TouchableOpacity, AsyncStorage, ScrollView, StatusBar } from 'react-native'
-import Modal from 'react-native-modal'
+import { View, Text, Image, RefreshControl, TouchableOpacity, AsyncStorage, ScrollView, Modal, StatusBar } from 'react-native'
 import Icons from 'react-native-vector-icons/Ionicons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Permissions, Notifications } from 'expo'

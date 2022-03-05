@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, Picker, TouchableOpacity, ScrollView, TextInput, Image, AsyncStorage, StatusBar } from 'react-native';
+import { View, Text, Picker, TouchableOpacity, ScrollView, TextInput, Image, AsyncStorage, StatusBar, Modal } from 'react-native';
 import axios from 'axios';
 import konfigurasi from '../../config'
-import Modal from 'react-native-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default class Login extends Component {
