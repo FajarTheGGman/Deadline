@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { View, StatusBar, Text, TouchableOpacity, AsyncStorage, ScrollView, Image } from 'react-native';
+import { View, StatusBar, Text, TouchableOpacity, AsyncStorage, ScrollView, Image, Modal } from 'react-native';
 import axios from 'axios'
-import Modal from 'react-native-modal'
 import Icons from 'react-native-vector-icons/Ionicons'
 import MapView, { Marker } from 'react-native-maps'
 import * as geolib from 'geolib'
@@ -154,7 +153,7 @@ export default class Attendance extends Component {
             <ScrollView contentContainerStyle={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar backgroundColor="white" barStyle="dark-content" />
 
-                <Modal isVisible={this.state.far}>
+                <Modal visible={this.state.far} animationType="slide">
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                         <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 10, alignItems: 'center' }}>
                             <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Try to be Closer !</Text>

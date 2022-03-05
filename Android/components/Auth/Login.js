@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Image, AsyncStorage, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, TextInput, Image, AsyncStorage, StatusBar } from 'react-native';
 import axios from 'axios';
 import konfigurasi from '../../config'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import Modal from 'react-native-modal'
 import Loading from 'react-native-loading-spinner-overlay';
 import { StackActions } from '@react-navigation/native';
 
@@ -91,7 +90,7 @@ export default class Login extends Component {
                 <StatusBar backgroundColor="white" barStyle="dark-content" />
                 <Loading visible={this.state.loading} textContent={"Please Wait..."} textStyle={{ fontWeight: 'bold' }} />
 
-                <Modal isVisible={this.state.wrong}>
+                <Modal visible={this.state.wrong} animationType="slide">
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                         <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 10, alignItems: 'center' }}>
                             <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Wrong Credentials!</Text>
