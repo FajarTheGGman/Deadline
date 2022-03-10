@@ -1,7 +1,7 @@
 {
-  "name": "express-api-starter",
+  "name": "DeadLine Project",
   "version": "1.2.0",
-  "description": " A basic starter for an express.js API",
+  "description": "Simple application for improve students productivity",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
@@ -10,15 +10,15 @@
     "test": "mocha --exit"
   },
   "keywords": [],
-  "author": "CJ R. <cj@null.computer> (https://w3cj.now.sh)",
+  "author": "FajarTheGGman",
   "repository": {
     "type": "git",
-    "url": "https://github.com/w3cj/express-api-starter.git"
+    "url": "hthttps://github.com/FajarTheGGman/Deadline"
   },
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.0.1",
-    "colors": "^1.4.0",
+    "colors": "*",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
