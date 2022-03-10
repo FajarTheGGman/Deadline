@@ -27,7 +27,7 @@ require('dotenv').config();
 const middlewares = require('./middlewares');
 const api = require('./api');
 
-mongoose.connect(process.env.DB, { useUnifiedTopology: true }).then(() => {
+mongoose.connect('mongodb://127.0.0.1:27017/absensi', { useUnifiedTopology: true }).then(() => {
     defaultUsers()
 }).catch(err => {
     console.log(colors.red('[!] Error connecting to database'))

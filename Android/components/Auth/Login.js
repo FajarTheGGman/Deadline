@@ -90,7 +90,7 @@ export default class Login extends Component {
                 <StatusBar backgroundColor="white" barStyle="dark-content" />
                 <Loading visible={this.state.loading} textContent={"Please Wait..."} textStyle={{ fontWeight: 'bold' }} />
 
-                <Modal visible={this.state.wrong} animationType="slide">
+                <Modal visible={this.state.wrong} transparent={true} animationType="slide">
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                         <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 10, alignItems: 'center' }}>
                             <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Wrong Credentials!</Text>

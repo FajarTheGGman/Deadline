@@ -4,6 +4,8 @@ import axios from 'axios'
 import konfigurasi from '../../config'
 import Icons from 'react-native-vector-icons/Ionicons'
 import MapView, { Marker } from 'react-native-maps'
+import { WebView } from 'react-native-webview'
+import html_script from './map'
 
 export default class Location extends Component{
     constructor(props){
@@ -24,7 +26,7 @@ export default class Location extends Component{
             axios.post(konfigurasi.server + 'location/get', {
                 token: token,
                 secret: konfigurasi.secret
-            }).then(res => {
+            }).then(async res => {
                 if(res.data.location){
                     this.setState({
                         id: res.data.location[0]._id,
@@ -33,6 +35,14 @@ export default class Location extends Component{
                         nameLocation: res.data.location[0].location,
                     })
                 }
+
+                setTimeout(() => {
+                    this.refs.Map_Ref.postMessage(JSON.stringify({
+                        latitude: this.state.latitude,
+                        longitude: this.state.longitude,
+                        nameLocation: this.state.nameLocation
+                    }))
+                }, 1000)
             })
         })
     }
@@ -57,38 +67,18 @@ export default class Location extends Component{
     render(){
         return(
             <View style={{flex:1}}>
-                <MapView
-                    style={{flex:1, flexDirection:'column'}}
-                    initialRegion={{
-                        latitude: this.state.latitude,
-                        longitude: this.state.longitude,
-                        latitudeDelta: 0.2922,
-                        longitudeDelta: 0.2421,
+                <WebView
+                    ref={'Map_Ref'}
+                    onMessage={(e) => {
+                        let data = JSON.parse(e.nativeEvent.data)
+                        this.setState({
+                            newLatitude: data.latitude,
+                            newLongitude: data.longitude,
+                        })
                     }}
-
-                    onPress={(val) => this.setState({
-                        newLatitude: val.nativeEvent.coordinate.latitude,
-                        newLongitude: val.nativeEvent.coordinate.longitude,
-                    })}
-
-                >
-                    <Marker
-                        coordinate={{
-                            latitude: this.state.latitude,
-                            longitude: this.state.longitude,
-                        }}
-                        title="School"
-                        description="Current Location"
-                    />
-                    <Marker
-                        coordinate={{
-                            latitude: this.state.newLatitude,
-                            longitude: this.state.newLongitude,
-                        }}
-                        title="New School"
-                        description="This is my school"
-                    />
-                </MapView>
+                    source={{ html: html_script }}
+                    style={{flex:1, flexDirection:'column'}}
+                />
                 <View style={{ flexDirection: 'column', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, padding: 5, elevation: 15 }}>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={{ fontSize: 17, fontWeight: 'bold' }}>Your Current Location</Text>

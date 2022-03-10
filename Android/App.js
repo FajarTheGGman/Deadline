@@ -43,6 +43,8 @@ import EventAdmin from './components/Admin/Events'
 import InboxAdmin from './components/Admin/Inbox'
 import AdminNew from './components/Admin/Admin'
 import HomeworkAdmin from './components/Admin/Homework'
+import Testing from './components/Users/Testing'
+import Statistic from './components/Admin/Statistic'
 
 export default class Navigation extends Component{
     render(){
@@ -53,10 +55,16 @@ export default class Navigation extends Component{
                     <Stack.Screen name="Home" component={Home} options={{
                         headerShown: false
                     }} />
+                    <Stack.Screen name="Testing" component={Testing} options={{
+                        headerShown: false
+                    }} />
                     <Stack.Screen name="Banner" component={Banner} options={{
                         headerShown: false
                     }} />
                     <Stack.Screen name="Guide" component={Guide} options={{
+                        headerShown: false
+                    }} />
+                    <Stack.Screen name="Statistic" component={Statistic} options={{
                         headerShown: false
                     }} />
                     <Stack.Screen name="Admin" component={Admin} options={{

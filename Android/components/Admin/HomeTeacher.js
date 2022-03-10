@@ -110,7 +110,7 @@ class Barcode extends Component{
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Create QR Code</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>QR For Attendance</Text>
                     <ViewShot ref="viewShot" options={{ format: "jpg", quality: 0.9 }}>
                         <View style={{ backgroundColor: 'white', padding: 15, marginTop: 15, borderRadius: 10, elevation: 15 }}>
                             <QRCode

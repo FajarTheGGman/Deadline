@@ -202,7 +202,6 @@ class Barcode extends Component{
                                     if(res.data.success){
                                         alert('Attendance Success')
                                         AsyncStorage.setItem('attendance', 'true');
-                                        AsyncStorage.setItem('expire', new Date());
                                     }
                                 })
                             }

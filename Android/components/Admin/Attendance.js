@@ -3,6 +3,7 @@ import { View, Text, TextInput, Picker, TouchableOpacity, AsyncStorage, Image, S
 import axios from 'axios'
 import SwipeUpDownModal from 'react-native-swipe-modal-up-down'
 import Icons from 'react-native-vector-icons/Ionicons'
+import { LineChart } from 'react-native-chart-kit'
 import konfigurasi from '../../config'
 
 export default class AttendanceAdmin extends Component{
@@ -17,7 +18,10 @@ export default class AttendanceAdmin extends Component{
             class: '',
             filter_class: '',
             filter_major: '',
-            filter: false
+            filter: false,
+            month_begin: ["January", "February", "March", "April", "May"],
+            month_last: ["June", "July", "August", "September", "October"],
+            data_month_begin: [],
         }
     }
 
@@ -28,8 +32,9 @@ export default class AttendanceAdmin extends Component{
                 secret: konfigurasi.secret,
                 username: this.state.user,
                 class: this.state.filter_class,
-                major: this.state.filter_major
-            }).then(res => {
+                major: this.state.filter_major,
+                date: new Date().getDay() + '/' + new Date().getMonth() + '/' + new Date().getFullYear()
+             }).then(res => {
                 if(res.data.success){
                     this.setState({ data: this.state.data.concat(res.data.data) })
                 }
@@ -74,7 +79,7 @@ export default class AttendanceAdmin extends Component{
 
     render(){
         return(
-            <ScrollView contentContainerStyle={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 15, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar backgroundColor='white' barStyle='dark-content' />
 
                 <SwipeUpDownModal 
@@ -139,9 +144,58 @@ export default class AttendanceAdmin extends Component{
                     </TouchableOpacity>
                 </View>
 
-                <View style={{ flexDirection: 'column', marginTop: 25 }}>
-                    <Text style={{ marginLeft: 15, fontWeight: 'bold', fontSize: 18 }}>All Attendance</Text>
-                    {this.state.data.map((x,y) => {
+                <View style={{ flexDirection: 'column', marginTop: 5 }}>
+                <View style={{ alignItems: 'center', marginTop: 15 }}>
+                    <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Statistic Per Month</Text>
+                    <LineChart
+                        data={{
+                            labels: new Date().getMonth() == 5 ? this.state.month_last : this.state.month_begin,
+                            datasets: [
+                                {
+                                    data: [
+                                            Math.random() * 100,
+                                            Math.random() * 100,
+                                            Math.random() * 100,
+                                            Math.random() * 100,
+                                            Math.random() * 100,
+                                        ]
+                                }
+                            ]
+                            }}
+                width={330} // from react-native
+                height={220}
+                yAxisLabel=""
+                yAxisSuffix=""
+                yAxisInterval={1} // optional, defaults to 1
+                chartConfig={{
+                      backgroundColor: "#4E9F3D",
+                      backgroundGradientFrom: "#4E9F3D",
+                      backgroundGradientTo: "#4E9F3D",
+                      decimalPlaces: 2, // optional, defaults to 2dp
+                      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                      labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                      style: {
+                            borderRadius: 16,
+                            padding: 10,
+                        },
+                      propsForDots: {
+                              r: "6",
+                              strokeWidth: "2",
+                              stroke: "skyblue"
+                            }
+                    }}
+                bezier
+                style={{
+                      marginVertical: 8,
+                      borderRadius: 16
+                    }}
+              />
+                </View>
+                    <Text style={{ marginLeft: 15, fontWeight: 'bold', fontSize: 18, marginTop: 15 }}>Today Attendance</Text>
+                    {this.state.data.length == 0 ? <View style={{ alignItems: "center", marginTop: 25 }}>
+                            <Icons name='logo-dropbox' color="grey" size={70} />
+                        <Text style={{ fontSize: 15, marginTop: 10, fontWeight: 'bold', color: 'grey' }}>No Attendance available yet!</Text>
+                            </View> : this.state.data.map((x,y) => {
                         return <View style={{ backgroundColor: 'white', padding: 10, marginLeft: 10, marginRight: 10, elevation: 15, borderRadius: 15, flexDirection: 'row', justifyContent: 'space-between', marginTop: 25 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={require('../../assets/illustrations/male.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />
