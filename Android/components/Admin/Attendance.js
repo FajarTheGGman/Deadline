@@ -194,7 +194,7 @@ export default class AttendanceAdmin extends Component{
                     <Text style={{ marginLeft: 15, fontWeight: 'bold', fontSize: 18, marginTop: 15 }}>Today Attendance</Text>
                     {this.state.data.length == 0 ? <View style={{ alignItems: "center", marginTop: 25 }}>
                             <Icons name='logo-dropbox' color="grey" size={70} />
-                        <Text style={{ fontSize: 15, marginTop: 10, fontWeight: 'bold', color: 'grey' }}>No Attendance available yet!</Text>
+                        <Text style={{ fontSize: 15, marginTop: 10, fontWeight: 'bold', color: 'grey' }}>Attendance not available yet!</Text>
                             </View> : this.state.data.map((x,y) => {
                         return <View style={{ backgroundColor: 'white', padding: 10, marginLeft: 10, marginRight: 10, elevation: 15, borderRadius: 15, flexDirection: 'row', justifyContent: 'space-between', marginTop: 25 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>

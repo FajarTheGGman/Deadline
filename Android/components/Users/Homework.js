@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StatusBar, AsyncStorage, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, TextInput, AsyncStorage, Image, ScrollView } from 'react-native';
 import axios from 'axios';
 import Icons from 'react-native-vector-icons/Ionicons';
+import SwipeUpDownModal from 'react-native-swipe-modal-up-down';
 import konfigurasi from '../../config'
 
 export default class Homework extends Component{
@@ -9,7 +10,12 @@ export default class Homework extends Component{
         super(props);
 
         this.state = {
-            homework: []
+            homework: [],
+            resultTitle: null,
+            resultDesc: null,
+            result: false,
+            homework_title: null,
+            homework_desc: null
         }
     }
 
@@ -26,10 +32,59 @@ export default class Homework extends Component{
         })
     }
 
+    open_result(index){
+        let title = this.state.homework[index].title;
+        let desc = this.state.homework[index].desc;
+        this.state.homework_title = title;
+        this.state.homework_desc = desc;
+        this.setState({
+            result: true,
+        })
+    }
+
     render(){
         return(
             <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar backgroundColor='white' barStyle='dark-content' />
+
+                <SwipeUpDownModal
+                    modalVisible={this.state.result}
+                    ContentModal={
+                        <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white', marginTop: 70, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
+                            <View style={{ backgroundColor: 'white', elevation: 15, alignItems: 'center', borderTopLeftRadius: 15, borderTopRightRadius: 15 }}>
+                                <Icons name='remove-outline' size={40} color="black" />
+                                <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: -8, paddingBottom: 15 }}>Send Result</Text>
+                            </View>
+
+                            <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', marginTop: 20, alignItems: 'center' }}>
+
+                                <Text style={{ padding: 15, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white', fontWeight: 'bold' }}>Homework : {this.state.homework_title}</Text>
+                                <Text style={{ padding: 15, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white', fontWeight: 'bold', marginTop: 20 }}>{this.state.homework_desc}</Text>
+
+                                <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Title Result</Text>
+                                <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Title Result ?" onChangeText={(val) => this.setState({ resultTitle: val })} />
+
+                                <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Description</Text>
+                                <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Description ?" onChangeText={(val) => this.setState({ resultDesc: val })} multiline={true} />
+
+                                <TouchableOpacity style={{ marginTop: 25, elevation: 10, borderRadius: 10, width: 280, padding: 10, backgroundColor: '#4E9F3D', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.send_result()}>
+                                    <Text style={{ color: 'white', fontWeight: 'bold' }}>Send <Icons name='send-outline' size={15} /></Text>
+                                </TouchableOpacity>
+
+                                <View style={{ padding: 10, paddingBottom: 50 }}>
+                                </View>
+
+                            </ScrollView>
+
+                        </View>
+                    }
+
+                    onClose={() => {
+                        this.setState({
+                            result: false
+                        });
+                    }}
+                />
 
                 <View style={{ marginTop: 25, alignItems: 'center' }}>
                     <Image source={require('../../assets/illustrations/homework/banner.png')} style={{ width: 150, height: 150 }} />
@@ -44,9 +99,9 @@ export default class Homework extends Component{
                                 <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{x.lessons}</Text>
                             </View>
 
-                            <View style={{ backgroundColor: '#4E9F3D', padding: 5, borderRadius: 100 }}>
-                                <Text style={{ fontWeight: 'bold' }}>Type</Text>
-                            </View>
+                            <TouchableOpacity style={{ backgroundColor: '#4E9F3D', padding: 5, borderRadius: 10, elevation: 15 }} onPress={() => this.open_result(y)}>
+                                <Text style={{ fontWeight: 'bold' }}><Icons name='send-outline' size={20}/></Text>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={{ flexDirection: 'column' }}>
