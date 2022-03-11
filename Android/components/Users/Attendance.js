@@ -162,8 +162,6 @@ export default class Attendance extends Component {
                     }).then(res => {
                         if(res.data.success){
                             alert('Attendance Success')
-                            AsyncStorage.setItem('attendance', 'true');
-                            AsyncStorage.setItem('expire', new Date());
                         }else if(res.data.error){
                             alert('You already get attendance in this lecture')
                         }

@@ -43,7 +43,7 @@ route.post('/getall', (req, res) => {
                         }
                     });
                 }else if(token.level == 'teacher'){
-                    modelAttendance.find({}, (err, result) => {
+                    modelAttendance.find({ date: { $regex: req.body.date } }, (err, result) => {
                         if(err){
                             res.json({ error: '[!] Error get all attendance' }).status(301);
                         }
