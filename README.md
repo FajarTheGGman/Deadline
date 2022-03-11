@@ -1,9 +1,6 @@
 # DeadLine
 <p>Application for improve students productivity</p>
 
-![](https://img.shields.io/badge/Alert-information-yellow) 
-<b>Still in development</b>
-
 ![](https://raw.githubusercontent.com/FajarTheGGman/deadline/main/img/banner.png)
 
 ![](https://img.shields.io/badge/react-native-blue)
