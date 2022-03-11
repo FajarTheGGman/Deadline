@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, StatusBar, TextInput, AsyncStorage, Image
 import axios from 'axios';
 import Icons from 'react-native-vector-icons/Ionicons';
 import SwipeUpDownModal from 'react-native-swipe-modal-up-down';
+import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
 import konfigurasi from '../../config'
 
 export default class Homework extends Component{
@@ -15,7 +17,8 @@ export default class Homework extends Component{
             resultDesc: null,
             result: false,
             homework_title: null,
-            homework_desc: null
+            homework_desc: null,
+            homework_teacher: null,
         }
     }
 
@@ -35,10 +38,45 @@ export default class Homework extends Component{
     open_result(index){
         let title = this.state.homework[index].title;
         let desc = this.state.homework[index].desc;
+        let teacher = this.state.homework[index].teacher;
         this.state.homework_title = title;
         this.state.homework_desc = desc;
+        this.state.homework_teacher = teacher;
         this.setState({
             result: true,
+        })
+    }
+
+    async send_result(){
+        /*
+        let res = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+            base64: true
+        });
+
+        axios.post('https://api.imgbb.com/1/upload?key=1ee24cebba156c40e04d161825c9a637', {
+            image: res.base64
+        }).then(result => {
+            console.log(result.data)
+        })*/
+        AsyncStorage.getItem('token').then(token => {
+
+            axios.post(konfigurasi.server + 'homework/add/completed', {
+                token: token,
+                secret: konfigurasi.secret,
+                title: this.state.homework_title,
+                teacher: this.state.homework_teacher,
+                title_result: this.state.resultTitle,
+                desc_result: this.state.resultDesc,
+                date: new Date().getDay() + "/" + new Date().getMonth() + "/" + new Date().getFullYear()
+            }).then(res => {
+                if(res.status == 200){
+                    alert('Berhasil mengirim hasil tugas')
+                }
+            })
         })
     }
 
@@ -58,11 +96,13 @@ export default class Homework extends Component{
 
                             <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', marginTop: 20, alignItems: 'center' }}>
 
-                                <Text style={{ padding: 15, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white', fontWeight: 'bold' }}>Homework : {this.state.homework_title}</Text>
+                                <Text style={{ padding: 15, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white', fontWeight: 'bold', marginTop: 15 }}>Homework : {this.state.homework_title}</Text>
                                 <Text style={{ padding: 15, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white', fontWeight: 'bold', marginTop: 20 }}>{this.state.homework_desc}</Text>
 
                                 <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Title Result</Text>
                                 <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Title Result ?" onChangeText={(val) => this.setState({ resultTitle: val })} />
+
+                                <TouchableOpacity style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white', alignItems: 'center', marginTop: 20, flexDirection: 'row', justifyContent: 'center' }} onPress={() => this.send_result()}><Icons name='document-outline' size={25} /><Text style={{ fontWeight: 'bold' }}>File</Text></TouchableOpacity>
 
                                 <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Description</Text>
                                 <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Description ?" onChangeText={(val) => this.setState({ resultDesc: val })} multiline={true} />
