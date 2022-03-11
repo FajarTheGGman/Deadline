@@ -13,6 +13,7 @@ export default class HomeworkAdmin extends Component{
         this.state = {
             username: null,
             homework: [],
+            homework_complete: [],
             lessons: [],
             class: [],
             title_input: null,
@@ -23,7 +24,8 @@ export default class HomeworkAdmin extends Component{
             homeworkSearch: null,
             teacher_input: null,
             date: false,
-            addHomework: false
+            addHomework: false,
+            complete: false
         }
     }
 
@@ -31,7 +33,7 @@ export default class HomeworkAdmin extends Component{
         AsyncStorage.getItem('token').then(token => {
             axios.post(konfigurasi.server + 'homework/getall', {
                 token: token,
-                secret: konfigurasi.secret
+                secret: konfigurasi.secret,
             }).then(res => {
                 if(res.data.homework){
                     this.setState({ homework: this.state.homework.concat(res.data.homework) })
@@ -178,6 +180,19 @@ export default class HomeworkAdmin extends Component{
         })
     }
 
+    complete(id){
+        AsyncStorage.getItem('token').then(token => {
+            axios.post(konfigurasi.server + 'homework/get', {
+                token: token,
+                secret: konfigurasi.secret,
+                id: id
+            }).then(res => {
+                this.setState({ complete: true })
+                this.setState({ homework_complete: this.state.homework_complete.concat(res.data.homework[0].completed) })
+            })
+        })
+    }
+
     render(){
         return(
             <ScrollView style={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
@@ -259,6 +274,60 @@ export default class HomeworkAdmin extends Component{
                     }}
                 />
 
+                <SwipeUpDownModal
+                    modalVisible={this.state.complete}
+                    ContentModal={
+                        <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white', marginTop: 70, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
+                            <View style={{ backgroundColor: 'white', elevation: 15, alignItems: 'center', borderTopLeftRadius: 15, borderTopRightRadius: 15 }}>
+                                <Icons name='remove-outline' size={40} color="black" />
+                                <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: -8, paddingBottom: 15 }}>Result Homework</Text>
+                            </View>
+
+                            <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', marginTop: 20 }}>
+                                {this.state.homework_complete.map((x,y) => {
+                                    return(
+                                <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 15, elevation: 15, marginRight: 10, marginLeft: 10, marginTop: 25 }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <View>
+                                            <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{x.title_result}</Text>
+                                        </View>
+
+                                        <View style={{ backgroundColor: '#4E9F3D', padding: 5, borderRadius: 100 }}>
+                                            <Text style={{ fontWeight: 'bold' }}>Grade - {x.class}</Text>
+                                        </View>
+                                    </View>
+
+                                    <View style={{ flexDirection: 'column' }}>
+                                        <Text style={{ marginTop: 15, color: 'grey', marginLeft: 10 }}>The Homeworks</Text>
+                                        <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center' }}>
+                                            <Image source={require('../../assets/illustrations/lecture/teacher.png')} style={{ width: 50, height: 50, marginLeft: 5 }} />
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text style={{ fontWeight: 'bold', marginLeft: 15, fontSize: 16, color: '#4E9F3D' }}>{x.name}</Text>
+                                                <Text style={{ color: 'grey', marginLeft: 15 }}>{x.major}</Text>
+                                            </View>
+                                        </View>
+                                         <View style={{ marginTop: 10, marginLeft: 5 }}>
+                                            <Text style={{ color: '#4E9F3D', fontWeight: 'bold' }}>Description</Text>
+                                            <Text style={{ color: 'grey' }}>{x.desc_result}</Text>
+                                        </View>
+                                    </View>
+
+
+                                </View>
+
+                                    )
+                                })}
+
+                            </ScrollView>
+                        </View>
+                    }
+                    
+                    onClose={() => {
+                        this.setState({
+                            complete: false
+                        });
+                    }}
+                />
 
 
                 <View style={{ marginTop: 25 }}>
@@ -298,7 +367,11 @@ export default class HomeworkAdmin extends Component{
                                 <Image source={require('../../assets/illustrations/lecture/teacher.png')} style={{ width: 50, height: 50, marginLeft: 5 }} />
                                 <Text style={{ fontWeight: 'bold', marginLeft: 15, fontSize: 16, color: '#4E9F3D' }}>{x.title}</Text>
                             </View>
-                             <View style={{ marginTop: 10, marginLeft: 5 }}>
+                            <TouchableOpacity style={{ marginLeft: 5, marginTop: 10, flexDirection: 'row' }} onPress={() => this.complete(x._id)}>
+                                <Icons name='folder-outline' size={20} color="#4E9F3D" />
+                                <Text style={{ color: '#4E9F3D', marginLeft: 5 }}>Open Result</Text>
+                            </TouchableOpacity>
+                            <View style={{ marginTop: 10, marginLeft: 5 }}>
                                 <Text style={{ color: '#4E9F3D', fontWeight: 'bold' }}>Task to complete</Text>
                                 <Text style={{ color: 'grey' }}>{x.desc}</Text>
                             </View>

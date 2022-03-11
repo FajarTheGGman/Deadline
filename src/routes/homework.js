@@ -52,6 +52,54 @@ route.post('/getall', (req,res) => {
     })
 })
 
+route.post('/get', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong Authorization' }).status(301)
+        }else{
+            modelUsers.find({ username: token.username }, (err, users) => {
+                if(users.length == 0 || err){
+                    res.json({ error: '[!] User not found' }).status(301)
+                }else{
+                    if(token.level == 'admin'){
+                        modelHomework.find({}, (err, homework) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301)
+                            }else{
+                                res.json({ homework: homework }).status(200)
+                            }
+                        })
+                    }else if(token.level == 'students'){
+                        modelHomework.find({ class: token.class }, (err, homework) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301)
+                            }else{
+                                res.json({ homework: homework }).status(200)
+                            }
+                        })
+                    }else if(token.level == 'developer'){
+                        modelHomework.find({}, (err, homework) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301)
+                            }else{
+                                res.json({ homework: homework }).status(200)
+                            }
+                        })
+                    }else if(token.level == 'teacher'){
+                        modelHomework.find({ teacher: token.username, _id: req.body.id }, (err, homework) => {
+                            if(err){
+                                res.json({ error: '[!] Error' }).status(301)
+                            }else{
+                                res.json({ homework: homework }).status(200)
+                            }
+                        })
+                    }
+                }
+            })
+        }
+    })
+})
+
 route.post('/search', (req,res) => {
     jwt.verify(req.body.token, req.body.secret, (err, token) => {
         if(err){
@@ -182,6 +230,8 @@ route.post('/add/completed', (req,res) => {
                             modelHomework.updateOne({ title: req.body.title, teacher: req.body.teacher }, { 
                                 $push: { 
                                     completed: {
+                                        title_result: req.body.title_result,
+                                        desc_result: req.body.desc_result,
                                         name: token.name,
                                         class: token.class,
                                         major: token.major,
@@ -189,9 +239,7 @@ route.post('/add/completed', (req,res) => {
                                     }
                                 } 
                             }, (err, homework) => {
-
                                     res.json({ success: '[+] Homework Completed!' }).status(200)
-                                
                             })
                         }
                     })

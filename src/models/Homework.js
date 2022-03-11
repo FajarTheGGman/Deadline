@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 
 const Completed = mongoose.Schema({
-    name: { type: String, required: true },
-    class: { type: String, required: true },
-    major: { type: String, required: true },
-    date: { type: String, required: true },
+    name: { type: String },
+    title_result: { type: String },
+    desc_result: { type: String },
+    class: { type: String },
+    major: { type: String },
+    date: { type: String },
 })
 
 const Homework = mongoose.Schema({
