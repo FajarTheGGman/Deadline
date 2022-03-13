@@ -59,7 +59,7 @@ export default class Lecture extends Component{
                             </View>
 
                             <View style={{ backgroundColor: '#4E9F3D', padding: 5, borderRadius: 100 }}>
-                                <Text style={{ fontWeight: 'bold' }}>Type</Text>
+                                <Text style={{ fontWeight: 'bold' }}>Grade - {x.class}</Text>
                             </View>
                         </View>
 

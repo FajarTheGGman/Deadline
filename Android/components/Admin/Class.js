@@ -18,6 +18,7 @@ export default class ClassAdmin extends Component{
             classDesc: '',
             majorTitle: '',
             majorDesc: '',
+            level: '',
             search: null
         }
     }
@@ -31,6 +32,18 @@ export default class ClassAdmin extends Component{
                 if(res.data.class){
                     this.setState({
                         classList: this.state.classList.concat(res.data.class)
+                    })
+                }
+            })
+
+            // get user profile info
+            axios.post(konfigurasi.server + 'auth/profile', {
+                token: token,
+                secret: konfigurasi.secret
+            }).then(res => {
+                if(res.status == 200){
+                    this.setState({
+                        level: res.data.level
                     })
                 }
             })
@@ -67,6 +80,7 @@ export default class ClassAdmin extends Component{
                 secret: konfigurasi.secret
             }).then(res => {
                 if(res.data.majors){
+                    this.setState({ majorList: [] })
                     this.setState({
                         majorList: this.state.majorList.concat(res.data.majors)
                     })
@@ -156,7 +170,7 @@ export default class ClassAdmin extends Component{
 
     render(){
         return(
-            <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
+            <ScrollView style={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar backgroundColor="white" barStyle="dark-content" />
                 <SwipeUpDownModal
                     modalVisible={this.state.addClass}
@@ -242,6 +256,7 @@ export default class ClassAdmin extends Component{
                     </View>
                 </View>
 
+                {this.state.level == 'teacher' ? <View></View> : 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                     <TouchableOpacity onPress={() => this.setState({ addClass: true })} style={{  marginLeft: 20, }}>
                         <Text style={{ color: '#4E9F3D' }}>Add Class</Text>
@@ -251,6 +266,7 @@ export default class ClassAdmin extends Component{
                         <Text style={{ color: '#4E9F3D' }}>Add Major</Text>
                     </TouchableOpacity>
                 </View>
+                }
 
                 <View style={{ flexDirection: 'column', marginTop: 25 }}>
                     <Text style={{ marginLeft: 15, fontSize: 16, fontWeight: 'bold' }}>All Class</Text>
@@ -297,7 +313,7 @@ export default class ClassAdmin extends Component{
                     </View>
                     })}
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 }

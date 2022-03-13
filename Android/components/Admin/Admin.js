@@ -331,7 +331,10 @@ export default class AdminNew extends Component{
                 </View>
 
                 <Text style={{ fontWeight: 'bold', marginTop: 25, fontSize: 18, marginLeft: 15 }}>Newest Developer</Text>
-                {this.state.devList.map((x,y) => {
+                {this.state.devList.length == 0 ? <View style={{ alignItems: 'center' }}>
+                        <Icons name='logo-dropbox' color='grey' size={50} />
+                        <Text style={{ color: 'grey', fontWeight: 'bold' }}>Developer not added yet!</Text>
+                    </View> : this.state.devList.map((x,y) => {
                     return <View style={{ backgroundColor: 'white', marginTop: 15, elevation: 15, borderRadius: 15, marginLeft: 10, marginRight: 10, flexDirection: 'row', padding: 15, justifyContent: 'space-between', alignItems: 'center' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={require('../../assets/icons/developer.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />
@@ -350,7 +353,10 @@ export default class AdminNew extends Component{
                 })}
 
                 <Text style={{ fontWeight: 'bold', marginTop: 25, fontSize: 18, marginLeft: 15 }}>Newest Admin</Text>
-                {this.state.adminList.map((x,y) => {
+                {this.state.adminList.length == 0 ? <View style={{ alignItems: 'center' }}>
+                        <Icons name='logo-dropbox' color='grey' size={50} />
+                        <Text style={{ color: 'grey', fontWeight: 'bold' }}>Admin not added yet!</Text>
+                    </View> : this.state.adminList.map((x,y) => {
                     return <View style={{ backgroundColor: 'white', marginTop: 15, elevation: 15, borderRadius: 15, marginLeft: 10, marginRight: 10, flexDirection: 'row', padding: 15, justifyContent: 'space-between', alignItems: 'center' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={require('../../assets/icons/admin.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />
@@ -369,7 +375,10 @@ export default class AdminNew extends Component{
                 })}
 
                 <Text style={{ fontWeight: 'bold', marginTop: 25, fontSize: 18, marginLeft: 15 }}>Newest Teacher</Text>
-                {this.state.teacherList.map((x,y) => {
+                {this.state.teacherList.length == 0 ? <View style={{ alignItems: 'center' }}>
+                        <Icons name='logo-dropbox' color='grey' size={50} />
+                        <Text style={{ color: 'grey', fontWeight: 'bold' }}>Teacher not added yet!</Text>
+                    </View> : this.state.teacherList.map((x,y) => {
                     return <View style={{ backgroundColor: 'white', marginTop: 15, elevation: 15, borderRadius: 15, marginLeft: 10, marginRight: 10, flexDirection: 'row', padding: 15, justifyContent: 'space-between', alignItems: 'center' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={require('../../assets/icons/teacher.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />

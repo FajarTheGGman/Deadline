@@ -52,7 +52,7 @@ route.post('/getall', (req, res) => {
                             }
                         });
                     }
-                    modelAttendance.find({ date: { $regex: req.body.date }, teacher: token.username }, (err, result) => {
+                    modelAttendance.find({ date: { $regex: req.body.date }, teacher: token.username, name: req.body.username }, (err, result) => {
                         if(err){
                             res.json({ error: '[!] Error get all attendance' }).status(301);
                         }
@@ -68,6 +68,73 @@ route.post('/getall', (req, res) => {
                 res.json({ error: '[!] Error get all attendance' });
             }
         });
+    })
+})
+
+route.post('/add/manual', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong authorization' });
+        }else{
+            modelUsers.find({ username: token.username }, (err, result) => {
+                if(err || result.length == 0){
+                    res.json({ error: '[!] Users not found' }).status(301)
+                }else{
+                    modelAttendance.find({ date: req.body.date, name: req.body.name, class: req.body.class, major: req.body.major, lessons: req.body.lessons }, (err, result) => {
+                        if(result.length != 0){
+                            res.json({ error: '[!] Error add attendance' }).status(301);
+                        }else{
+                            let data = {
+                                date: req.body.date,
+                                name: req.body.name,
+                                class: req.body.class,
+                                major: req.body.major,
+                                lessons: req.body.lessons,
+                                teacher: token.username,
+                                username: req.body.username,
+                                time: req.body.time,
+                            }
+                            modelAttendance.insertMany(data, (err, result) => {
+                                if(err){
+                                    res.json({ error: '[!] Error add attendance' }).status(301);
+                                }else{
+                                    res.json({ success: '[+] Add attendance success' });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    })
+})
+
+
+route.post('/delete', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Wrong authorization' });
+        }else{
+            modelUsers.find({ username: token.username }, (err, result) => {
+                if(err){
+                    res.json({ error: '[!] Users not found' }).status(301)
+                }else{
+                    modelAttendance.find({ _id: req.body.id }, (err, data) => {
+                        if(err){
+                            res.json({ error: '[!] Something wrong in server' }).status(501)
+                        }else{
+                            modelAttendance.deleteOne({ _id: req.body.id }, (err, result) => {
+                                if(err){
+                                    res.json({ error: '[!] Error delete attendance' }).status(501)
+                                }else{
+                                    res.json({ success: '[+] Delete attendance success' });
+                                }
+                            });
+                        }
+                    })
+                }
+            })
+        }
     })
 })
 

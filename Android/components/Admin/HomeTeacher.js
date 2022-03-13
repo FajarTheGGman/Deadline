@@ -315,7 +315,6 @@ class Index extends Component{
                     this.state.lessons.map(item => {
                         if(item.date > get_time){
                             this.setState({ time: item.date })
-                            console.log(this.state.time)
                             this.setState({ next_lecture: this.state.next_lecture.concat(item) })
 
                         // count time from now to 14:20:01 with parseTime
@@ -332,42 +331,30 @@ class Index extends Component{
                             let second_now = time_now_split[2];
                             let hour_diff = hour - hour_now;
                             let minute_diff = minute - minute_now;
-                            let second_diff = second - second_now;
-                            if(second_diff < 0){
-                                second_diff = 60 - second_diff;
-                                minute_diff = minute_diff - 1;
-                            }
-                            if(minute_diff < 0){
-                                minute_diff = 60 - minute_diff;
-                                hour_diff = hour_diff - 1;
-                            }
-                            return { hour_diff, minute_diff, second_diff }
-                        }
 
-
-
-                        let hours = 1
-                        let minutes = 10
-                        let sec = 60
-                        setInterval(() => {
-                            this.setState({
-                                schedule: `${countTime(this.state.time).hour_diff} : ${countTime(this.state.time).minute_diff} : ${countTime(this.state.time).second_diff}`
-                            })
-                            sec--;
-                            if(sec == 0){
-                                minutes--;
-                                sec = 60;
-                                if(minutes == 0){
-                                    hours--;
-                                    minutes = 60;
-                                    if(hours == 0){
-                                        this.setState({
-                                            schedule: 'Class Begin'
-                                        })
+                                if(minute_diff < 0){
+                                    hour_diff = hour_diff - 1;
+                                    minute_diff = 60 + minute_diff;
+                                    if(hour_diff < 0){
+                                        return '00:00:00';
                                     }
                                 }
+                            
+                            return { hour_diff, minute_diff }
+                        }
+
+                        setInterval(() => {
+                            if(this.state.time == undefined){
+                                this.setState({ schedule: '' })
+                            }else{
+                                this.setState({
+                                    schedule: `${countTime(this.state.time).hour_diff} : ${countTime(this.state.time).minute_diff}`
+                                })
                             }
                         }, 1000)
+                        
+                        }else{
+                            this.setState({ schedule: '' })
                         }
                     })
                 }
@@ -503,7 +490,7 @@ class Index extends Component{
 
                     <View>
                         <View style={{ marginTop: 15, backgroundColor: '#191A19', borderRadius: 10, padding: 7, alignSelf: 'flex-start' }}>
-                            {this.state.schedule.length == 0 ?                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>There's no class today</Text> : 
+                            {this.state.schedule.length == 0 || this.state.schedule == 'undefined : undefined' ?                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>There's no class today</Text> : 
                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>Class Begin in - {this.state.schedule}</Text>
                             }
                         </View>

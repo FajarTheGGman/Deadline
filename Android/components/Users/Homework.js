@@ -67,8 +67,10 @@ export default class Homework extends Component{
                 desc_result: this.state.resultDesc,
                 date: new Date().getDay() + "/" + new Date().getMonth() + "/" + new Date().getFullYear()
             }).then(res => {
-                if(res.status == 200){
+                if(res.data.success){
                     alert('Berhasil mengirim hasil tugas')
+                }else if(res.data.already){
+                    alert('Kamu sudah mengirim hasil tugas')
                 }
             })
         })
@@ -97,7 +99,8 @@ export default class Homework extends Component{
                                 <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Title Result</Text>
                                 <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Title Result ?" onChangeText={(val) => this.setState({ resultTitle: val })} />
 
-                                <TouchableOpacity style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white', alignItems: 'center', marginTop: 20, flexDirection: 'row', justifyContent: 'center' }} onPress={() => this.send_result()}><Icons name='document-outline' size={25} /><Text style={{ fontWeight: 'bold' }}>File</Text></TouchableOpacity>
+                                {/*
+                                <TouchableOpacity style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white', alignItems: 'center', marginTop: 20, flexDirection: 'row', justifyContent: 'center' }} onPress={() => this.send_result()}><Icons name='document-outline' size={25} /><Text style={{ fontWeight: 'bold' }}>File</Text></TouchableOpacity>*/}
 
                                 <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Description</Text>
                                 <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Description ?" onChangeText={(val) => this.setState({ resultDesc: val })} multiline={true} />

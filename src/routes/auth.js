@@ -86,6 +86,24 @@ route.post('/picture', (req,res) => {
     })
 })
 
+route.post('/get', (req,res) => {
+    jwt.verify(req.body.token, req.body.secret, (err, token) => {
+        if(err){
+            res.json({ error: '[!] Token is invalid' }).status(401)
+        }else{
+            modelUsers.findOne({ username: token.username }, (err, users) => {
+                if(err){
+                    res.json({ error: '[!] Something wrong in server' }).status(501)
+                }else{
+                    modelUsers.find({ name: { $regex: req.body.name }, level: 'students' }, (err, done) => {
+                        res.json({ data: done })
+                    })
+                }
+            })
+        }
+    })
+})
+
 route.post('/fullname', (req,res) => {
     jwt.verify(req.body.token, req.body.secret, (err, token) => {
         if(err){
