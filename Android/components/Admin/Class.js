@@ -254,7 +254,10 @@ export default class ClassAdmin extends Component{
 
                 <View style={{ flexDirection: 'column', marginTop: 25 }}>
                     <Text style={{ marginLeft: 15, fontSize: 16, fontWeight: 'bold' }}>All Class</Text>
-                    {this.state.classList.map((x,y) => {
+                    {this.state.classList.length == 0 ? <View style={{ alignItems: 'center' }}>
+                        <Icons name='logo-dropbox' color='grey' size={50} />
+                        <Text style={{ color: 'grey', fontWeight: 'bold' }}>Class not added yet!</Text>
+                    </View> : this.state.classList.map((x,y) => {
                     return <View style={{ backgroundColor: 'white', marginTop: 15, elevation: 15, borderRadius: 15, marginLeft: 10, marginRight: 10, flexDirection: 'row', padding: 15, justifyContent: 'space-between', alignItems: 'center' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={require('../../assets/icons/class.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />
@@ -273,7 +276,10 @@ export default class ClassAdmin extends Component{
                     })}
 
                     <Text style={{ marginLeft: 15, fontSize: 16, marginTop: 25, fontWeight: 'bold' }}>All Major</Text>
-                    {this.state.majorList.map((x,y) => {
+                    {this.state.majorList.length == 0 ? <View style={{ alignItems: 'center' }}>
+                        <Icons name='logo-dropbox' color='grey' size={50} />
+                        <Text style={{ color: 'grey', fontWeight: 'bold' }}>Class not added yet!</Text>
+                    </View> : this.state.majorList.map((x,y) => {
                     return <View style={{ backgroundColor: 'white', marginTop: 15, elevation: 15, borderRadius: 15, marginLeft: 10, marginRight: 10, flexDirection: 'row', padding: 15, justifyContent: 'space-between', alignItems: 'center' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={require('../../assets/icons/class.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />

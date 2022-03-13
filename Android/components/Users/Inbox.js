@@ -110,9 +110,9 @@ export default class Inbox extends Component{
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             {x.gender == 'male' ? <Image source={require('../../assets/illustrations/male.png')} style={{ width: 50, height: 50, borderRadius: 100 }} /> : <Image source={require('../../assets/illustrations/female.png')} style={{ width: 50, height: 50, borderRadius: 100 }} /> }
                             <View style={{ marginLeft: 10, flexDirection: 'column' }}>
-                                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{x.title}</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{x.title.length > 20 ? x.title.slice(0,20)+'...' : x.title}</Text>
                                 <Text style={{ fontSize: 15 }}>From {x.from}</Text>
-                                <Text style={{ color: 'grey' }}>{x.body}</Text>
+                                <Text style={{ color: 'grey' }}>{x.body.length > 25 ? x.body.slice(0,25)+'....' : x.body}</Text>
                             </View>
                         </View>
 

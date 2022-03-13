@@ -29,10 +29,19 @@ const html_script = `
 <script>
 	var mymap = L.map('mapid').setView([51.505, -0.09], 5);
 
+    let schoolIcon = L.icon({
+        iconUrl: 'https://i.ibb.co/bNyQh3V/school.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [41, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
     document.addEventListener('message', (data) => {
         let parse = JSON.parse(data.data);
         mymap.setView([parse.latitude, parse.longitude], 15);
-        L.marker([parse.latitude, parse.longitude]).addTo(mymap).bindPopup('<b>' + parse.nameLocation + '</b>').openPopup();
+        L.marker([parse.latitude, parse.longitude], { icon: schoolIcon }).addTo(mymap).bindPopup('<b>' + parse.nameLocation + '</b>').openPopup();
     })
 
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {

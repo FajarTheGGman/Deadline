@@ -22,6 +22,20 @@ export default class AttendanceAdmin extends Component{
             month_begin: ["January", "February", "March", "April", "May"],
             month_last: ["June", "July", "August", "September", "October"],
             data_month_begin: [],
+            month: {
+                january: 0,
+                february: 0,
+                march: 0,
+                april: 0,
+                may: 0,
+                june: 0,
+                july: 0,
+                august: 0,
+                september: 0,
+                october: 0,
+                november: 0,
+                december: 0
+            }
         }
     }
 
@@ -37,6 +51,34 @@ export default class AttendanceAdmin extends Component{
              }).then(res => {
                 if(res.data.success){
                     this.setState({ data: this.state.data.concat(res.data.data) })
+                    // count attendance by month
+                    for(var i = 0; i < this.state.data.length; i++){
+                        if(this.state.data[i].date.split('/')[1] == '1'){
+                            this.setState({ month: { ...this.state.month, january: this.state.month.january + 1 } })
+                        }else if(this.state.data[i].date.split('/')[1] == '2'){
+                            this.setState({ month: { ...this.state.month, february: this.state.month.february + 1 } })
+                        }else if(this.state.data[i].date.split('/')[1] == '3'){
+                            this.setState({ month: { ...this.state.month, march: this.state.month.march + 1 } })
+                        }else if(this.state.data[i].date.split('/')[1] == '4'){
+                            this.setState({ month: { ...this.state.month, april: this.state.month.april + 1 } })
+                        }else if(this.state.data[i].date.split('/')[1] == '05'){
+                            this.setState({ month: { ...this.state.month, may: this.state.month.may + 1 } })
+                        }else if(this.state.data[i].date.split('/')[1] == '6'){
+                            this.setState({ month: { ...this.state.month, june: this.state.month.june + 1 } })
+                        }else if(this.state.data[i].date.split('/')[1] == '7'){
+                            this.setState({ month: { ...this.state.month, july: this.state.month.july + 1 } })
+                        }else if(this.state.data[i].date.split('/')[1] == '8'){
+                            this.setState({ month: { ...this.state.month, august: this.state.month.august + 1 } })
+                        }else if(this.state.data[i].date.split('/')[1] == '9'){
+                            this.setState({ month: { ...this.state.month, september: this.state.month.september + 1 } })
+                        }else if(this.state.data[i].date.split('/')[1] == '10'){
+                            this.setState({ month: { ...this.state.month, october: this.state.month.october + 1 } })
+                        }else if(this.state.data[i].date.split('/')[1] == '11'){
+                            this.setState({ month: { ...this.state.month, november: this.state.month.november + 1 } })
+                        }else if(this.state.data[i].date.split('/')[1] == '12'){
+                            this.setState({ month: { ...this.state.month, december: this.state.month.december + 1 } })
+                        }
+                    }
                 }
             })
 
@@ -152,12 +194,20 @@ export default class AttendanceAdmin extends Component{
                             labels: new Date().getMonth() == 5 ? this.state.month_last : this.state.month_begin,
                             datasets: [
                                 {
-                                    data: [
-                                            Math.random() * 100,
-                                            Math.random() * 100,
-                                            Math.random() * 100,
-                                            Math.random() * 100,
-                                            Math.random() * 100,
+                                    data: new Date().getMonth == 5 ? [
+                                        this.state.month.june,
+                                        this.state.month.july,
+                                        this.state.month.august,
+                                        this.state.month.september,
+                                        this.state.month.october,
+                                        this.state.month.november,
+                                        this.state.month.december,
+                                    ] : [
+                                            this.state.month.january,
+                                            this.state.month.february,
+                                            this.state.month.march,
+                                            this.state.month.april,
+                                            this.state.month.may,
                                         ]
                                 }
                             ]
@@ -211,7 +261,6 @@ export default class AttendanceAdmin extends Component{
                             <Text style={{ color: 'grey' }}>{x.major.length > 5 ? x.major.slice(0, 5)+'...' : x.major}</Text>
                         </View>
                     </View>
-
                     })}
                 </View>
             </ScrollView>

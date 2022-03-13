@@ -43,7 +43,16 @@ route.post('/getall', (req, res) => {
                         }
                     });
                 }else if(token.level == 'teacher'){
-                    modelAttendance.find({ date: { $regex: req.body.date } }, (err, result) => {
+                    if(req.query.all == 'true'){
+                        modelAttendance.find({ teacher: token.username }, (err, result) => {
+                            if(err){
+                                res.json({ error: '[!] Error get all attendance' }).status(301);
+                            }else{
+                                res.json({ success: '[+] Get all attendance success', data: result });
+                            }
+                        });
+                    }
+                    modelAttendance.find({ date: { $regex: req.body.date }, teacher: token.username }, (err, result) => {
                         if(err){
                             res.json({ error: '[!] Error get all attendance' }).status(301);
                         }
@@ -108,6 +117,7 @@ route.post('/add', (req,res) => {
                                     picture: token.picture,
                                     gender: token.gender,
                                     lessons: req.body.lessons,
+                                    teacher: req.body.teacher,
                                     time: req.body.time,
                                     class: token.class,
                                     major: token.major,
@@ -121,7 +131,6 @@ route.post('/add', (req,res) => {
                                     }
                                 });
                         })
-
                     }else{
                         modelAttendance.find({ name: token.name, lessons: req.body.lessons, date: req.body.date }, (err, check) => {
                             if(check.length == 0){
@@ -129,6 +138,7 @@ route.post('/add', (req,res) => {
                                     name: token.name,
                                     username: token.username,
                                     lessons: req.body.lessons,
+                                    teacher: req.body.teacher,
                                     time: req.body.time,
                                     gender: token.gender,
                                     class: token.class,
@@ -143,7 +153,7 @@ route.post('/add', (req,res) => {
                                     }
                                 });
                             }else{
-                                res.json({ error: '[!] You already get attendance' }).status(301);
+                                res.json({ already: '[!] You already get attendance' }).status(301);
                             }
                                 
                         })

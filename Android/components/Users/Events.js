@@ -22,7 +22,8 @@ export default class Events extends Component {
                 token: token,
                 secret: konfigurasi.secret
             }).then(res => {
-                if(res.status == 200){
+                console.log(res.data)
+                if(!res.data.error){
                     this.setState({ events: this.state.events.concat(res.data.events) });
                 }
             })
@@ -47,7 +48,10 @@ export default class Events extends Component {
                         <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 20, color: '#4E9F3D', }}>
                             This month's events
                         </Text>
-                        {this.state.events.map((x,y) => {
+                        {this.state.events.length == 0 ?  <View style={{ marginTop: 65, alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }}>
+                        <Icons name='logo-dropbox' size={80} color="grey" />
+                        <Text style={{ fontWeight: 'bold', color: 'grey' }}>Leaderboards not available yet!</Text>
+                    </View> : this.state.events.map((x,y) => {
                             return <TouchableOpacity style={{ flexDirection: "column", marginTop: 25 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <Text style={{ fontWeight: 'bold' }}>{x.events}</Text>

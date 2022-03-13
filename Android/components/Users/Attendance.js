@@ -29,7 +29,8 @@ export default class Attendance extends Component {
             major: '',
             class: '',
             hand: 'hand-left-outline',
-            far: false
+            far: false,
+            error: false
         }
     }
 
@@ -62,6 +63,8 @@ export default class Attendance extends Component {
                             }))
     
                     }
+                }).catch(err => {
+                    this.setState({ error: true })
                 })
     
                 axios.post(konfigurasi.server + "auth/profile", {
@@ -155,6 +158,7 @@ export default class Attendance extends Component {
                         token: token,
                         secret: konfigurasi.secret,
                         lessons: this.state.next_lecture[0].lessons,
+                        teacher: this.state.next_lecture[0].teacher,
                         major: this.state.major,
                         class: this.state.class,
                         time: this.state.time,
@@ -162,7 +166,7 @@ export default class Attendance extends Component {
                     }).then(res => {
                         if(res.data.success){
                             alert('Attendance Success')
-                        }else if(res.data.error){
+                        }else if(res.data.already){
                             alert('You already get attendance in this lecture')
                         }
                     })
@@ -177,6 +181,21 @@ export default class Attendance extends Component {
         return(
             <ScrollView contentContainerStyle={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar backgroundColor="white" barStyle="dark-content" />
+
+                <Modal visible={this.state.error} transparent={true} animationType="slide">
+                    <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                        <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 10, alignItems: 'center' }}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>School not found !</Text>
+                            <Image source={require('../../assets/illustrations/bug.png')} style={{ width: 200, height: 150, marginTop: 10, marginBottom: 10 }} />
+                            <Text style={{ fontSize: 15, marginTop: 10 }}>School location not uploaded yet!</Text>
+                            <Text style={{ fontSize: 15 }}>Please call your admin</Text>
+
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
+                                <Text style={{ fontSize: 15, marginTop: 10, color: '#00a8ff' }}>Back</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
 
                 <Modal visible={this.state.far} transparent={true} animationType="slide">
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -207,7 +226,7 @@ export default class Attendance extends Component {
                             </View>
 
                             <View style={{ backgroundColor: '#4E9F3D', padding: 5, borderRadius: 100 }}>
-                                <Text style={{ fontWeight: 'bold' }}>Type</Text>
+                                <Text style={{ fontWeight: 'bold' }}>Grade - {this.state.next_lecture[0].class}</Text>
                             </View>
                         </View>
 
