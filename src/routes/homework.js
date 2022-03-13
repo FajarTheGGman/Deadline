@@ -227,21 +227,31 @@ route.post('/add/completed', (req,res) => {
                         if(homework.length == 0 || err){
                             res.json({ error: '[!] Homework not found' }).status(301)
                         }else{
-                            modelHomework.updateOne({ title: req.body.title, teacher: req.body.teacher }, { 
-                                $push: { 
-                                    completed: {
-                                        title_result: req.body.title_result,
-                                        desc_result: req.body.desc_result,
-                                        name: token.name,
-                                        class: token.class,
-                                        major: token.major,
-                                        date: req.body.date
+                            modelHomework.find({ completed: { $elemMatch: { name: token.name } } }, (err, completed) => {
+                                if(completed.length == 0 || err){
+                                    modelHomework.updateOne({ title: req.body.title, teacher: req.body.teacher }, { 
+                                    $push: { 
+                                        completed: {
+                                            title_result: req.body.title_result,
+                                            desc_result: req.body.desc_result,
+                                            name: token.name,
+                                            class: token.class,
+                                            major: token.major,
+                                            date: req.body.date
+                                        }
                                     }
-                                } 
-                            }, (err, homework) => {
-                                    res.json({ success: '[+] Homework Completed!' }).status(200)
+                                    }, (err, homework) => {
+                                        if(err){
+                                            res.json({ error: '[!] Error' }).status(301)
+                                        }else{
+                                            res.json({ success: '[+] Homework completed!' }).status(200)
+                                        }
+                                    })
+                                }else{
+                                    res.json({ already: '[!] You have already completed this homework' }).status(301)
+                                }
                             })
-                        }
+                       }
                     })
                 }
             })

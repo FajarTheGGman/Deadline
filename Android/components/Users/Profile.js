@@ -99,9 +99,17 @@ export default class Profile extends Component{
                 })
             }
             if(this.state.level != 'admin' && this.state.level != 'developer'){
+                const dayOrigin = new Date().getDay();
+                const dayName = (dayOrigin) => {
+                    const day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    return day[dayOrigin];
+                }
+
+                const day = dayName(dayOrigin);
                 await axios.post(konfigurasi.server + "lessons/getall", {
                     token: token,
-                    secret: konfigurasi.secret
+                    secret: konfigurasi.secret,
+                    day: day
                 }).then(res => {
                     if(res.data.lessons){
                         this.setState({
