@@ -6,6 +6,7 @@ const AttendanceSchema = new mongoose.Schema({
     picture: { type: String, default: '' },
     gender: { type: String },
     lessons: { type: String },
+    teacher: { type: String },
     major: { type: String },
     level: { type: String },
     time: { type: String },

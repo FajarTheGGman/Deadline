@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Picker, ScrollView, Image, AsyncStorage, StatusBar } from 'react-native'
+import { View, Text, TouchableOpacity, Modal, TextInput, Picker, ScrollView, Image, AsyncStorage, StatusBar } from 'react-native'
 import axios from 'axios'
 import Icons from 'react-native-vector-icons/Ionicons'
 import SwipeUpDownModal from 'react-native-swipe-modal-up-down'
@@ -25,7 +25,9 @@ export default class HomeworkAdmin extends Component{
             teacher_input: null,
             date: false,
             addHomework: false,
-            complete: false
+            complete: false,
+            readmore: false,
+            desc: null,
         }
     }
 
@@ -193,10 +195,30 @@ export default class HomeworkAdmin extends Component{
         })
     }
 
+    readmore(x){
+        this.setState({ readmore: true })
+        this.setState({ desc: x })
+    }
+
     render(){
         return(
             <ScrollView style={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar backgroundColor='white' barStyle='dark-content' />
+
+
+                <Modal visible={this.state.readmore} transparent={true} animationType="slide">
+                    <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                        <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 10, alignItems: 'center' }}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Description</Text>
+                            <Text style={{ fontSize: 15, marginTop: 10 }}></Text>
+                            <Text style={{ fontSize: 15 }}>{this.state.desc}</Text>
+
+                            <TouchableOpacity onPress={() => this.setState({ readmore: false })}>
+                                <Text style={{ fontSize: 15, marginTop: 10, color: '#00a8ff' }}>Close</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
 
                 <SwipeUpDownModal
                     modalVisible={this.state.addHomework}
@@ -308,7 +330,7 @@ export default class HomeworkAdmin extends Component{
                                         </View>
                                          <View style={{ marginTop: 10, marginLeft: 5 }}>
                                             <Text style={{ color: '#4E9F3D', fontWeight: 'bold' }}>Description</Text>
-                                            <Text style={{ color: 'grey' }}>{x.desc_result}</Text>
+                                             <Text style={{ color: 'grey', marginTop: 10 }}>{x.desc_result.length > 15 ? <Text style={{ color: '#4E9F3D' }} onPress={() => this.readmore(x.desc_result)}><Icons name="newspaper-outline" size={20} /> Read More..</Text> : x.desc_result}</Text>
                                         </View>
                                     </View>
 
@@ -349,7 +371,10 @@ export default class HomeworkAdmin extends Component{
                 </View>
 
                 <View style={{ paddingBottom: 30 }}>
-                    {this.state.homework.map((x,y) => {
+                    {this.state.homework.length == 0 ? <View style={{ marginTop: 65, alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }}>
+                        <Icons name='logo-dropbox' size={80} color="grey" />
+                        <Text style={{ fontWeight: 'bold', color: 'grey' }}>Leaderboards not available yet!</Text>
+                    </View> : this.state.homework.map((x,y) => {
                         return <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 15, elevation: 15, marginRight: 10, marginLeft: 10, marginTop: 25 }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <View>

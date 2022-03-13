@@ -1,5 +1,5 @@
 const konfigurasi = {
-    server: 'https://deadline-fajarfirdaus.herokuapp.com/',
+    server: 'http://192.168.1.10:5000/',
     secret: 'dontbeafool'
 }
 

@@ -48,22 +48,16 @@ export default class Homework extends Component{
     }
 
     async send_result(){
-        /*
+	/*
         let res = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [5, 4],
             quality: 1,
-            base64: true
         });
-
-        axios.post('https://api.imgbb.com/1/upload?key=1ee24cebba156c40e04d161825c9a637', {
-            image: res.base64
-        }).then(result => {
-            console.log(result.data)
-        })*/
+	*/
+        
         AsyncStorage.getItem('token').then(token => {
-
             axios.post(konfigurasi.server + 'homework/add/completed', {
                 token: token,
                 secret: konfigurasi.secret,
@@ -78,6 +72,7 @@ export default class Homework extends Component{
                 }
             })
         })
+        
     }
 
     render(){
@@ -132,7 +127,10 @@ export default class Homework extends Component{
                 </View>
 
                 <View style={{ marginTop: 25, paddingBottom: 25 }}>
-                    {this.state.homework.map((x,y) => {
+                    {this.state.homework.length == 0 ? <View style={{ marginTop: 65, alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }}>
+                        <Icons name='logo-dropbox' size={80} color="grey" />
+                        <Text style={{ fontWeight: 'bold', color: 'grey' }}>Leaderboards not available yet!</Text>
+                    </View> : this.state.homework.map((x,y) => {
                         return <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 15, elevation: 15, marginRight: 10, marginLeft: 10, marginTop: 25 }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <View>

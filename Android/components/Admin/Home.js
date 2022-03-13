@@ -476,7 +476,9 @@ class Index extends Component{
 
                     <View>
                         <View style={{ marginTop: 15, backgroundColor: '#191A19', borderRadius: 10, padding: 7, alignSelf: 'flex-start' }}>
+                            {this.state.schedule.length == 0 ?                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>There's no class today</Text> : 
                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>Class Begin in - {this.state.schedule}</Text>
+                            }
                         </View>
                     </View>
 

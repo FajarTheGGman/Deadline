@@ -270,7 +270,10 @@ export default class LectureAdmin extends Component{
 
                 <View style={{ marginTop: 25, paddingBottom: 25 }}>
                     <Text style={{ marginLeft: 15, fontSize: 17, fontWeight: 'bold' }}>Newest Lecture</Text>
-                    {this.state.lessons.map((x,y) => {
+                    {this.state.lessons.length == 0 ? <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 120 }}>
+                        <Icons name='logo-dropbox' color="grey" size={50} />
+                        <Text style={{ fontSize: 15, marginTop: 10, color: 'grey' }}>No Lecture Available</Text>
+                    </View>: this.state.lessons.map((x,y) => {
                     return <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 15, elevation: 15, marginRight: 10, marginLeft: 10, marginTop: 25 }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <View>

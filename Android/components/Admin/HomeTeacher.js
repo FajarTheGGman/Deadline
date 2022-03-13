@@ -53,7 +53,9 @@ class Barcode extends Component{
 
         this.state = {
             raw: 'There is no data yet!',
+            lessons: [],
             class: '',
+            lessonsInput: '',
             callback: '',
             classList: [],
         }
@@ -82,6 +84,20 @@ class Barcode extends Component{
             }).catch(err => {
                 console.log(err)
             })
+
+            axios.post(konfigurasi.server + 'lessons/getall', {
+                token: token,
+                secret: konfigurasi.secret
+            }).then(res => {
+                if(res.status === 200){
+                    this.setState({
+                        lessons: this.state.lessons.concat(res.data.lessons),
+                        lessonsInput: res.data.lessons[0].lessons
+                    })
+                }
+            }).catch(err => {
+                console.log(err)
+            })
         })
     }
 
@@ -94,6 +110,7 @@ class Barcode extends Component{
             })
             const data = {
                 class: this.state.class,
+                lessons: this.state.lessonsInput,
                 callback: this.state.callback,
                 message: 'Be careful, this is a users data'
             }
@@ -109,7 +126,7 @@ class Barcode extends Component{
         return(
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
-                <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 55 }}>
                     <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>QR For Attendance</Text>
                     <ViewShot ref="viewShot" options={{ format: "jpg", quality: 0.9 }}>
                         <View style={{ backgroundColor: 'white', padding: 15, marginTop: 15, borderRadius: 10, elevation: 15 }}>
@@ -123,6 +140,15 @@ class Barcode extends Component{
                         </View>
                     </ViewShot>
                     <TextInput placeholder="Message ?" style={{ backgroundColor: 'white', padding: 10, borderRadius: 10, elevation: 15, marginTop: 20, width: 200 }} onChangeText={(val) => this.setState({ callback: val })} />
+                    <View style={{ marginTop: 20, backgroundColor: 'white', borderRadius: 10, padding: 5, width: 220, elevation: 15 }}>
+                        <Picker selectedItem={this.state.lessonsInput} onValueChange={(val) => this.setState({ class: val })}>
+                            {this.state.lessons.map((val, index) => {
+                                return(
+                                    <Picker.Item label={val.lessons > 25 ? val.lessons.slice(0,25)+'...' : val.lessons} value={val.lessons} key={index} />
+                                )
+                            })}
+                        </Picker>
+                    </View>
                     <View style={{ marginTop: 20, backgroundColor: 'white', borderRadius: 10, padding: 5, width: 220, elevation: 15 }}>
                         <Picker selectedItem={this.state.class} onValueChange={(val) => this.setState({ class: val })}>
                             {this.state.classList.map((val, index) => {
@@ -155,7 +181,6 @@ class Settings extends Component{
         )
     }
 
-    // make a method to send file data to server with axios
     async sendFile(uri){
         const token = await AsyncStorage.getItem('token')
         const formData = new FormData()
@@ -478,7 +503,9 @@ class Index extends Component{
 
                     <View>
                         <View style={{ marginTop: 15, backgroundColor: '#191A19', borderRadius: 10, padding: 7, alignSelf: 'flex-start' }}>
+                            {this.state.schedule.length == 0 ?                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>There's no class today</Text> : 
                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>Class Begin in - {this.state.schedule}</Text>
+                            }
                         </View>
                     </View>
 

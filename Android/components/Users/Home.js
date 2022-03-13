@@ -8,6 +8,7 @@ import konfigurasi from '../../config'
 import axios from 'axios'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import base64 from 'react-native-base64'
+import * as geolib from 'geolib'
 
 // expo packages
 import * as Location from 'expo-location'
@@ -185,25 +186,19 @@ class Barcode extends Component{
                     this.setState({ hand: 'hand-left' })
                 }else{
                     if(this.state.total_distance < 15){
-                        AsyncStorage.getItem('expire').then(x => {
-                            let getDate = new Date();
-                            if(x == getDate){
-                                alert('You have already attended today')
-                            }else{
-                                this.setState({ hand: 'hand-left-outline' })
-                                axios.post(konfigurasi.server + 'attendance/add', {
-                                    token: token,
-                                    secret: konfigurasi.secret,
-                                    lessons: this.state.next_lecture[0].lessons,
-                                    major: this.state.major,
-                                    class: this.state.class,
-                                    time: this.state.time,
-                                }).then(res => {
-                                    if(res.data.success){
-                                        alert('Attendance Success')
-                                        AsyncStorage.setItem('attendance', 'true');
-                                    }
-                                })
+                         axios.post(konfigurasi.server + 'attendance/add', {
+                            token: token,
+                            secret: konfigurasi.secret,
+                            lessons: this.state.next_lecture[0].lessons,
+                            major: this.state.major,
+                            class: this.state.class,
+                            time: this.state.time,
+                            date: new Date().getDay() + '/' + new Date().getMonth() + '/' + new Date().getFullYear()
+                        }).then(res => {
+                            if(res.data.success){
+                                alert('Attendance Success')
+                            }else if(res.data.error){
+                                alert('You already get attendance in this lecture')
                             }
                         })
                     }else{
@@ -218,18 +213,25 @@ class Barcode extends Component{
         AsyncStorage.getItem('token').then(token => {
             const dec = base64.decode(data)
             const js_data = JSON.parse(dec)
-            axios.post(konfigurasi.server + 'attendance/add', {
-                token: token,
-                secret: konfigurasi.secret,
-                class: js_data.class,
-                lessons: this.state.next_lecture[0].lessons,
-                major: this.state.major,
-                time: this.state.time,
-            }).then(res => {
-                if(res.data.status == 'success'){
-                    alert(js_data.callback)
-                }
-            })
+            
+            if(js_data.lessons == this.state.next_lecture[0].lessons){
+                axios.post(konfigurasi.server + 'attendance/add', {
+                    token: token,
+                    secret: konfigurasi.secret,
+                    class: js_data.class,
+                    lessons: js_data.lessons,
+                    major: this.state.major,
+                    time: this.state.time,
+                }).then(res => {
+                    if(res.data.success){
+                        alert(js_data.callback)
+                    }else if(res.data.already == 'error'){
+                        alert('You already get attendance in this lecture')
+                    }
+                })
+            }else{
+                alert('This lecture is not today')
+            }
         })
     }
 
