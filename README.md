@@ -20,6 +20,12 @@
 2. npm start "your ip"
 </pre>
 
+<b>Default Developer Users</b>
+<pre>
+Username : @deadline
+Password : #justadeveloper
+</pre>
+
 <b> The Android </b>
 <pre>
 1. cd Android
