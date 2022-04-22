@@ -18,29 +18,25 @@ export default class Banner extends Component{
     componentDidMount(){
         AsyncStorage.getItem('token').then((token) => {
             if(token){
-                axios.post(konfigurasi.server + "auth/profile", {
-                    token: token,
-                    secret: konfigurasi.secret
-                }).then(res => {
-                    if(res.status == 200){
-                        if(res.data.level == 'admin'){
+                AsyncStorage.getItem('level')
+                .then(res => {
+                        if(res == 'admin'){
                             this.props.navigation.dispatch(
                                 StackActions.replace('Admin')
                             );
-                        }else if(res.data.level == 'developer'){
+                        }else if(res == 'developer'){
                             this.props.navigation.dispatch(
                                 StackActions.replace('Admin')
                             );
-                        }else if(res.data.level == 'students'){
+                        }else if(res == 'students'){
                             this.props.navigation.dispatch(
                                 StackActions.replace('Home')
                             );
-                        }else if(res.data.level == 'teacher'){
+                        }else if(res == 'teacher'){
                             this.props.navigation.dispatch(
                                 StackActions.replace('Teacher')
                             );
                         }
-                    }
                 })
             }
         })

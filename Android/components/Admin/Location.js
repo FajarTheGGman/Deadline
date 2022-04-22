@@ -67,6 +67,7 @@ export default class Location extends Component{
     render(){
         return(
             <View style={{flex:1}}>
+                <StatusBar backgroundColor={"#4E9F3D"} barStyle='dark-content' />
                 <WebView
                     ref={'Map_Ref'}
                     onMessage={(e) => {

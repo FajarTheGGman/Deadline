@@ -115,7 +115,7 @@ export default class EventAdmin extends Component{
     render(){
         return(
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar barStyle={"dark-content"} backgroundColor="white" />
+                <StatusBar barStyle={"dark-content"} backgroundColor={"#4E9F3D"} />
 
                 <SwipeUpDownModal
                     modalVisible={this.state.addEvents}
@@ -128,7 +128,7 @@ export default class EventAdmin extends Component{
 
                             <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', marginTop: 20, alignItems: 'center' }}>
                                 <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start' }}>Events Title</Text>
-                                <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Title Roles ?" onChangeText={(val) => this.setState({ eventTitle: val })} />
+                                <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Title Events ?" onChangeText={(val) => this.setState({ eventTitle: val })} />
 
                                 <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 15 }}>Events Description</Text>
                                 <TextInput style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }} placeholder="Events Description ?" onChangeText={(val) => this.setState({ eventDesc: val })} multiline={true} />

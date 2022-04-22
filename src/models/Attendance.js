@@ -11,6 +11,8 @@ const AttendanceSchema = new mongoose.Schema({
     level: { type: String },
     time: { type: String },
     class: { type: String },
+    absent: { type: Boolean, default: false },
+    absent_notes: { type: String, default: '' },
     late: { type: Boolean, default: false },
     date: { type: String },
     datetime: { type: String },

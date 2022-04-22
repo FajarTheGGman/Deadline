@@ -1,3 +1,5 @@
+// Copyright 2022 By Fajar Firdaus
+
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const route = express.Router();
@@ -188,6 +190,8 @@ route.post('/add', (req,res) => {
                                     time: req.body.time,
                                     class: token.class,
                                     major: token.major,
+                                    absent: req.body.absent,
+                                    absent_notes: req.body.absent_notes,
                                     date: req.body.date,
                                     late: req.body.late,
                                 }, (err, done) => {

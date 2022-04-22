@@ -196,7 +196,7 @@ export default class InboxAdmin extends Component{
     render(){
         return(
             <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar barStyle={"dark-content"} backgroundColor="white" />
+                <StatusBar barStyle={"dark-content"} backgroundColor={"#4E9F3D"} />
 
                 <SwipeUpDownModal
                     modalVisible={this.state.overview}

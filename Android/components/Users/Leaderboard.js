@@ -89,7 +89,7 @@ export default class Leaderboard extends Component {
     render(){
         return(
             <ScrollView style={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar backgroundColor="white" barStyle={"dark-content"} />
+                <StatusBar backgroundColor={"#4E9F3D"} barStyle={"dark-content"} />
                 <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 25 }}>
                     <Image source={require('../../assets/illustrations/leaderboard/banner.png')} style={{ width: 260, height: 140 }} />
                     <Text style={{ marginTop: 15, fontWeight: 'bold', fontSize: 17 }}>Attendance of {this.state.lecture}</Text>

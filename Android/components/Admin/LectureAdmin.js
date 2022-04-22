@@ -166,7 +166,7 @@ export default class LectureAdmin extends Component{
     render(){
         return(
             <ScrollView style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
+                <StatusBar barStyle={"dark-content"} backgroundColor={"#4E9F3D"} />
 
                 <SwipeUpDownModal
                     modalVisible={this.state.addLecture}

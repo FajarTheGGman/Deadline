@@ -1,3 +1,5 @@
+// Copyright 2022 By Fajar Firdaus
+
 const express = require('express');
 const route = express.Router();
 const modelUsers = require('../models/Users');
@@ -72,7 +74,7 @@ route.post('/getall', (req, res) => {
                     if(users.length == 0){
                         res.json({ error: '[!] user not found' }).status(301);
                     }else{
-                        modelLessons.find({ teacher: token.username }, (err, lessons) => {
+                        modelLessons.find({ teacher: token.username, day: { $regex: req.body.day } }, (err, lessons) => {
                             if(err){
                                 res.json({ error: '[!] error' }).status(301);
                             }else{

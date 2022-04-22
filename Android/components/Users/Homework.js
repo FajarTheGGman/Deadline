@@ -80,7 +80,7 @@ export default class Homework extends Component{
     render(){
         return(
             <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar backgroundColor='white' barStyle='dark-content' />
+                <StatusBar backgroundColor={"#4E9F3D"} barStyle='dark-content' />
 
                 <SwipeUpDownModal
                     modalVisible={this.state.result}
@@ -132,7 +132,7 @@ export default class Homework extends Component{
                 <View style={{ marginTop: 25, paddingBottom: 25 }}>
                     {this.state.homework.length == 0 ? <View style={{ marginTop: 65, alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }}>
                         <Icons name='logo-dropbox' size={80} color="grey" />
-                        <Text style={{ fontWeight: 'bold', color: 'grey' }}>Leaderboards not available yet!</Text>
+                        <Text style={{ fontWeight: 'bold', color: 'grey' }}>Homework not available!</Text>
                     </View> : this.state.homework.map((x,y) => {
                         return <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 15, elevation: 15, marginRight: 10, marginLeft: 10, marginTop: 25 }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

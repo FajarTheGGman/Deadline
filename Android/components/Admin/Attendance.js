@@ -258,7 +258,7 @@ export default class AttendanceAdmin extends Component{
     render(){
         return(
             <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 15, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar backgroundColor='white' barStyle='dark-content' />
+                <StatusBar backgroundColor={"#4E9F3D"} barStyle='dark-content' />
 
                 <SwipeUpDownModal 
                     modalVisible={this.state.manual}

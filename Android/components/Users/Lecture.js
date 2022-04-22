@@ -39,7 +39,7 @@ export default class Lecture extends Component{
     render(){
         return(
             <ScrollView style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
+                <StatusBar barStyle={"dark-content"} backgroundColor={"#4E9F3D"} />
                 <View style={{ alignItems: 'center', marginTop: 25 }}>
                     <Image source={require('../../assets/illustrations/lecture/banner.png')} style={{ width: 160, height: 120 }} />
                     <Text style={{ marginTop: 10, fontWeight: 'bold', fontSize: 18 }}>Lecture of this day</Text>
@@ -71,7 +71,7 @@ export default class Lecture extends Component{
                             </View>
                             <View style={{ flexDirection: 'row', marginTop: 15, marginLeft: 10 }}>
                                 <Icons name='time-outline' size={20} color="#4E9F3D" />
-                                <Text style={{ marginLeft: 10, color: '#4E9F3D' }}>{x.date}</Text>
+                                <Text style={{ marginLeft: 10, color: '#4E9F3D' }}>{x.date} - {x.day}</Text>
                             </View>
                         </View>
                     </View>

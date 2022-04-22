@@ -15,3 +15,4 @@ jsome({
 app.listen(port, process.argv[2], () => {
     console.log(colors.green(`[+] Listening: ${process.argv[2] == undefined ? '127.0.0.1' : process.argv[2]}:5000`));
 });
+
