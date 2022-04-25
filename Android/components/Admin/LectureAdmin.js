@@ -27,8 +27,8 @@ export default class LectureAdmin extends Component{
     }
 
     componentDidMount(){
-        AsyncStorage.getItem('token').then(token => {
-            axios.post(konfigurasi.server + 'auth/profile', {
+        AsyncStorage.getItem('token').then(async token => {
+            await axios.post(konfigurasi.server + 'auth/profile', {
                 token: token,
                 secret: konfigurasi.secret,
             }).then(res => {
@@ -39,16 +39,38 @@ export default class LectureAdmin extends Component{
                 }
             })
 
-            axios.post(konfigurasi.server + 'lessons/getall', {
-                token: token,
-                secret: konfigurasi.secret,
-            }).then(res => {
-                if(res.data.lessons){
-                    this.setState({
-                        lessons: this.state.lessons.concat(res.data.lessons),
-                    })
-                }
-            })
+            const dayOrigin = new Date().getDay();
+            const dayName = (dayOrigin) => {
+                const day = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+                return day[dayOrigin];
+            }
+
+            const day = dayName(dayOrigin);
+
+            if(this.state.level == 'teacher'){
+                axios.post(konfigurasi.server + 'lessons/getall', {
+                    token: token,
+                    secret: konfigurasi.secret,
+                    day: day,
+                }).then(res => {
+                    if(res.data.lessons){
+                        this.setState({
+                            lessons: this.state.lessons.concat(res.data.lessons),
+                        })
+                    }
+                })
+            }else{
+                axios.post(konfigurasi.server + 'lessons/getall', {
+                    token: token,
+                    secret: konfigurasi.secret,
+                }).then(res => {
+                    if(res.data.lessons){
+                        this.setState({
+                            lessons: this.state.lessons.concat(res.data.lessons),
+                        })
+                    }
+                })
+            }
 
             axios.post(konfigurasi.server + 'auth/getall/admin?teacher=true', {
                 token: token,
@@ -166,7 +188,7 @@ export default class LectureAdmin extends Component{
     render(){
         return(
             <ScrollView style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
+                <StatusBar barStyle={"dark-content"} backgroundColor={"#4E9F3D"} />
 
                 <SwipeUpDownModal
                     modalVisible={this.state.addLecture}
@@ -294,7 +316,7 @@ export default class LectureAdmin extends Component{
                             <View style={{ flexDirection: 'row', marginTop: 15, marginLeft: 10, justifyContent: 'space-between', alignItems: 'center' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Icons name='time-outline' size={20} color="#4E9F3D" />
-                                    <Text style={{ marginLeft: 10, color: '#4E9F3D' }}>{x.date}</Text>
+                                    <Text style={{ marginLeft: 7, color: '#4E9F3D', fontWeight: 'bold' }}>{x.date}</Text>
                                 </View>
 
                                 <View style={{ marginRight: 5 }}>

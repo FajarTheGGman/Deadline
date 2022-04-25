@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StatusBar, Text, TouchableOpacity, AsyncStorage, ScrollView, Image, Modal } from 'react-native';
+import { View, StatusBar, Text, TextInput, TouchableOpacity, AsyncStorage, ScrollView, Image, Modal } from 'react-native';
 import axios from 'axios'
 import Icons from 'react-native-vector-icons/Ionicons'
 import MapView, { Marker } from 'react-native-maps'
@@ -16,6 +16,7 @@ export default class Attendance extends Component {
         this.state = {
             lessons: [],
             next_lecture: [],
+            absent_notes: '',
             time: '',
             date: null,
             region_lat: null,
@@ -30,7 +31,9 @@ export default class Attendance extends Component {
             class: '',
             hand: 'hand-left-outline',
             far: false,
-            error: false
+            sick: false,
+            error: false,
+            fake_gps: false
         }
     }
 
@@ -92,7 +95,9 @@ export default class Attendance extends Component {
                         let get_time = new Date().getHours() + ':' + new Date().getMinutes();
                         this.setState({ time: get_time })
                         this.state.lessons.map(item => {
-                            if(item.date > get_time){
+                            let x = item.date.split(':')
+                            let time = x[0] + ':' + x[1]
+                            if(time > get_time){
                                 this.setState({ next_lecture: this.state.next_lecture.concat(item) })
                             }
                         })
@@ -100,7 +105,7 @@ export default class Attendance extends Component {
                 })
             })
     
-                const { status } = Location.requestForegroundPermissionsAsync();
+            const { status } = Location.requestForegroundPermissionsAsync();
     
             Location.watchPositionAsync({
                 enableHighAccuracy: true,
@@ -109,7 +114,8 @@ export default class Attendance extends Component {
             }, (location) => {
                 this.setState({
                     my_lat: location.coords.latitude,
-                    my_lon: location.coords.longitude
+                    my_lon: location.coords.longitude,
+                    fake_gps: location.mocked
                 })
     
                 try{
@@ -162,7 +168,7 @@ export default class Attendance extends Component {
                         major: this.state.major,
                         class: this.state.class,
                         time: this.state.time,
-                        date: new Date().getDay() + '/' + new Date().getMonth() + '/' + new Date().getFullYear()
+                        date: new Date().toLocaleDateString()
                     }).then(res => {
                         if(res.data.success){
                             alert('Attendance Success')
@@ -175,12 +181,36 @@ export default class Attendance extends Component {
             }
         })
     }
+    
+    sick(){
+        AsyncStorage.getItem('token').then(token => {
+            this.setState({ hand: 'hand-left-outline' })
+            axios.post(konfigurasi.server + 'attendance/add', {
+                token: token,
+                secret: konfigurasi.secret,
+                lessons: this.state.next_lecture[0].lessons,
+                teacher: this.state.next_lecture[0].teacher,
+                major: this.state.major,
+                class: this.state.class,
+                time: this.state.time,
+                absent: true,
+                absent_notes: this.state.absent_notes,
+                date: new Date().toLocaleDateString()
+            }).then(res => {
+                if(res.data.success){
+                    alert('Attendance Success')
+                }else if(res.data.already){
+                    alert('You already get attendance in this lecture')
+                }
+            })
+        })
+    }
 
 
     render(){
         return(
             <ScrollView contentContainerStyle={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar backgroundColor="white" barStyle="dark-content" />
+                <StatusBar backgroundColor={"#4E9F3D"} barStyle="dark-content" />
 
                 <Modal visible={this.state.error} transparent={true} animationType="slide">
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -207,6 +237,42 @@ export default class Attendance extends Component {
 
                             <TouchableOpacity onPress={() => this.setState({ far: false })}>
                                 <Text style={{ fontSize: 15, marginTop: 10, color: '#00a8ff' }}>Okay</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal visible={this.state.fake_gps} transparent={true} animationType="slide">
+                    <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                        <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 10, alignItems: 'center' }}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Not today buddy !</Text>
+                            <Image source={require('../../assets/illustrations/fake_gps.png')} style={{ width: 170, height: 150, marginTop: 15, marginBottom: 10 }} />
+                            <Text style={{ fontSize: 15, marginTop: 10 }}>It's looks like you're using</Text>
+                            <Text style={{ fontSize: 15 }}>Fake gps, plz disable it</Text>
+                            <Text style={{ fontSize: 15 }}>If you want to get attendance</Text>
+
+                            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                                <Text style={{ fontSize: 15, marginTop: 10, color: '#00a8ff' }}>Okay</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal visible={this.state.sick} transparent={true} animationType="slide">
+                    <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                        <View style={{ backgroundColor: 'white', padding: 25, borderRadius: 10, alignItems: 'center' }}>
+                            <View style={{ flexDirection: 'row', alignSelf: 'flex-end', justifyContent: 'flex-end' }}>
+                                    <TouchableOpacity onPress={() => this.setState({ sick: false })}>
+                                        <Icons name="close" size={30} color="#4E9F3D" />
+                                    </TouchableOpacity>
+                            </View>
+                            <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 3 }}>Are you sick today ?</Text>
+                            <Image source={require('../../assets/illustrations/sick.png')} style={{ width: 150, height: 150, marginTop: 10, marginBottom: 10 }} />
+                            <Text style={{ fontSize: 15, marginTop: 10 }}>Drop your absent down below</Text>
+                            <TextInput placeholder="Description" style={{ marginTop: 15, backgroundColor: 'white', elevation: 10, borderRadius: 10, width: 170, padding: 5 }} multiline={true} onChangeText={(val) => this.setState({ absent_notes: val })} />
+
+                            <TouchableOpacity onPress={() => this.sick()} style={{ backgroundColor: '#4E9F3D', marginTop: 15, padding: 5, borderRadius: 7, width: 90, elevation: 10 }}>
+                                <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white', textAlign: 'center' }}>Send</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -239,11 +305,14 @@ export default class Attendance extends Component {
                             <View style={{ flexDirection: 'row', marginTop: 15, marginLeft: 10, justifyContent: 'space-between' }}>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Icons name='time-outline' size={20} color="#4E9F3D" />
-                                    <Text style={{ marginLeft: 10, color: '#4E9F3D' }}>{this.state.next_lecture[0].date}</Text>
+                                    <Text style={{ marginLeft: 5, fontWeight: 'bold', color: '#4E9F3D' }}>{this.state.next_lecture[0].date}</Text>
                                 </View>
 
-                                <View style={{ marginTop: -10, marginRight: 5 }}>
-                                    <TouchableOpacity onPress={() => this.attendance()}>
+                                <View style={{ marginTop: -10, marginRight: 5, flexDirection: 'row' }}>
+                                    <TouchableOpacity style={{ backgroundColor: 'white', elevation: 15, padding: 5, borderRadius: 10, marginRight: 10 }} onPress={() => this.setState({ sick: true })}>
+                                        <Icons name={this.state.hand} size={30} color='orange' />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{ backgroundColor: 'white', elevation: 15, padding: 5, borderRadius: 10 }} onPress={() => this.attendance()}>
                                         <Icons name={this.state.hand} size={30} color='#4E9F3D' />
                                     </TouchableOpacity>
                                 </View>
@@ -251,6 +320,11 @@ export default class Attendance extends Component {
                         </View>
                     </View>
                     }
+                </View>
+
+                <View style={{ alignItems: 'center', marginTop: 15 }}>
+                    <Text>Just in case, if gps doesn't accurate</Text>
+                    <Text>You can use QR Code attendance in menu :)</Text>
                 </View>
 
                 <View style={{ backgroundColor: 'white', elevation: 15, padding: 10, borderTopLeftRadius: 15, borderTopRightRadius: 15, marginTop: 25 }}>
@@ -265,17 +339,14 @@ export default class Attendance extends Component {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 10 }}>
                         <View style={{ alignItems: 'center'}}>
                             <Icons name='bicycle-outline' size={25} />
-                            <Text>30 minutes</Text>
                         </View>
 
                         <View style={{ alignItems: 'center'}}>
                             <Icons name='walk-outline' size={25} />
-                            <Text>1 Hour</Text>
                         </View>
 
                         <View style={{ alignItems: 'center'}}>
                             <Icons name='car-outline' size={25} />
-                            <Text>25 Minutes</Text>
                         </View>
                     </View>
                 </View>

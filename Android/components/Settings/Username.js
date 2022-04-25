@@ -47,7 +47,7 @@ export default class Username extends Component{
     render(){
         return(
             <ScrollView style={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar barStyle={"dark-content"} backgroundColor='white' />
+                <StatusBar barStyle={"dark-content"} backgroundColor={"#4E9F3D"} />
                 <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 100 }}>
                     <Image source={require('../../assets/illustrations/passwords.png')} style={{ width: 160, height: 160 }} />
 

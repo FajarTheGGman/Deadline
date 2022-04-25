@@ -202,7 +202,7 @@ export default class AdminNew extends Component{
     render(){
         return(
             <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white', }}>
-                <StatusBar backgroundColor="white" barStyle="dark-content" />
+                <StatusBar backgroundColor={"#4E9F3D"} barStyle="dark-content" />
 
                 <SwipeUpDownModal
                     modalVisible={this.state.filter}

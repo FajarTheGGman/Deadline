@@ -19,7 +19,7 @@ export default class HomeworkAdmin extends Component{
             title_input: null,
             class_input: null,
             lesson_input: null,
-            desc_input: null,
+            desc_input: '',
             deadline_input: null,
             homeworkSearch: null,
             teacher_input: null,
@@ -27,7 +27,7 @@ export default class HomeworkAdmin extends Component{
             addHomework: false,
             complete: false,
             readmore: false,
-            desc: null,
+            desc: '',
         }
     }
 
@@ -203,7 +203,7 @@ export default class HomeworkAdmin extends Component{
     render(){
         return(
             <ScrollView style={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar backgroundColor='white' barStyle='dark-content' />
+                <StatusBar backgroundColor={"#4E9F3D"} barStyle='dark-content' />
 
 
                 <Modal visible={this.state.readmore} transparent={true} animationType="slide">
@@ -306,7 +306,10 @@ export default class HomeworkAdmin extends Component{
                             </View>
 
                             <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', marginTop: 20 }}>
-                                {this.state.homework_complete.map((x,y) => {
+                                {this.state.homework_complete.length == 0 ? <View style={{ alignItems: 'center' }}>
+                                    <Icons name="logo-dropbox" size={30} color={'grey'} />
+                                    <Text style={{ fontSize: 15, marginTop: 10, color: 'grey', fontWeight: 'bold' }}>No Homework</Text>
+                                </View> : this.state.homework_complete.map((x,y) => {
                                     return(
                                 <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 15, elevation: 15, marginRight: 10, marginLeft: 10, marginTop: 25 }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -330,7 +333,7 @@ export default class HomeworkAdmin extends Component{
                                         </View>
                                          <View style={{ marginTop: 10, marginLeft: 5 }}>
                                             <Text style={{ color: '#4E9F3D', fontWeight: 'bold' }}>Description</Text>
-                                             <Text style={{ color: 'grey', marginTop: 10 }}>{x.desc_result.length > 15 ? <Text style={{ color: '#4E9F3D' }} onPress={() => this.readmore(x.desc_result)}><Icons name="newspaper-outline" size={20} /> Read More..</Text> : x.desc_result}</Text>
+                                             <Text style={{ color: 'grey', marginTop: 10 }}>{x.desc_result == null ? <Text></Text> : x.desc_result.length > 15  ? <Text style={{ color: '#4E9F3D' }} onPress={() => this.readmore(x.desc_result)}><Icons name="newspaper-outline" size={20} /> Read More..</Text> : x.desc_result}</Text>
                                         </View>
                                     </View>
 
@@ -373,7 +376,7 @@ export default class HomeworkAdmin extends Component{
                 <View style={{ paddingBottom: 30 }}>
                     {this.state.homework.length == 0 ? <View style={{ marginTop: 65, alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }}>
                         <Icons name='logo-dropbox' size={80} color="grey" />
-                        <Text style={{ fontWeight: 'bold', color: 'grey' }}>Leaderboards not available yet!</Text>
+                        <Text style={{ fontWeight: 'bold', color: 'grey' }}>Homework not available yet!</Text>
                     </View> : this.state.homework.map((x,y) => {
                         return <View style={{ backgroundColor: 'white', padding: 15, borderRadius: 15, elevation: 15, marginRight: 10, marginLeft: 10, marginTop: 25 }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -403,9 +406,9 @@ export default class HomeworkAdmin extends Component{
                             <View style={{ flexDirection: 'row', marginTop: 15, marginLeft: 10, justifyContent: 'space-between', alignItems: 'center' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Icons name='time-outline' size={20} color="#4E9F3D" />
-                                    <Text style={{ marginLeft: 10, color: '#4E9F3D' }}>{x.deadline}</Text>
+                                    <Text style={{ marginLeft: 7, color: '#4E9F3D', fontWeight: 'bold' }}>{x.deadline}</Text>
                                 </View>
-                                {this.state.username == x.teacher ? <View style={{ marginRight: 5 }}>
+                                {this.state.username == x.teacher || this.state.username == '@deadline' ? <View style={{ marginRight: 5 }}>
                                     <TouchableOpacity onPress={() => this.delete(x._id)}>
                                         <Icons name='trash-outline' size={25} color="red" />
                                     </TouchableOpacity>

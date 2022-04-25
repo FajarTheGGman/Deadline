@@ -34,7 +34,7 @@ export default class Events extends Component {
         return(
             <ScrollView contentContainerStyle={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
                 <StatusBar
-                    backgroundColor="white"
+                    backgroundColor={"#4E9F3D"}
                     barStyle="dark-content"
                 />
 
@@ -50,7 +50,7 @@ export default class Events extends Component {
                         </Text>
                         {this.state.events.length == 0 ?  <View style={{ marginTop: 65, alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }}>
                         <Icons name='logo-dropbox' size={80} color="grey" />
-                        <Text style={{ fontWeight: 'bold', color: 'grey' }}>Leaderboards not available yet!</Text>
+                        <Text style={{ fontWeight: 'bold', color: 'grey' }}>Events not available yet!</Text>
                     </View> : this.state.events.map((x,y) => {
                             return <TouchableOpacity style={{ flexDirection: "column", marginTop: 25 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

@@ -1,19 +1,24 @@
+// Copyright(C) By Fajar Firdaus
+
+// Native Components
 import React, { Component } from 'react'
 import { View, AsyncStorage, RefreshControl, Text, Image, TouchableOpacity, ScrollView, StatusBar, TextInput, Picker, Modal } from 'react-native'
 import Icons from 'react-native-vector-icons/Ionicons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Notifications } from 'expo'
 import { StackActions } from '@react-navigation/native'
 import base64 from 'react-native-base64'
 import axios from 'axios'
-import konfigurasi from '../../config'
 import QRCode from 'react-native-qrcode-svg'
 import ViewShot from 'react-native-view-shot'
-import * as MediaLibrary from 'expo-media-library'
-import * as Permissions from 'expo-permissions'
+
+// Configurations
+import konfigurasi from '../../config'
 
 // expo packages
 import * as Location from 'expo-location'
+import * as MediaLibrary from 'expo-media-library'
+import * as Permissions from 'expo-permissions'
+import { Notifications } from 'expo'
 
 export default class Tab extends Component{
     render(){
@@ -125,9 +130,11 @@ class Barcode extends Component{
     render(){
         return(
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
-                <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 55 }}>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>QR For Attendance</Text>
+                <StatusBar barStyle={"dark-content"} backgroundColor={"#4E9F3D"} />
+                <View style={{ backgroundColor: '#4E9F3D', paddingBottom: 15, alignItems: 'center', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
+                    <Text style={{ fontSize: 17, marginTop: 14, fontWeight: 'bold', color: 'black' }}>QR For Attendance</Text>
+                </View>
+                <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 75 }}>
                     <ViewShot ref="viewShot" options={{ format: "jpg", quality: 0.9 }}>
                         <View style={{ backgroundColor: 'white', padding: 15, marginTop: 15, borderRadius: 10, elevation: 15 }}>
                             <QRCode
@@ -205,9 +212,10 @@ class Settings extends Component{
     render(){
         return(
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
-                <Text style={{ color: '#191A19', fontWeight: 'bold', fontSize: 17, alignSelf: 'center', marginTop: 15 }}>Settings <Icons name='hammer-outline' size={20} color="#191A19" /></Text>
-                
+                <StatusBar barStyle={"dark-content"} backgroundColor={'#4E9F3D'} />
+                <View style={{ backgroundColor: '#4E9F3D', paddingBottom: 15, borderBottomLeftRadius: 15, borderBottomRightRadius: 15, }}>
+                    <Text style={{ color: '#191A19', fontWeight: 'bold', marginTop: 10, fontSize: 17, alignSelf: 'center' }}>Settings <Icons name='hammer-outline' size={20} color="#191A19" /></Text>
+                </View>                
                 <View style={{ flexDirection: 'column', marginLeft: 20, marginRight: 20, justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'column' }}>
                         <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10  }}  onPress={() => this.props.navigation.navigate('Username')}>
@@ -462,10 +470,10 @@ class Index extends Component{
 
     render(){
         return(
-            <ScrollView style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }} refreshControl={<RefreshControl refreshing={this.state.refresh} onRefresh={() => this.refresh()} />}>
-                <StatusBar barStyle={"dark-content"} backgroundColor={"white"} />
+            <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }} refreshControl={<RefreshControl refreshing={this.state.refresh} onRefresh={() => this.refresh()} />}>
+                <StatusBar barStyle={"dark-content"} backgroundColor={"#4E9F3D"} />
                 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', backgroundColor: '#4E9F3D', justifyContent: 'space-between', paddingBottom: 15, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
                     <View style={{ flexDirection: 'row', marginTop: 25, marginLeft: 20 }}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', { users: 'me' })}>
                             <Image source={this.state.picture.length == 0 ? this.state.gender == 'male' ? require('../../assets/illustrations/male.png') : require('../../assets/illustrations/female.png') : this.state.picture} style={{ width: 50, height: 50, borderRadius: 100, borderWidth: 2, borderColor: '#191A19' }} />
@@ -496,43 +504,53 @@ class Index extends Component{
                         </View>
                     </View>
 
-                    <View style={{ flexDirection: 'column', marginTop: 25 }}>
+                    <View style={{ flexDirection: 'column', marginTop: 25, backgroundColor: 'white', elevation: 15, borderRadius: 15, padding: 15, paddingBottom: 25, marginRight: 15, marginLeft: 5 }}>
                         <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#191A19', alignSelf: 'center' }}>Your Navigation</Text>
-                        <View style={{ flexDirection: "row", marginTop: 15, justifyContent: 'space-evenly', alignItems: 'center' }}>
-                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('LectureAdmin')}>
-                                <Icons name="library-outline" size={30} color="#191A19" />
-                                <Text style={{ color: '#191A19' }}>Lecture</Text>
-                            </TouchableOpacity>
+                        <View style={{ flexDirection: "row", marginTop: 15, justifyContent: 'space-between', alignItems: 'center' }}>
+                            <View style={{ flexDirection: 'column', alignItems: 'center', marginLeft: 25 }}>
+                                <TouchableOpacity style={{ alignItems: 'center', backgroundColor: '#4E9F3D', padding: 7, elevation: 15, borderRadius: 10 }} onPress={() => this.props.navigation.navigate('LectureAdmin')}>
+                                    <Icons name="library-outline" size={30} color="black" />
+                                </TouchableOpacity>
+                                <Text style={{ marginTop: 5, fontWeight: 'bold', textAlign: 'center' }}>Lecture</Text>
+                            </View>
 
-                            <TouchableOpacity style={{ alignItems: 'center', marginLeft: 10 }} onPress={() => this.props.navigation.navigate('HomeworkAdmin')}>
-                                <Icons name="newspaper-outline" size={30} color="#191A19" />
-                                <Text style={{ color: '#191A19' }}>Home Work</Text>
-                            </TouchableOpacity>
+                            <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                                <TouchableOpacity style={{ alignItems: 'center', backgroundColor: '#4E9F3D', padding: 7, elevation: 15, borderRadius: 10 }} onPress={() => this.props.navigation.navigate('HomeworkAdmin')}>
+                                    <Icons name="newspaper-outline" size={30} color="black" />
+                                </TouchableOpacity>
+                                <Text style={{ marginTop: 5, fontWeight: 'bold', textAlign: 'center' }}>Homework</Text>
+                            </View>
 
-                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ClassAdmin')}>
-                                <Icons name="school-outline" size={30} color="#191A19" />
-                                <Text style={{ color: '#191A19' }}>Class</Text>
-                            </TouchableOpacity>
+                            <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 25 }}>
+                                <TouchableOpacity style={{ alignItems: 'center', backgroundColor: '#4E9F3D', padding: 7, elevation: 15, borderRadius: 10 }} onPress={() => this.props.navigation.navigate('ClassAdmin')}>
+                                    <Icons name="school-outline" size={30} color="black" />
+                                </TouchableOpacity>
+                                <Text style={{ marginTop: 5, fontWeight: 'bold', textAlign: 'center' }}>Class</Text>
+                            </View>
                         </View>
 
-                        <View style={{ flexDirection: "row", marginTop: 35, justifyContent: 'space-evenly',  }}>
-                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('EventAdmin')}>
-                                <Icons name="golf-outline" size={30} color="#191A19" />
-                                <Text style={{ color: '#191A19' }}>Events</Text>
-                            </TouchableOpacity>
+                        <View style={{ flexDirection: "row", marginTop: 35, justifyContent: 'space-between' }}>
+                            <View style={{ flexDirection: 'column', alignItems: 'center', marginLeft: 25 }}>
+                                <TouchableOpacity style={{ alignItems: 'center', backgroundColor: '#4E9F3D', padding: 7, elevation: 15, borderRadius: 10 }} onPress={() => this.props.navigation.navigate('EventAdmin')}>
+                                    <Icons name="golf-outline" size={30} color="black" />
+                                </TouchableOpacity>
+                                <Text style={{ marginTop: 5, fontWeight: 'bold', textAlign: 'center' }}>Events</Text>
+                            </View>
 
-                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('AttendanceAdmin')}>
-                                <Icons name="hand-left-outline" size={30} color="#191A19" />
-                                <Text style={{ color: '#191A19' }}>Attendance</Text>
-                            </TouchableOpacity>
+                            <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                                <TouchableOpacity style={{ alignItems: 'center', backgroundColor: '#4E9F3D', padding: 7, elevation: 15, borderRadius: 10 }} onPress={() => this.props.navigation.navigate('AttendanceAdmin')}>
+                                    <Icons name="hand-left-outline" size={30} color="black" />
+                                </TouchableOpacity>
+                                <Text style={{ marginTop: 5, fontWeight: 'bold', textAlign: 'center' }}>Attendance</Text>
+                            </View>
 
-                            <TouchableOpacity style={{ alignItems: 'center',  }} onPress={() => this.props.navigation.navigate('InboxAdmin')}>
-                                <Icons name="file-tray-outline" size={30} color="#191A19" />
-                                <Text style={{ color: '#191A19' }}>Inbox</Text>
-                            </TouchableOpacity>
-
+                            <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 25 }}>
+                                <TouchableOpacity style={{ alignItems: 'center', backgroundColor: '#4E9F3D', padding: 7, elevation: 15, borderRadius: 10 }} onPress={() => this.props.navigation.navigate('InboxAdmin')}>
+                                    <Icons name="file-tray-outline" size={30} color="black" />
+                                </TouchableOpacity>
+                                <Text style={{ marginTop: 5, fontWeight: 'bold', textAlign: 'center' }}>Inbox</Text>
+                            </View>
                         </View>
-
                     </View>
                 </View>
             </ScrollView>

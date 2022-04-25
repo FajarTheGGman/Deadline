@@ -1,3 +1,5 @@
+// Copyright 2022 By Fajar Firdaus
+
 const express = require('express');
 const route = express.Router();
 const modelUsers = require('../models/Users');

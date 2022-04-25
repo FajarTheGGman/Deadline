@@ -57,6 +57,7 @@ export default class Login extends Component {
         }).then((res) => {
             if(res.data.success){
                 this.setState({ loading: false })
+                AsyncStorage.setItem('level', res.headers.level)
                 AsyncStorage.setItem('token', res.headers.token).then(() => {
                     if(res.headers.level == 'admin'){
                         this.props.navigation.dispatch(

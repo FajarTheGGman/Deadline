@@ -136,7 +136,7 @@ export default class Profile extends Component{
     render(){
         return(
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar backgroundColor="white" barStyle="dark-content" />
+                <StatusBar backgroundColor={"#4E9F3D"} barStyle="dark-content" />
 
                 <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 15 }}>
                     {this.state.picture.length == 0 ? this.state.gender == 'male' ? <Image source={require('../../assets/illustrations/male.png')} style={{ width: 120, height: 120, borderRadius: 100, borderWidth: 2, borderColor: 'black' }} /> : <Image source={require('../../assets/illustrations/female.png')} style={{ width: 120, height: 120, borderRadius: 100, borderWidth: 2, borderColor: 'black' }} /> : <Image source={{ uri: this.state.picture }} style={{ width: 120, height: 120, borderRadius: 100, borderWidth: 2, borderColor: 'black' }} /> }

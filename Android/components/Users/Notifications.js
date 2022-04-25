@@ -27,7 +27,7 @@ export default class Notification extends Component{
     render(){
         return(
             <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar backgroundColor="white" barStyle="dark-content" />
+                <StatusBar backgroundColor={"#4E9F3D"} barStyle="dark-content" />
 
                 <View style={{ marginLeft: 17, marginTop: 15 }}>
                     <Text style={{ fontWeight: 'bold', fontSize: 20 }}>What's New ?</Text>

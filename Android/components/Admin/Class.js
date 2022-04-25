@@ -171,7 +171,7 @@ export default class ClassAdmin extends Component{
     render(){
         return(
             <ScrollView style={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar backgroundColor="white" barStyle="dark-content" />
+                <StatusBar backgroundColor={"#4E9F3D"} barStyle="dark-content" />
                 <SwipeUpDownModal
                     modalVisible={this.state.addClass}
                     ContentModal={
@@ -268,7 +268,7 @@ export default class ClassAdmin extends Component{
                 </View>
                 }
 
-                <View style={{ flexDirection: 'column', marginTop: 25 }}>
+                <View style={{ flexDirection: 'column', marginTop: 25, marginBottom: 30 }}>
                     <Text style={{ marginLeft: 15, fontSize: 16, fontWeight: 'bold' }}>All Class</Text>
                     {this.state.classList.length == 0 ? <View style={{ alignItems: 'center' }}>
                         <Icons name='logo-dropbox' color='grey' size={50} />

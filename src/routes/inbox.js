@@ -1,3 +1,5 @@
+// Copyright 2022 By Fajar Firdaus
+
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const route = express.Router();

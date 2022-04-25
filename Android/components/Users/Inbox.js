@@ -51,10 +51,15 @@ export default class Inbox extends Component{
         })
     }
 
+    profile(){
+        this.setState({ overview: false })
+        this.props.navigation.navigate('Profile', { users: this.state.sender_from })
+    }
+
     render(){
         return(
             <ScrollView style={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }}>
-                <StatusBar barStyle={"dark-content"} backgroundColor="white" />
+                <StatusBar barStyle={"dark-content"} backgroundColor={"#4E9F3D"} />
 
                 <SwipeUpDownModal
                     modalVisible={this.state.overview}
@@ -71,7 +76,9 @@ export default class Inbox extends Component{
                                 <View style={{ marginLeft: 10, marginTop: 20 }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ flexDirection: 'row' }}>
-                                            {this.state.sender_picture.length == 0 ? this.state.sender_gender == 'male' ? <Image source={require('../../assets/illustrations/male.png')} style={{ width: 50, height: 50, borderRadius: 100 }} /> : <Image source={require('../../assets/illustrations/female.png')} style={{ width: 50, height: 50, borderRadius: 100 }} /> : <Image source={{ uri: this.state.picture }} style={{ width: 50, height: 50, borderRadius: 100 }} />}
+                                            <TouchableOpacity onPress={() => this.profile()}>
+                                                {this.state.sender_picture.length == 0 ? this.state.sender_gender == 'male' ? <Image source={require('../../assets/illustrations/male.png')} style={{ width: 50, height: 50, borderRadius: 100 }} /> : <Image source={require('../../assets/illustrations/female.png')} style={{ width: 50, height: 50, borderRadius: 100 }} /> : <Image source={{ uri: this.state.picture }} style={{ width: 50, height: 50, borderRadius: 100 }} />}
+                                            </TouchableOpacity>
                                             <View style={{ flexDirection: 'column', marginLeft: 10 }}>
                                                 <Text style={{ fontWeight: 'bold', fontSize: 17 }}>{this.state.sender_from}</Text>
                                                 <Text style={{ color: 'grey' }}>To: class - {this.state.sender_class}</Text>
@@ -103,7 +110,7 @@ export default class Inbox extends Component{
                     {this.state.inbox.length == 0 ? <View style={{ alignItems: 'center' }}>
                         <View style={{ marginTop: 80, alignItems: 'center' }}>
                             <Icons name='logo-dropbox' color='grey' size={60} />
-                            <Text style={{ color: 'grey' }}>It's Looks like you have no lecture today</Text>
+                            <Text style={{ color: 'grey' }}>It's Looks like you have no inbox today</Text>
                         </View>
                     </View> : this.state.inbox.map((x,y) => {
                         return <TouchableOpacity style={{ padding: 15, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', marginRight: 10, marginLeft: 10, alignItems: 'center', marginTop: 20 }} onPress={() => this.overview(y)}>
