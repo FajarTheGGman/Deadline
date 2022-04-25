@@ -5,6 +5,7 @@ import SwipeUpDownModal from 'react-native-swipe-modal-up-down'
 import Icons from 'react-native-vector-icons/Ionicons'
 import { LineChart } from 'react-native-chart-kit'
 import konfigurasi from '../../config'
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 export default class AttendanceAdmin extends Component{
     constructor(props){
@@ -40,47 +41,48 @@ export default class AttendanceAdmin extends Component{
                 november: 0,
                 december: 0
             },
-            manual: false
+            manual: false,
+            date: false,
+            attendance_date: null
         }
     }
 
     componentDidMount(){
         AsyncStorage.getItem('token').then(token => {
-            axios.post(konfigurasi.server + 'attendance/getall', {
+            axios.post(konfigurasi.server + 'attendance/getall?all=false', {
                 token: token,
                 secret: konfigurasi.secret,
                 username: this.state.user,
                 class: this.state.filter_class,
                 major: this.state.filter_major,
-                date: new Date().getDay() + '/' + new Date().getMonth() + '/' + new Date().getFullYear()
-             }).then(res => {
+                date: new Date().toLocaleDateString()
+            }).then(res => {
                 if(res.data.success){
                     this.setState({ data: this.state.data.concat(res.data.data) })
-                    // count attendance by month
                     for(var i = 0; i < this.state.data.length; i++){
-                        if(this.state.data[i].date.split('/')[1] == '1'){
+                        if(this.state.data[i].date.split('/')[0] == '01'){
                             this.setState({ month: { ...this.state.month, january: this.state.month.january + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '2'){
+                        }else if(this.state.data[i].date.split('/')[0] == '02'){
                             this.setState({ month: { ...this.state.month, february: this.state.month.february + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '3'){
+                        }else if(this.state.data[i].date.split('/')[0] == '03'){
                             this.setState({ month: { ...this.state.month, march: this.state.month.march + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '4'){
+                        }else if(this.state.data[i].date.split('/')[0] == '04'){
                             this.setState({ month: { ...this.state.month, april: this.state.month.april + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '05'){
+                        }else if(this.state.data[i].date.split('/')[0] == '05'){
                             this.setState({ month: { ...this.state.month, may: this.state.month.may + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '6'){
+                        }else if(this.state.data[i].date.split('/')[0] == '06'){
                             this.setState({ month: { ...this.state.month, june: this.state.month.june + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '7'){
+                        }else if(this.state.data[i].date.split('/')[0] == '07'){
                             this.setState({ month: { ...this.state.month, july: this.state.month.july + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '8'){
+                        }else if(this.state.data[i].date.split('/')[0] == '08'){
                             this.setState({ month: { ...this.state.month, august: this.state.month.august + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '9'){
+                        }else if(this.state.data[i].date.split('/')[0] == '09'){
                             this.setState({ month: { ...this.state.month, september: this.state.month.september + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '10'){
+                        }else if(this.state.data[i].date.split('/')[0] == '10'){
                             this.setState({ month: { ...this.state.month, october: this.state.month.october + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '11'){
+                        }else if(this.state.data[i].date.split('/')[0] == '11'){
                             this.setState({ month: { ...this.state.month, november: this.state.month.november + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '12'){
+                        }else if(this.state.data[i].date.split('/')[0] == '12'){
                             this.setState({ month: { ...this.state.month, december: this.state.month.december + 1 } })
                         }
                     }
@@ -120,42 +122,42 @@ export default class AttendanceAdmin extends Component{
 
     refresh(){
         AsyncStorage.getItem('token').then(token => {
-            axios.post(konfigurasi.server + 'attendance/getall', {
+            axios.post(konfigurasi.server + 'attendance/getall?all=false', {
                 token: token,
                 secret: konfigurasi.secret,
                 username: this.state.user,
                 class: this.state.filter_class,
                 major: this.state.filter_major,
-                date: new Date().getDay() + '/' + new Date().getMonth() + '/' + new Date().getFullYear()
+                date: this.state.attendance_date == null ? '' : new Date().toLocaleDateString()
              }).then(res => {
                 if(res.data.success){
                     this.setState({ data: [] })
                     this.setState({ data: this.state.data.concat(res.data.data) })
                     // count attendance by month
                     for(var i = 0; i < this.state.data.length; i++){
-                        if(this.state.data[i].date.split('/')[1] == '1'){
+                        if(this.state.data[i].date.split('/')[0] == '01'){
                             this.setState({ month: { ...this.state.month, january: this.state.month.january + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '2'){
+                        }else if(this.state.data[i].date.split('/')[0] == '02'){
                             this.setState({ month: { ...this.state.month, february: this.state.month.february + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '3'){
+                        }else if(this.state.data[i].date.split('/')[0] == '03'){
                             this.setState({ month: { ...this.state.month, march: this.state.month.march + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '4'){
+                        }else if(this.state.data[i].date.split('/')[0] == '04'){
                             this.setState({ month: { ...this.state.month, april: this.state.month.april + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '05'){
+                        }else if(this.state.data[i].date.split('/')[0] == '05'){
                             this.setState({ month: { ...this.state.month, may: this.state.month.may + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '6'){
+                        }else if(this.state.data[i].date.split('/')[0] == '06'){
                             this.setState({ month: { ...this.state.month, june: this.state.month.june + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '7'){
+                        }else if(this.state.data[i].date.split('/')[0] == '07'){
                             this.setState({ month: { ...this.state.month, july: this.state.month.july + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '8'){
+                        }else if(this.state.data[i].date.split('/')[0] == '08'){
                             this.setState({ month: { ...this.state.month, august: this.state.month.august + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '9'){
+                        }else if(this.state.data[i].date.split('/')[0] == '09'){
                             this.setState({ month: { ...this.state.month, september: this.state.month.september + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '10'){
+                        }else if(this.state.data[i].date.split('/')[0] == '10'){
                             this.setState({ month: { ...this.state.month, october: this.state.month.october + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '11'){
+                        }else if(this.state.data[i].date.split('/')[0] == '11'){
                             this.setState({ month: { ...this.state.month, november: this.state.month.november + 1 } })
-                        }else if(this.state.data[i].date.split('/')[1] == '12'){
+                        }else if(this.state.data[i].date.split('/')[0] == '12'){
                             this.setState({ month: { ...this.state.month, december: this.state.month.december + 1 } })
                         }
                     }
@@ -187,13 +189,15 @@ export default class AttendanceAdmin extends Component{
 
     search(){
         AsyncStorage.getItem('token').then(token => {
-            axios.post(konfigurasi.server + 'attendance/getall', {
+            axios.post(konfigurasi.server + 'attendance/getall?all=false', {
                 token: token,
                 secret: konfigurasi.secret,
-                username: this.state.user,
                 class: this.state.filter_class,
-                major: this.state.filter_major
+                major: this.state.filter_major,
+                date: this.state.attendance_date == null ? '' : this.state.attendance_date,
+                username: '',
             }).then(res => {
+                console.log(res.data)
                 if(res.data.success){
                     this.setState({ data: [] })
                     this.setState({ data: this.state.data.concat(res.data.data) })
@@ -207,7 +211,9 @@ export default class AttendanceAdmin extends Component{
             axios.post(konfigurasi.server + 'auth/get', {
                 token: token,
                 secret: konfigurasi.secret,
-                name: this.state.user_name
+                name: this.state.user,
+                class: this.state.filter_class,
+                major: this.state.filter_major,
             }).then(res => {
                 if(res.status == 200){
                     this.setState({ user_attendance: this.state.user_attendance.concat(res.data.data) })
@@ -236,8 +242,9 @@ export default class AttendanceAdmin extends Component{
             axios.post(konfigurasi.server + 'attendance/add/manual', {
                 token: token,
                 secret: konfigurasi.secret,
-                date: new Date().getDay() + '/' + new Date().getMonth() + '/' + new Date().getFullYear(),
+                date: new Date().toLocaleDateString(),
                 name: this.state.user_attendance[index].name,
+                username: this.state.user_attendance[index].username,
                 class: this.state.user_attendance[index].class,
                 major: this.state.user_attendance[index].major,
                 lessons: this.state.lessons_input,
@@ -269,7 +276,7 @@ export default class AttendanceAdmin extends Component{
                                 <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: -8, paddingBottom: 15 }}>Add Attendance</Text>
                             </View>
 
-                            <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', marginTop: 20, alignItems: 'center' }}>
+                            <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', marginTop: 20, alignItems: 'center', paddingBottom: 35 }}>
                                 <View style={{ marginTop: 25 }}>
                                     <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                                         <View style={{ flexDirection: 'row', backgroundColor: '#ededed', width: 270, padding: 10, borderRadius: 10, alignItems: 'center' }}>
@@ -331,6 +338,23 @@ export default class AttendanceAdmin extends Component{
 
                             <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', marginTop: 20, alignItems: 'center' }}>
 
+                                <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Attendance Date</Text>
+                                <TouchableOpacity style={{ padding: 10, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white', alignItems: 'center'}} onPress={() => this.setState({ date: true })}>
+                                    {this.state.attendance_date == null ? <Text>Click here to set attendance date</Text> : <Text style={{ fontWeight: 'bold' }}>{this.state.attendance_date}</Text>}
+                                </TouchableOpacity>
+
+                                {this.state.date && (
+                                <DateTimePicker
+                                    value={new Date()}
+                                    mode={'date'}
+                                    is24Hour={true}
+                                    display="default"
+                                    onChange={(event, selectedDate) => {
+                                        let month = selectedDate.getMonth() < 10 ? '0' + selectedDate.getMonth() : selectedDate.getMonth() 
+                                        let date = month + '/' + selectedDate.getDate() + '/' + selectedDate.getFullYear();
+                                        this.setState({ attendance_date: date, date: false });
+                                    }}/>
+                                )}
                                 <Text style={{ fontSize: 15, marginLeft: 45, marginBottom: 10, alignSelf: 'flex-start', marginTop: 20 }}>Filter Class</Text>
                                 <View style={{ padding: 5, elevation: 10, borderRadius: 10, width: 280, backgroundColor: 'white' }}>
                                     <Picker selectedItem={this.state.filter_class} onValueChange={(val) => this.setState({ filter_class: val })}>
@@ -349,7 +373,7 @@ export default class AttendanceAdmin extends Component{
                                     </Picker>
                                 </View>
 
-                                <TouchableOpacity style={{ marginTop: 25, elevation: 10, borderRadius: 10, width: 280, padding: 10, backgroundColor: '#4E9F3D', alignItems: 'center', justifyContent: 'center' }} onPress={() => alert('Filters Apply')}>
+                                <TouchableOpacity style={{ marginTop: 25, elevation: 10, borderRadius: 10, width: 280, padding: 10, backgroundColor: '#4E9F3D', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.search()}>
                                     <Text style={{ color: 'white', fontWeight: 'bold' }}>Apply Filters</Text>
                                 </TouchableOpacity>
 
@@ -446,11 +470,12 @@ export default class AttendanceAdmin extends Component{
                             <Icons name='logo-dropbox' color="grey" size={70} />
                         <Text style={{ fontSize: 15, marginTop: 10, fontWeight: 'bold', color: 'grey' }}>Attendance not available yet!</Text>
                             </View> : this.state.data.map((x,y) => {
-                        return <View style={{ backgroundColor: 'white', padding: 10, marginLeft: 10, marginRight: 10, elevation: 15, borderRadius: 15, flexDirection: 'row', justifyContent: 'space-between', marginTop: 25 }}>
+                        return <TouchableOpacity style={{ backgroundColor: 'white', padding: 10, marginLeft: 10, marginRight: 10, elevation: 15, borderRadius: 15, flexDirection: 'row', justifyContent: 'space-between', marginTop: 25 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={require('../../assets/illustrations/male.png')} style={{ width: 50, height: 50, borderRadius: 100 }} />
                             <View style={{ flexDirection: 'column', marginLeft: 10 }}>
-                                <Text style={{ fontWeight: 'bold' }}>{x.name}</Text>
+                                {x.absent == true ? <Text style={{ fontWeight: 'bold', color: 'red' }}>{x.name} (absent)</Text> : <Text style={{ fontWeight: 'bold' }}>{x.name}</Text>}
+
                                 <Text>@{x.username}</Text>
                                 <Text style={{ color: 'grey' }}>Grade {x.class}</Text>
                             </View>
@@ -466,7 +491,7 @@ export default class AttendanceAdmin extends Component{
                                 <Icons name='trash-outline' size={25} color="red" />
                             </TouchableOpacity>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                     })}
                 </View>
             </ScrollView>

@@ -316,7 +316,7 @@ export default class InboxAdmin extends Component{
 
                 <View style={{ marginTop: 20 }}>
                     {this.state.inbox.map((x,y) => {
-                        return <TouchableOpacity style={{ padding: 15, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', marginRight: 10, marginLeft: 10, alignItems: 'center', marginTop: 20 }} onPress={() => this.overview(y)}>
+                        return <TouchableOpacity style={{ padding: 15, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', marginRight: 10, marginLeft: 10, alignItems: 'center', marginTop: 10 }} onPress={() => this.overview(y)}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             {x.gender == 'male' ? <Image source={require('../../assets/illustrations/male.png')} style={{ width: 50, height: 50, borderRadius: 100 }} /> : <Image source={require('../../assets/illustrations/female.png')} style={{ width: 50, height: 50, borderRadius: 100 }} /> }
                             <View style={{ marginLeft: 10, flexDirection: 'column' }}>

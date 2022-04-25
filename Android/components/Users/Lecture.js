@@ -71,7 +71,7 @@ export default class Lecture extends Component{
                             </View>
                             <View style={{ flexDirection: 'row', marginTop: 15, marginLeft: 10 }}>
                                 <Icons name='time-outline' size={20} color="#4E9F3D" />
-                                <Text style={{ marginLeft: 10, color: '#4E9F3D' }}>{x.date} - {x.day}</Text>
+                                <Text style={{ marginLeft: 5, color: '#4E9F3D', fontWeight: 'bold' }}>{x.date} - {x.day}</Text>
                             </View>
                         </View>
                     </View>

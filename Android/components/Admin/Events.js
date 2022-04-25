@@ -5,6 +5,9 @@ import Icons from 'react-native-vector-icons/Ionicons'
 import SwipeUpDownModal from 'react-native-swipe-modal-up-down'
 import konfigurasi from '../../config'
 import DateTimePicker from '@react-native-community/datetimepicker';
+// import notifications expo
+import * as Notifications from 'expo-notifications';
+
 
 export default class EventAdmin extends Component{
     constructor(props){

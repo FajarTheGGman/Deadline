@@ -1,5 +1,5 @@
 const konfigurasi = {
-    server: 'https://deadline-fajarfirdaus.herokuapp.com/',
+    server: "https://deadline-fajarfirdaus.herokuapp.com/",
     secret: 'dontbeafool'
 }
 

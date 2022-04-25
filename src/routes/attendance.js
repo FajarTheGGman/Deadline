@@ -53,18 +53,20 @@ route.post('/getall', (req, res) => {
                                 res.json({ success: '[+] Get all attendance success', data: result });
                             }
                         });
-                    }
-                    modelAttendance.find({ date: { $regex: req.body.date }, teacher: token.username, name: req.body.username }, (err, result) => {
-                        if(err){
-                            res.json({ error: '[!] Error get all attendance' }).status(301);
-                        }
+                    }else if(req.query.all == 'false'){
+                        modelAttendance.find({ date: { $regex: req.body.date }, major: { $regex: req.body.major }, class: { $regex: req.body.class }, name: { $regex: req.body.username }, teacher: token.username }, (err, result) => {
+                            if(err){
+                                console.log(err)
+                                res.json({ error: '[!] Error get all attendance' }).status(301);
+                            }
 
-                        if(result.length > 0){
-                            res.json({ success: '[+] Get all attendance success', data: result });
-                        }else{
-                            res.json({ error: '[!] Error get all attendance' });
-                        }
-                    });
+                            if(result.length > 0){
+                                res.json({ success: '[+] Get all attendance success', data: result });
+                            }else{
+                                res.json({ error: '[!] Error get all attendance' });
+                            }
+                        });
+                    }
                 }
             }else{
                 res.json({ error: '[!] Error get all attendance' });
@@ -179,7 +181,7 @@ route.post('/add', (req,res) => {
                     res.json({ error: '[!] Users not found' }).status(301);
                 }else{
                     if(req.query.qr == 'true'){
-                        modelAttendance.find({ name: token.name, class: req.body.class }, (err, check) => {
+                        modelAttendance.find({ name: token.name, date: req.body.date, class: req.body.class }, (err, check) => {
                                 modelAttendance.insertMany({
                                     name: token.name,
                                     username: token.username,
@@ -212,6 +214,8 @@ route.post('/add', (req,res) => {
                                     teacher: req.body.teacher,
                                     time: req.body.time,
                                     gender: token.gender,
+                                    absent: req.body.absent,
+                                    absent_notes: req.body.absent_notes,
                                     class: token.class,
                                     major: token.major,
                                     date: req.body.date,

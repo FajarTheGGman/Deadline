@@ -136,7 +136,9 @@ class Barcode extends Component{
                     let get_time = new Date().getHours() + ':' + new Date().getMinutes();
                     this.setState({ time: get_time })
                     this.state.lessons.map(item => {
-                        if(item.date > get_time){
+                        let x = item.date.split(':')
+                        let time = x[0] + ':' + x[1]
+                        if(time > get_time){
                             this.setState({ next_lecture: this.state.next_lecture.concat(item) })
                         }
                     })
@@ -550,7 +552,7 @@ class Index extends Component{
 
                     <View>
                         <View style={{ marginTop: 15, backgroundColor: '#191A19', borderRadius: 10, padding: 7, alignSelf: 'flex-start' }}>
-                            {this.state.schedule.length == 0 || this.state.schedule == 'undefined : undefined' ? <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>There's no class today</Text> : <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>Class Begin {this.state.schedule}</Text>  }
+                            {this.state.schedule.length == 0 || this.state.schedule == 'undefined : undefined' ? <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>There's no class today</Text> : <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 17 }}>Class Begin - {this.state.schedule}</Text>  }
                         </View>
                     </View>
 

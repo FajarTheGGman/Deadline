@@ -406,9 +406,9 @@ export default class HomeworkAdmin extends Component{
                             <View style={{ flexDirection: 'row', marginTop: 15, marginLeft: 10, justifyContent: 'space-between', alignItems: 'center' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Icons name='time-outline' size={20} color="#4E9F3D" />
-                                    <Text style={{ marginLeft: 10, color: '#4E9F3D' }}>{x.deadline}</Text>
+                                    <Text style={{ marginLeft: 7, color: '#4E9F3D', fontWeight: 'bold' }}>{x.deadline}</Text>
                                 </View>
-                                {this.state.username == x.teacher ? <View style={{ marginRight: 5 }}>
+                                {this.state.username == x.teacher || this.state.username == '@deadline' ? <View style={{ marginRight: 5 }}>
                                     <TouchableOpacity onPress={() => this.delete(x._id)}>
                                         <Icons name='trash-outline' size={25} color="red" />
                                     </TouchableOpacity>

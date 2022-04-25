@@ -16,6 +16,7 @@ export default class Attendance extends Component {
         this.state = {
             lessons: [],
             next_lecture: [],
+            absent_notes: '',
             time: '',
             date: null,
             region_lat: null,
@@ -94,7 +95,9 @@ export default class Attendance extends Component {
                         let get_time = new Date().getHours() + ':' + new Date().getMinutes();
                         this.setState({ time: get_time })
                         this.state.lessons.map(item => {
-                            if(item.date > get_time){
+                            let x = item.date.split(':')
+                            let time = x[0] + ':' + x[1]
+                            if(time > get_time){
                                 this.setState({ next_lecture: this.state.next_lecture.concat(item) })
                             }
                         })
@@ -102,7 +105,7 @@ export default class Attendance extends Component {
                 })
             })
     
-                const { status } = Location.requestForegroundPermissionsAsync();
+            const { status } = Location.requestForegroundPermissionsAsync();
     
             Location.watchPositionAsync({
                 enableHighAccuracy: true,
@@ -165,7 +168,7 @@ export default class Attendance extends Component {
                         major: this.state.major,
                         class: this.state.class,
                         time: this.state.time,
-                        date: new Date().getDay() + '/' + new Date().getMonth() + '/' + new Date().getFullYear()
+                        date: new Date().toLocaleDateString()
                     }).then(res => {
                         if(res.data.success){
                             alert('Attendance Success')
@@ -180,7 +183,27 @@ export default class Attendance extends Component {
     }
     
     sick(){
-
+        AsyncStorage.getItem('token').then(token => {
+            this.setState({ hand: 'hand-left-outline' })
+            axios.post(konfigurasi.server + 'attendance/add', {
+                token: token,
+                secret: konfigurasi.secret,
+                lessons: this.state.next_lecture[0].lessons,
+                teacher: this.state.next_lecture[0].teacher,
+                major: this.state.major,
+                class: this.state.class,
+                time: this.state.time,
+                absent: true,
+                absent_notes: this.state.absent_notes,
+                date: new Date().toLocaleDateString()
+            }).then(res => {
+                if(res.data.success){
+                    alert('Attendance Success')
+                }else if(res.data.already){
+                    alert('You already get attendance in this lecture')
+                }
+            })
+        })
     }
 
 
@@ -246,7 +269,7 @@ export default class Attendance extends Component {
                             <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 3 }}>Are you sick today ?</Text>
                             <Image source={require('../../assets/illustrations/sick.png')} style={{ width: 150, height: 150, marginTop: 10, marginBottom: 10 }} />
                             <Text style={{ fontSize: 15, marginTop: 10 }}>Drop your absent down below</Text>
-                            <TextInput placeholder="Description" style={{ marginTop: 15, backgroundColor: 'white', elevation: 10, borderRadius: 10, width: 170, padding: 5 }} multiline={true} />
+                            <TextInput placeholder="Description" style={{ marginTop: 15, backgroundColor: 'white', elevation: 10, borderRadius: 10, width: 170, padding: 5 }} multiline={true} onChangeText={(val) => this.setState({ absent_notes: val })} />
 
                             <TouchableOpacity onPress={() => this.sick()} style={{ backgroundColor: '#4E9F3D', marginTop: 15, padding: 5, borderRadius: 7, width: 90, elevation: 10 }}>
                                 <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white', textAlign: 'center' }}>Send</Text>
@@ -299,7 +322,7 @@ export default class Attendance extends Component {
                     }
                 </View>
 
-                <View style={{ alignItems: 'center' }}>
+                <View style={{ alignItems: 'center', marginTop: 15 }}>
                     <Text>Just in case, if gps doesn't accurate</Text>
                     <Text>You can use QR Code attendance in menu :)</Text>
                 </View>

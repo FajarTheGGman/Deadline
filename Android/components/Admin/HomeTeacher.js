@@ -470,7 +470,7 @@ class Index extends Component{
 
     render(){
         return(
-            <ScrollView style={{ flex: 1, flexDirection: 'column', backgroundColor: 'white' }} refreshControl={<RefreshControl refreshing={this.state.refresh} onRefresh={() => this.refresh()} />}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1, flexDirection: 'column', backgroundColor: 'white' }} refreshControl={<RefreshControl refreshing={this.state.refresh} onRefresh={() => this.refresh()} />}>
                 <StatusBar barStyle={"dark-content"} backgroundColor={"#4E9F3D"} />
                 
                 <View style={{ flexDirection: 'row', backgroundColor: '#4E9F3D', justifyContent: 'space-between', paddingBottom: 15, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
@@ -537,14 +537,14 @@ class Index extends Component{
                                 <Text style={{ marginTop: 5, fontWeight: 'bold', textAlign: 'center' }}>Events</Text>
                             </View>
 
-                            <View style={{ flexDirection: 'column', alignItems: 'center', marginLeft: 10 }}>
+                            <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                                 <TouchableOpacity style={{ alignItems: 'center', backgroundColor: '#4E9F3D', padding: 7, elevation: 15, borderRadius: 10 }} onPress={() => this.props.navigation.navigate('AttendanceAdmin')}>
                                     <Icons name="hand-left-outline" size={30} color="black" />
                                 </TouchableOpacity>
                                 <Text style={{ marginTop: 5, fontWeight: 'bold', textAlign: 'center' }}>Attendance</Text>
                             </View>
 
-                            <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 18 }}>
+                            <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 25 }}>
                                 <TouchableOpacity style={{ alignItems: 'center', backgroundColor: '#4E9F3D', padding: 7, elevation: 15, borderRadius: 10 }} onPress={() => this.props.navigation.navigate('InboxAdmin')}>
                                     <Icons name="file-tray-outline" size={30} color="black" />
                                 </TouchableOpacity>
