@@ -1,5 +1,5 @@
 {
-  "name": "android",
+  "name": "Deadline Mobile",
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
